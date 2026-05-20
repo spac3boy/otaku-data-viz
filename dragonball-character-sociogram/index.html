@@ -226,6 +226,35 @@ svg .node.selected .aura{animation:pulse 1.5s ease-in-out infinite alternate}
   .left{order:3;min-height:620px}
   .meter{width:100%;margin-left:0;justify-content:flex-start}
 }
+
+body.preview-mode{
+  overflow:hidden;
+  background:#071018;
+}
+body.preview-mode::before,
+body.preview-mode header,
+body.preview-mode .left,
+body.preview-mode .right,
+body.preview-mode .project-disclaimer,
+body.preview-mode .toolbar{
+  display:none!important;
+}
+body.preview-mode .app{
+  display:block;
+  height:100vh;
+  min-height:0;
+  padding:0;
+}
+body.preview-mode #chartWrap{
+  height:100vh;
+  min-height:0;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+body.preview-mode #chart{
+  height:100vh;
+}
 </style>
 </head>
 <body>
@@ -771,6 +800,9 @@ function addEvents(){
 function setLanguage(lang){ languageMode=lang; refreshLanguageUI(); }
 function showTooltip(pt,d){ const count=links.filter(l=>activeTypes.has(l.type)&&(l.source===d.id||l.target===d.id)&&visibleNodeBySaga(l.s)&&visibleNodeBySaga(l.t)).length; tooltip.innerHTML=`<strong>${displayName(d)}</strong><br>${factionLabel(d.faction)}<br>${count} ${ui('visibleRelationships')}`; tooltip.style.left=(pt.sx+16)+'px'; tooltip.style.top=(pt.sy+16)+'px'; tooltip.style.display='block'; }
 function hideTooltip(){ tooltip.style.display='none'; }
+if(new URLSearchParams(window.location.search).has('preview')){
+  document.body.classList.add('preview-mode');
+}
 try { init(); } catch(err) {
   const fallback=document.getElementById('staticFallbackSvg');
   if(fallback) fallback.classList.remove('is-enhanced');

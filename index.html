@@ -7,934 +7,175 @@
   <meta name="description" content="Interactive data stories for anime, manga, games, and pop culture." />
   <style>
     :root {
-      --ink: #050505;
-      --paper: #f7f7f2;
-      --paper-2: #e9e9e1;
-      --paper-3: #ffffff;
-      --red: #050505;
-      --blue: #050505;
-      --green: #050505;
-      --yellow: #ffffff;
-      --pink: #d8d8d0;
-      --line: rgba(5, 5, 5, 0.28);
-      --muted: rgba(5, 5, 5, 0.62);
-      --shadow: 10px 10px 0 var(--ink);
-      --shadow-soft: 6px 6px 0 rgba(5, 5, 5, 0.24);
-      --radius: 4px;
-      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --serif: Georgia, "Times New Roman", serif;
+      --ink:#050505;
+      --paper:#f7f4ea;
+      --paper-2:#ebe6d8;
+      --paper-3:#fffdf6;
+      --gray:#d5d1c8;
+      --muted:rgba(5,5,5,.66);
+      --shadow:9px 9px 0 var(--ink);
+      --shadow-soft:5px 5px 0 rgba(5,5,5,.24);
+      --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      --serif:Georgia,"Times New Roman",serif;
     }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;color:var(--ink);font-family:var(--sans);overflow-x:hidden;
       background:
-        radial-gradient(circle at 18px 18px, rgba(5,5,5,0.12) 0 1.5px, transparent 1.7px),
-        radial-gradient(circle at 6px 6px, rgba(5,5,5,0.07) 0 1px, transparent 1.2px),
-        linear-gradient(90deg, rgba(5,5,5,0.045) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(5,5,5,0.045) 1px, transparent 1px),
+        radial-gradient(circle at 18px 18px,rgba(5,5,5,.13) 0 1.35px,transparent 1.6px),
+        linear-gradient(90deg,rgba(5,5,5,.045) 1px,transparent 1px),
+        linear-gradient(0deg,rgba(5,5,5,.045) 1px,transparent 1px),
         var(--paper);
-      background-size: 22px 22px, 12px 12px, 48px 48px, 48px 48px, auto;
-      font-family: var(--sans);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.18;
-      mix-blend-mode: multiply;
-      background:
-        repeating-linear-gradient(115deg, transparent 0 12px, rgba(5,5,5,0.12) 12px 13px),
-        repeating-linear-gradient(0deg, transparent 0 3px, rgba(5,5,5,0.04) 3px 4px);
-      z-index: -1;
-    }
-
-    a { color: inherit; }
-
-    .site-shell {
-      width: min(1180px, calc(100% - clamp(28px, 5vw, 72px)));
-      margin: 0 auto;
-    }
-
-    .skip-link {
-      position: absolute;
-      left: 16px;
-      top: -60px;
-      background: var(--ink);
-      color: var(--paper-3);
-      padding: 12px 16px;
-      z-index: 10;
-      border-radius: 999px;
-      transition: top 160ms ease;
-    }
-
-    .skip-link:focus { top: 16px; }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      backdrop-filter: blur(14px);
-      background: rgba(244, 239, 227, 0.84);
-      border-bottom: 2px solid var(--line);
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-height: 76px;
-      gap: 20px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      font-weight: 900;
-      letter-spacing: -0.045em;
-      font-size: clamp(1.15rem, 2vw, 1.55rem);
-    }
-
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      border: 3px solid var(--ink);
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at center, var(--paper-3) 0 31%, transparent 32%),
-        linear-gradient(90deg, transparent 45%, var(--ink) 45% 55%, transparent 55%),
-        linear-gradient(0deg, transparent 45%, var(--ink) 45% 55%, transparent 55%),
-        var(--paper-3);
-      box-shadow: 4px 4px 0 var(--ink);
-      transform: rotate(-8deg);
-    }
-
-    nav ul {
-      display: flex;
-      gap: 10px;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
-
-    nav a {
-      display: inline-flex;
-      text-decoration: none;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border: 2px solid transparent;
-      padding: 10px 12px;
-      border-radius: 999px;
-    }
-
-    nav a:hover,
-    nav a:focus-visible {
-      border-color: var(--ink);
-      background: var(--paper-3);
-      outline: none;
-    }
-
-    .hero {
-      position: relative;
-      padding: clamp(52px, 9vw, 118px) 0 52px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: clamp(28px, 5vw, 72px);
-      align-items: end;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--mono);
-      font-weight: 800;
-      font-size: 0.78rem;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      background: var(--paper-3);
-      border: 2px solid var(--ink);
-      padding: 10px 14px;
-      border-radius: 999px;
-      box-shadow: 4px 4px 0 var(--ink);
-    }
-
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--ink);
-      box-shadow: 0 0 0 0 rgba(5,5,5,0.45);
-      animation: pulse 1.9s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(5,5,5,0.45); }
-      72% { box-shadow: 0 0 0 12px rgba(5,5,5,0); }
-      100% { box-shadow: 0 0 0 0 rgba(5,5,5,0); }
-    }
-
-    h1 {
-      margin: 24px 0 20px;
-      max-width: 920px;
-      font-size: clamp(4rem, 12vw, 11rem);
-      line-height: 0.82;
-      letter-spacing: -0.095em;
-      text-transform: uppercase;
-    }
-
-    .jp-label {
-      display: block;
-      margin-top: 12px;
-      font-family: var(--mono);
-      font-size: clamp(0.82rem, 1.3vw, 1rem);
-      font-weight: 900;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .jp-label.hero-label {
-      margin-top: -6px;
-      margin-bottom: 26px;
-      font-size: clamp(0.95rem, 1.7vw, 1.25rem);
-      color: var(--ink);
-    }
-
-    .hero-copy {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 22px;
-      align-items: start;
-      margin-top: 24px;
-    }
-
-    .hero-kicker {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      border-top: 3px solid var(--ink);
-      padding-top: 12px;
-    }
-
-    .hero-copy p {
-      font-size: clamp(1.2rem, 2vw, 1.62rem);
-      line-height: 1.35;
-      margin: 0;
-      max-width: 680px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 30px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 18px;
-      border: 3px solid var(--ink);
-      border-radius: 999px;
-      background: var(--ink);
-      color: var(--paper-3);
-      text-decoration: none;
-      font-weight: 900;
-      box-shadow: 5px 5px 0 rgba(21, 21, 21, 0.25);
-      transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
-    }
-
-    .btn:hover,
-    .btn:focus-visible {
-      transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0 rgba(21, 21, 21, 0.26);
-      outline: none;
-    }
-
-    .btn.secondary {
-      background: var(--paper-3);
-      color: var(--ink);
-    }
-
-    .hero-panel {
-      position: relative;
-      min-height: 480px;
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 3px solid var(--ink);
-      padding: 16px;
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      background: var(--ink);
-      color: var(--paper-3);
-    }
-
-    .panel-body {
-      position: relative;
-      height: 430px;
-      background:
-        radial-gradient(circle at 10px 10px, rgba(5,5,5,0.18) 0 1.8px, transparent 2px),
-        repeating-linear-gradient(130deg, transparent 0 13px, rgba(5,5,5,0.12) 13px 15px),
-        var(--paper-3);
-      background-size: 18px 18px, auto, auto;
-    }
-
-    .orbit {
-      position: absolute;
-      inset: 54px 32px 36px;
-      border: 3px dashed rgba(21,21,21,0.28);
-      border-radius: 50%;
-      animation: rotate 30s linear infinite;
-    }
-
-    .orbit.two {
-      inset: 98px 74px 80px;
-      border-style: solid;
-      border-color: rgba(28,78,216,0.38);
-      animation-duration: 24s;
-      animation-direction: reverse;
-    }
-
-    @keyframes rotate { to { transform: rotate(360deg); } }
-
-    .data-node {
-      position: absolute;
-      display: grid;
-      place-items: center;
-      width: 72px;
-      height: 72px;
-      border: 3px solid var(--ink);
-      border-radius: 8px;
-      color: var(--paper-3);
-      font-weight: 950;
-      box-shadow: 5px 5px 0 rgba(21,21,21,0.3);
-      overflow: hidden;
-    }
-
-    .data-node svg {
-      width: 58%;
-      height: 58%;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .data-node .fill-shape {
-      fill: currentColor;
-      stroke: none;
-    }
-
-    .data-node .label-tag {
-      position: absolute;
-      left: 6px;
-      bottom: 4px;
-      font-family: var(--mono);
-      font-size: 0.54rem;
-      letter-spacing: 0.08em;
-    }
-
-    .data-node.a { left: 18%; top: 16%; background: var(--ink); }
-    .data-node.b { right: 16%; top: 28%; background: var(--paper-3); color: var(--ink); width: 92px; height: 92px; }
-    .data-node.c { left: 34%; bottom: 14%; background: var(--ink); width: 64px; height: 64px; }
-    .data-node.d { right: 28%; bottom: 22%; background: var(--paper-3); color: var(--ink); width: 54px; height: 54px; }
-
-    .connector {
-      position: absolute;
-      height: 3px;
-      background: var(--ink);
-      transform-origin: left center;
-      opacity: 0.82;
-    }
-
-    .connector.one { width: 230px; left: 25%; top: 32%; transform: rotate(16deg); }
-    .connector.two { width: 185px; left: 43%; top: 62%; transform: rotate(-18deg); }
-    .connector.three { width: 160px; left: 32%; top: 48%; transform: rotate(66deg); }
-
-
-    .section {
-      padding: clamp(60px, 8vw, 100px) 0;
-      border-top: 3px solid var(--ink);
-    }
-
-    .section-heading {
-      display: grid;
-      grid-template-columns: 190px 1fr;
-      gap: clamp(20px, 4vw, 54px);
-      margin-bottom: 34px;
-    }
-
-    .section-index {
-      font-family: var(--mono);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      padding-top: 14px;
-      border-top: 3px solid var(--ink);
-    }
-
-    h2 {
-      margin: 0;
-      font-size: clamp(2.5rem, 6vw, 6.6rem);
-      line-height: 0.9;
-      letter-spacing: -0.08em;
-      text-transform: uppercase;
-      max-width: 920px;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(16px, 2.4vw, 24px);
-      align-items: stretch;
-    }
-
-    .project-card {
-      display: flex;
-      flex-direction: column;
-      min-height: 500px;
-      border: 3px solid var(--ink);
-      border-radius: var(--radius);
-      background: var(--paper-3);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
-      transition: transform 160ms ease, box-shadow 160ms ease;
-    }
-
-    .project-card:hover {
-      transform: translate(-3px, -3px) rotate(-0.4deg);
-      box-shadow: 10px 10px 0 rgba(21,21,21,0.22);
-    }
-
-    .project-art {
-      position: relative;
-      min-height: 190px;
-      border-bottom: 3px solid var(--ink);
-      background: var(--paper-2);
-      overflow: hidden;
-    }
-
-    .project-art.network {
-      background:
-        radial-gradient(circle at 24% 34%, var(--paper-3) 0 7%, transparent 7.5%),
-        radial-gradient(circle at 72% 38%, var(--ink) 0 9%, transparent 9.5%),
-        radial-gradient(circle at 44% 72%, var(--paper-3) 0 6%, transparent 6.5%),
-        linear-gradient(35deg, transparent 46%, var(--ink) 46% 48%, transparent 48%),
-        linear-gradient(145deg, transparent 43%, var(--ink) 43% 45%, transparent 45%),
-        radial-gradient(circle at 8px 8px, rgba(5,5,5,0.28) 0 1.6px, transparent 1.8px),
-        var(--paper-2);
-      background-size: auto, auto, auto, auto, auto, 12px 12px, auto;
-    }
-
-    .project-art.timeline {
-      background:
-        linear-gradient(90deg, transparent 10%, var(--ink) 10% 12%, transparent 12% 28%, var(--ink) 28% 30%, transparent 30% 52%, var(--ink) 52% 54%, transparent 54% 78%, var(--ink) 78% 80%, transparent 80%),
-        linear-gradient(0deg, transparent 48%, var(--ink) 48% 51%, transparent 51%),
-        repeating-linear-gradient(90deg, rgba(5,5,5,0.16) 0 2px, transparent 2px 9px),
-        var(--paper-3);
-    }
-
-    .project-art.grid {
-      background:
-        repeating-radial-gradient(circle at center, rgba(5,5,5,0.22) 0 2px, transparent 2px 7px),
-        repeating-linear-gradient(45deg, transparent 0 12px, rgba(5,5,5,0.2) 12px 14px),
-        var(--paper-2);
-      background-size: 18px 18px, auto, auto;
-    }
-
-    .project-art.grid::after {
-      content: "?";
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      font-size: 8rem;
-      font-weight: 950;
-      color: var(--paper-3);
-      -webkit-text-stroke: 3px var(--ink);
-      text-shadow: 5px 5px 0 var(--ink);
-    }
-
-    .project-content {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      padding: 22px;
-    }
-
-    .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      font-weight: 900;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      background: var(--paper);
-    }
-
-    .status-pill.live { background: var(--ink); color: var(--paper-3); }
-    .status-pill.soon { background: var(--paper-3); color: var(--ink); }
-
-    .project-number {
-      font-family: var(--mono);
-      color: var(--muted);
-      font-size: 0.78rem;
-    }
-
-    h3 {
-      margin: 0 0 14px;
-      font-size: clamp(1.7rem, 2.4vw, 2.25rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
-      text-transform: uppercase;
-    }
-
-    .project-content p {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .project-content .btn {
-      margin-top: auto;
-      align-self: flex-start;
-      min-height: 44px;
-      padding-inline: 16px;
-    }
-
-    .btn.disabled {
-      pointer-events: none;
-      background: var(--paper-2);
-      color: rgba(21,21,21,0.58);
-      box-shadow: none;
-    }
-
-    .manifesto {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-      grid-template-areas:
-        "quote copy"
-        "label copy";
-      gap: 14px clamp(24px, 5vw, 70px);
-      align-items: start;
-    }
-
-    .manifesto .big-quote { grid-area: quote; }
-    .manifesto > .jp-label { grid-area: label; }
-    .manifesto .copy-block { grid-area: copy; }
-
-    .big-quote {
-      margin: 0;
-      font-family: var(--serif);
-      font-size: clamp(2rem, 4.4vw, 4.8rem);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
-    }
-
-    .copy-block {
-      border: 3px solid var(--ink);
-      border-radius: var(--radius);
-      background: var(--paper-3);
-      padding: clamp(22px, 4vw, 38px);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .copy-block p {
-      font-size: 1.12rem;
-      line-height: 1.62;
-      margin: 0 0 18px;
-    }
-
-    .copy-block p:last-child { margin-bottom: 0; }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 26px;
-    }
-
-    .chip {
-      display: inline-flex;
-      border: 2px solid var(--ink);
-      border-radius: 0;
-      padding: 8px 11px;
-      background: var(--paper-3);
-      font-family: var(--mono);
-      font-size: 0.74rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .contact-band {
-      border: 3px solid var(--ink);
-      border-radius: 32px;
-      background: var(--ink);
-      color: var(--paper-3);
-      padding: clamp(28px, 5vw, 54px);
-      box-shadow: var(--shadow);
-    }
-
-    .contact-band h2 {
-      color: var(--paper-3);
-      max-width: 850px;
-    }
-
-    .contact-band p {
-      max-width: 680px;
-      font-size: 1.16rem;
-      line-height: 1.55;
-      color: rgba(255,249,237,0.78);
-    }
-
-    .contact-band .btn {
-      background: var(--paper-3);
-      color: var(--ink);
-      border-color: var(--paper-3);
-      box-shadow: 5px 5px 0 rgba(255,255,255,0.24);
-    }
-
-    footer {
-      padding: 40px 0 54px;
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      border-top: 3px solid var(--ink);
-      padding-top: 22px;
-    }
-
-    .footer-links {
-      display: flex;
-      justify-content: end;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .footer-links a {
-      font-family: var(--mono);
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-    }
-
-    @media (max-width: 1100px) {
-      .projects-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .project-card:first-child {
-        grid-column: 1 / -1;
-        display: grid;
-        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-        min-height: 360px;
-      }
-
-      .project-card:first-child .project-art {
-        min-height: 100%;
-        border-bottom: 0;
-        border-right: 3px solid var(--ink);
-      }
-    }
-
-    @media (max-width: 860px) {
-      .topbar {
-        min-height: auto;
-        padding: 14px 0;
-      }
-
-      .hero {
-        padding: 54px 0 42px;
-      }
-
-      .hero-grid,
-      .section-heading,
-      .footer-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-panel {
-        min-height: 320px;
-        max-width: 620px;
-      }
-
-      .panel-body { height: 270px; }
-
-
-      .manifesto {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "quote"
-          "label"
-          "copy";
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-card,
-      .project-card:first-child {
-        display: flex;
-        min-height: auto;
-        grid-column: auto;
-      }
-
-      .project-card:first-child .project-art {
-        min-height: 190px;
-        border-right: 0;
-        border-bottom: 3px solid var(--ink);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .site-shell {
-        width: min(100% - 24px, 1180px);
-      }
-
-      header {
-        position: relative;
-      }
-
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .brand {
-        font-size: 1.2rem;
-      }
-
-      .brand-mark {
-        width: 32px;
-        height: 32px;
-        border-width: 2px;
-      }
-
-      nav {
-        width: 100%;
-      }
-
-      nav ul {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-      }
-
-      nav a {
-        width: 100%;
-        justify-content: center;
-        padding: 9px 6px;
-        font-size: 0.68rem;
-        border-color: var(--ink);
-        background: var(--paper-3);
-      }
-
-      .hero {
-        padding: 40px 0 34px;
-      }
-
-      .eyebrow {
-        max-width: 100%;
-        font-size: 0.68rem;
-        line-height: 1.25;
-      }
-
-      h1 {
-        font-size: clamp(3.15rem, 17vw, 5.9rem);
-        line-height: 0.86;
-        text-shadow: 3px 3px 0 var(--paper-3), 5px 5px 0 var(--ink);
-      }
-
-      h2 {
-        font-size: clamp(2.3rem, 12vw, 4rem);
-        line-height: 0.94;
-      }
-
-      h3 {
-        font-size: clamp(1.65rem, 9vw, 2.35rem);
-      }
-
-      .jp-label {
-        letter-spacing: 0.1em;
-        line-height: 1.45;
-      }
-
-      .hero-copy {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .hero-copy p {
-        font-size: 1.08rem;
-      }
-
-      .hero-actions {
-        display: grid;
-        grid-template-columns: 1fr;
-      }
-
-      .btn {
-        width: 100%;
-        min-height: 50px;
-      }
-
-      .hero-panel {
-        display: none;
-      }
-
-      .section {
-        padding: 46px 0;
-      }
-
-      .section-heading {
-        gap: 12px;
-        margin-bottom: 22px;
-      }
-
-      .section-index {
-        padding-top: 10px;
-        font-size: 0.72rem;
-      }
-
-
-      .project-card {
-        border-width: 2px;
-        box-shadow: 5px 5px 0 rgba(5, 5, 5, 0.24);
-      }
-
-      .project-art,
-      .project-card:first-child .project-art {
-        min-height: 150px;
-        border-bottom-width: 2px;
-      }
-
-      .project-content {
-        padding: 18px;
-      }
-
-      .status-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 16px;
-      }
-
-      .project-content p {
-        font-size: 0.96rem;
-      }
-
-      .copy-block,
-      .contact-band {
-        border-width: 2px;
-        box-shadow: 5px 5px 0 rgba(5, 5, 5, 0.24);
-      }
-
-      .copy-block p,
-      .contact-band p {
-        font-size: 1rem;
-      }
-
-      .chips {
-        gap: 8px;
-      }
-
-      .chip {
-        font-size: 0.66rem;
-      }
-
-      .footer-links {
-        justify-content: flex-start;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .site-shell {
-        width: min(100% - 18px, 1180px);
-      }
-
-      h1 {
-        font-size: clamp(2.75rem, 16vw, 4rem);
-      }
-
-      nav a {
-        font-size: 0.62rem;
-      }
-
-      .project-content,
-      .copy-block,
-      .contact-band {
-        padding: 15px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-      }
+      background-size:18px 18px,48px 48px,48px 48px,auto;
+    }
+    body:before{
+      content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.16;mix-blend-mode:multiply;
+      background:repeating-linear-gradient(115deg,transparent 0 13px,rgba(5,5,5,.13) 13px 14px),
+                 repeating-linear-gradient(0deg,transparent 0 4px,rgba(5,5,5,.05) 4px 5px);
+    }
+    a{color:inherit}
+    .site-shell{width:min(1180px,calc(100% - clamp(24px,5vw,72px)));margin:0 auto}
+    .skip-link{position:absolute;left:16px;top:-60px;background:var(--ink);color:var(--paper-3);padding:12px 16px;z-index:10}
+    .skip-link:focus{top:16px}
+    header{position:sticky;top:0;z-index:8;background:rgba(247,244,234,.9);backdrop-filter:blur(14px);border-bottom:4px solid var(--ink)}
+    .topbar{display:flex;justify-content:space-between;align-items:center;min-height:72px;gap:20px}
+    .brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-weight:950;letter-spacing:-.05em;font-size:clamp(1.15rem,2vw,1.55rem);text-transform:uppercase}
+    .brand-mark{position:relative;width:44px;height:38px;border:3px solid var(--ink);background:var(--paper-3);box-shadow:4px 4px 0 var(--ink);transform:rotate(-5deg);overflow:hidden}
+    .brand-mark:before{content:"";position:absolute;left:-3px;top:-3px;width:18px;height:17px;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);background:var(--paper-2)}
+    .brand-mark:after{content:"";position:absolute;left:9px;right:7px;bottom:8px;height:12px;background:linear-gradient(90deg,var(--ink) 0 3px,transparent 3px 6px,var(--ink) 6px 9px,transparent 9px 13px),linear-gradient(var(--ink),var(--ink));background-size:auto,100% 3px;background-repeat:no-repeat;background-position:left center,left bottom}
+    nav ul{display:flex;gap:8px;padding:0;margin:0;list-style:none}
+    nav a{display:inline-flex;text-decoration:none;font-family:var(--mono);font-size:.74rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;border:2px solid var(--ink);padding:9px 12px;background:var(--paper-3);box-shadow:3px 3px 0 var(--ink)}
+    nav a:hover,nav a:focus-visible{background:var(--ink);color:var(--paper-3);outline:none;transform:translate(-1px,-1px)}
+    .hero{padding:clamp(34px,6vw,72px) 0 clamp(34px,5vw,60px)}
+    .manga-page{position:relative;border:5px solid var(--ink);background:var(--paper-3);box-shadow:var(--shadow);padding:clamp(18px,3vw,34px);overflow:hidden;isolation:isolate}
+    .manga-page:before{content:"";position:absolute;inset:0;z-index:-2;opacity:.18;background:repeating-radial-gradient(circle at 50% 50%,rgba(5,5,5,.55) 0 1.5px,transparent 1.5px 6px),var(--paper-3)}
+    .manga-page:after{content:"";position:absolute;inset:-40%;z-index:-1;background:repeating-conic-gradient(from -22deg at 72% 35%,rgba(5,5,5,.2) 0deg 1deg,transparent 1deg 7deg);opacity:.6}
+    .splash-panel{position:relative;min-height:clamp(520px,72vh,780px);display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.38fr);gap:clamp(18px,3vw,34px);align-items:end}
+    .chapter-tag,.caption-box{display:inline-flex;width:fit-content;border:3px solid var(--ink);background:var(--paper-3);padding:9px 12px;font-family:var(--mono);font-size:.76rem;font-weight:950;text-transform:uppercase;letter-spacing:.11em;box-shadow:4px 4px 0 var(--ink)}
+    .chapter-tag{position:absolute;top:0;left:0;background:var(--ink);color:var(--paper-3);z-index:2}
+    h1{margin:88px 0 8px;max-width:930px;font-size:clamp(4rem,13.4vw,12.5rem);line-height:.79;letter-spacing:-.105em;text-transform:uppercase;text-shadow:5px 5px 0 var(--paper-3),9px 9px 0 var(--ink)}
+    .jp-label{display:block;margin-top:12px;font-family:var(--mono);font-size:clamp(.78rem,1.3vw,.98rem);font-weight:950;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .hero-label{color:var(--ink);font-size:clamp(1rem,2vw,1.35rem);margin-bottom:22px}
+    .hero-copy{position:relative;max-width:640px;margin-top:28px;border:4px solid var(--ink);background:var(--paper-3);padding:clamp(18px,3vw,28px);box-shadow:var(--shadow-soft);font-size:clamp(1.1rem,2vw,1.48rem);line-height:1.35;font-weight:750}
+    .hero-copy:after{content:"";position:absolute;right:50px;bottom:-28px;width:42px;height:30px;background:var(--paper-3);border-right:4px solid var(--ink);border-bottom:4px solid var(--ink);transform:skewX(-28deg) rotate(10deg)}
+    .hero-copy p{margin:0}
+    .side-panel{align-self:stretch;display:grid;grid-template-rows:auto 1fr auto;gap:14px}
+    .sfx{font-size:clamp(3.6rem,8vw,7rem);line-height:.75;font-weight:950;letter-spacing:-.1em;text-transform:uppercase;transform:rotate(5deg);text-shadow:4px 4px 0 var(--paper-3),7px 7px 0 var(--ink)}
+    .meta-panel{border:4px solid var(--ink);background:repeating-linear-gradient(135deg,rgba(5,5,5,.1) 0 2px,transparent 2px 8px),var(--paper-2);padding:18px;box-shadow:var(--shadow-soft);align-self:end}
+    .meta-panel p{margin:0;font-family:var(--mono);font-size:.78rem;line-height:1.55;text-transform:uppercase;letter-spacing:.05em}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 18px;border:3px solid var(--ink);background:var(--ink);color:var(--paper-3);text-decoration:none;font-weight:950;text-transform:uppercase;letter-spacing:-.02em;box-shadow:5px 5px 0 rgba(5,5,5,.24);transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+    .btn:hover,.btn:focus-visible{transform:translate(-2px,-2px);box-shadow:8px 8px 0 rgba(5,5,5,.25);outline:none}
+    .btn.secondary{background:var(--paper-3);color:var(--ink)}
+    .btn.disabled{pointer-events:none;background:var(--gray);color:rgba(5,5,5,.58);box-shadow:none}
+    .page-divider{display:grid;grid-template-columns:120px 1fr 90px;align-items:center;gap:16px;margin:clamp(42px,7vw,76px) 0 22px;font-family:var(--mono);font-size:.78rem;font-weight:950;letter-spacing:.12em;text-transform:uppercase}
+    .page-divider:before,.page-divider:after{content:"";height:4px;background:var(--ink)}
+    .section{padding:0 0 clamp(58px,8vw,98px)}
+    .section-heading{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-bottom:clamp(18px,3vw,32px)}
+    h2{margin:0;max-width:930px;font-size:clamp(2.7rem,7vw,7.1rem);line-height:.86;letter-spacing:-.09em;text-transform:uppercase}
+    .projects-grid{display:grid;grid-template-columns:1.15fr .85fr;grid-template-areas:"feature timeline" "feature future";gap:18px;background:var(--ink);border:5px solid var(--ink);box-shadow:var(--shadow)}
+    .project-card{position:relative;min-height:380px;display:grid;grid-template-rows:220px 1fr;background:var(--paper-3);overflow:hidden;transition:transform .16s ease}
+    .project-card:hover{transform:translate(-3px,-3px)}
+    .project-card.feature{grid-area:feature;min-height:720px;grid-template-rows:1fr auto}
+    .project-card.timeline{grid-area:timeline}
+    .project-card.future{grid-area:future}
+    .project-art{position:relative;min-height:220px;border-bottom:4px solid var(--ink);overflow:hidden}
+    .project-art:before{content:"";position:absolute;inset:-20%;background:repeating-conic-gradient(from 10deg at 50% 50%,rgba(5,5,5,.32) 0deg 1deg,transparent 1deg 6deg);opacity:.6}
+    .project-art.network{min-height:430px;background:radial-gradient(circle at 50% 45%,var(--paper-3) 0 9%,transparent 9.3%),radial-gradient(circle at 20% 24%,var(--ink) 0 5%,transparent 5.4%),radial-gradient(circle at 78% 22%,var(--ink) 0 7%,transparent 7.4%),radial-gradient(circle at 32% 74%,var(--ink) 0 4.5%,transparent 4.9%),radial-gradient(circle at 70% 78%,var(--ink) 0 5.5%,transparent 5.9%),linear-gradient(25deg,transparent 48%,var(--ink) 48% 49.5%,transparent 49.5%),linear-gradient(145deg,transparent 47%,var(--ink) 47% 48.5%,transparent 48.5%),repeating-radial-gradient(circle at center,rgba(5,5,5,.18) 0 2px,transparent 2px 8px),var(--paper-2)}
+    .project-art.preview{min-height:430px;background:#071018}
+    .project-art.preview:before{display:none}
+    .project-art.preview iframe{display:block;width:100%;height:100%;min-height:430px;border:0;background:#071018;pointer-events:none}
+    .project-art.network:after,.project-art.preview:after{content:"RELATIONSHIP MAP";position:absolute;left:18px;bottom:18px;border:3px solid var(--ink);background:var(--paper-3);padding:8px 10px;font-family:var(--mono);font-size:.74rem;font-weight:950;letter-spacing:.1em}
+    .project-art.timeline{background:linear-gradient(90deg,transparent 8%,var(--ink) 8% 10%,transparent 10% 28%,var(--ink) 28% 30%,transparent 30% 51%,var(--ink) 51% 53%,transparent 53% 76%,var(--ink) 76% 78%,transparent 78%),linear-gradient(0deg,transparent 48%,var(--ink) 48% 52%,transparent 52%),repeating-linear-gradient(90deg,rgba(5,5,5,.16) 0 2px,transparent 2px 9px),var(--paper-3)}
+    .project-art.grid{background:repeating-radial-gradient(circle at center,rgba(5,5,5,.26) 0 2px,transparent 2px 7px),repeating-linear-gradient(45deg,transparent 0 12px,rgba(5,5,5,.22) 12px 14px),var(--paper-2)}
+    .project-art.grid:after{content:"???";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(4rem,10vw,8rem);font-weight:950;color:var(--paper-3);-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
+    .project-content{position:relative;display:flex;flex:1;flex-direction:column;padding:clamp(18px,3vw,30px);background:var(--paper-3)}
+    .status-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
+    .status-pill{display:inline-grid;place-items:center;min-width:92px;min-height:54px;padding:9px 12px;background:var(--paper-3);border:3px solid var(--ink);clip-path:polygon(7% 0,19% 9%,33% 0,48% 10%,66% 0,77% 12%,95% 4%,89% 29%,100% 45%,89% 60%,96% 88%,75% 82%,64% 100%,49% 87%,31% 100%,21% 84%,3% 91%,10% 66%,0 49%,10% 31%);font-family:var(--mono);font-size:.65rem;font-weight:950;letter-spacing:.08em;text-align:center;text-transform:uppercase}
+    .status-pill.live{background:var(--ink);color:var(--paper-3)}
+    .status-pill.soon{background:var(--paper-3);color:var(--ink)}
+    .project-number{font-family:var(--mono);color:var(--muted);font-size:.78rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+    h3{margin:0 0 8px;font-size:clamp(2rem,3.4vw,3.7rem);line-height:.9;letter-spacing:-.075em;text-transform:uppercase}
+    .timeline h3,.future h3{font-size:clamp(1.7rem,2.7vw,2.55rem)}
+    .project-content p{margin:18px 0 24px;color:var(--muted);line-height:1.52;font-weight:650}
+    .project-content .btn{margin-top:auto;align-self:flex-start}
+    .about-spread{display:grid;grid-template-columns:minmax(260px,.82fr) minmax(320px,1.18fr);gap:18px;background:var(--ink);border:5px solid var(--ink);box-shadow:var(--shadow)}
+    .quote-panel,.copy-panel{background:var(--paper-3);padding:clamp(22px,4vw,42px)}
+    .quote-panel{position:relative;min-height:440px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+    .quote-panel:before{content:"";position:absolute;inset:-20%;opacity:.32;background:repeating-conic-gradient(from -18deg at 75% 20%,rgba(5,5,5,.45) 0deg 1deg,transparent 1deg 8deg)}
+    .big-quote{position:relative;margin:0;font-family:var(--serif);font-size:clamp(2.1rem,4.6vw,5rem);line-height:.95;letter-spacing:-.06em}
+    .copy-panel p{font-size:1.1rem;line-height:1.62;margin:0 0 18px}
+    .copy-panel a{font-weight:900}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+    .chip{display:inline-flex;border:2px solid var(--ink);padding:8px 11px;background:var(--paper-3);font-family:var(--mono);font-size:.72rem;font-weight:950;text-transform:uppercase;letter-spacing:.06em;box-shadow:3px 3px 0 rgba(5,5,5,.22)}
+    .contact-band{position:relative;border:5px solid var(--ink);background:var(--ink);color:var(--paper-3);padding:clamp(28px,5vw,58px);box-shadow:var(--shadow);overflow:hidden}
+    .contact-band:before{content:"NEXT CHAPTER";position:absolute;right:-16px;top:20px;transform:rotate(8deg);color:rgba(255,255,255,.12);font-size:clamp(4rem,11vw,10rem);font-weight:950;letter-spacing:-.08em;white-space:nowrap}
+    .contact-band h2,.contact-band p,.contact-band .jp-label,.contact-band .btn{position:relative}
+    .contact-band h2{color:var(--paper-3);max-width:900px}
+    .contact-band .jp-label{color:rgba(255,255,255,.72)}
+    .contact-band p{max-width:680px;font-size:1.14rem;line-height:1.55;color:rgba(255,255,255,.78)}
+    .contact-band .btn{background:var(--paper-3);color:var(--ink);border-color:var(--paper-3);box-shadow:5px 5px 0 rgba(255,255,255,.24)}
+    footer{padding:40px 0 54px;font-size:.9rem;color:var(--muted)}
+    .footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:4px solid var(--ink);padding-top:22px}
+    .footer-links{display:flex;justify-content:end;flex-wrap:wrap;gap:14px}
+    .footer-links a{font-family:var(--mono);text-transform:uppercase;font-size:.75rem;letter-spacing:.08em;font-weight:900}
+
+    @media (max-width:980px){
+      .splash-panel{grid-template-columns:1fr;min-height:auto}
+      .side-panel{grid-template-columns:1fr 1fr;grid-template-rows:auto;align-items:stretch}
+      .sfx{font-size:clamp(3rem,13vw,6rem)}
+      .projects-grid{grid-template-columns:1fr;grid-template-areas:"feature" "timeline" "future"}
+      .project-card.feature{min-height:auto}
+      .project-card.feature .project-art{min-height:310px}
+      .about-spread{grid-template-columns:1fr}
+      .quote-panel{min-height:320px}
+    }
+    @media (max-width:720px){
+      header{position:relative}
+      .topbar{min-height:auto;padding:14px 0;align-items:flex-start;flex-direction:column}
+      .brand{font-size:1.15rem}
+      .brand-mark{width:38px;height:34px;border-width:2px}
+      nav{width:100%}
+      nav ul{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+      nav a{justify-content:center;padding:9px 6px;font-size:.66rem}
+      .site-shell{width:min(100% - 24px,1180px)}
+      .manga-page,.projects-grid,.about-spread,.contact-band{border-width:3px;box-shadow:5px 5px 0 var(--ink)}
+      h1{margin-top:68px;font-size:clamp(3.3rem,18vw,6.1rem);text-shadow:3px 3px 0 var(--paper-3),5px 5px 0 var(--ink)}
+      h2{font-size:clamp(2.3rem,12vw,4.25rem);line-height:.9}
+      h3{font-size:clamp(1.85rem,9vw,3rem)}
+      .timeline h3,.future h3{font-size:clamp(1.7rem,8vw,2.6rem)}
+      .hero-copy{border-width:3px;font-size:1.05rem}
+      .hero-copy:after{display:none}
+      .side-panel{grid-template-columns:1fr}
+      .meta-panel{padding:14px}
+      .hero-actions{display:grid;grid-template-columns:1fr}
+      .btn{width:100%}
+      .page-divider{grid-template-columns:1fr;gap:8px}
+      .page-divider:before,.page-divider:after{height:3px}
+      .project-card{grid-template-rows:170px 1fr;min-height:auto}
+      .project-card.feature .project-art{min-height:220px}
+      .project-art{border-bottom-width:3px}
+      .status-row{flex-direction:column;gap:8px}
+      .project-content,.quote-panel,.copy-panel,.contact-band{padding:18px}
+      .copy-panel p,.contact-band p{font-size:1rem}
+      .footer-grid{grid-template-columns:1fr}
+      .footer-links{justify-content:flex-start}
+    }
+    @media (max-width:380px){
+      .site-shell{width:min(100% - 18px,1180px)}
+      nav a{font-size:.6rem}
+      h1{font-size:clamp(2.85rem,17vw,4.2rem)}
+      .chapter-tag,.caption-box{font-size:.64rem}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
     }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-
   <header>
     <div class="site-shell topbar">
       <a class="brand" href="#top" aria-label="Otaku Data Viz home">
@@ -953,54 +194,60 @@
 
   <main id="main">
     <section id="top" class="hero">
-      <div class="site-shell hero-grid">
-        <div>
-          <div class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> Fan-made data experiments</div>
-          <h1>Otaku Data Viz</h1>
-          <span class="jp-label hero-label">オタク・データ・ビズ</span>
-          <div class="hero-copy">
-            <div class="hero-kicker">Interactive data stories</div>
-            <p>Maps, timelines, and visual essays exploring anime, manga, games, and pop-culture history through structured data and playful interaction.</p>
+      <div class="site-shell manga-page">
+        <div class="splash-panel">
+          <div>
+            <div class="chapter-tag">Chapter 001 / Fan-made Data Experiments</div>
+            <h1>Otaku Data Viz</h1>
+            <span class="jp-label hero-label">オタク・データ・ビズ</span>
+            <div class="hero-copy">
+              <p>Interactive maps, timelines, and visual essays exploring anime, manga, games, and pop-culture history through structured data and playful interaction.</p>
+            </div>
+            <div class="hero-actions">
+              <a class="btn" href="#projects">Read the Projects →</a>
+              <a class="btn secondary" href="#about">About the Archive</a>
+            </div>
           </div>
-          <div class="hero-actions">
-            <a class="btn" href="#projects">View Projects</a>
-            <a class="btn secondary" href="#about">About the Project</a>
-          </div>
+          <aside class="side-panel" aria-label="Issue metadata">
+            <div class="sfx" aria-hidden="true">DATA!!</div>
+            <div class="meta-panel">
+              <p>Issue type: interactive archive<br />Visual language: manga panels, lore maps, timeline systems<br />Status: ongoing</p>
+            </div>
+            <div class="caption-box">Unofficial / original UI / no panels or character art used</div>
+          </aside>
         </div>
-
       </div>
     </section>
 
-
     <section id="projects" class="section">
       <div class="site-shell">
+        <div class="page-divider"><span>P.001</span><span>Project Archive</span><span>続く</span></div>
         <div class="section-heading">
-          <div class="section-index">Projects / 001</div>
           <h2>Data viz for the worlds we obsess over.</h2>
           <span class="jp-label">データビズ・フォー・ザ・ワールズ・ウィー・オブセス・オーバー</span>
         </div>
-
         <div class="projects-grid">
-          <article class="project-card">
-            <div class="project-art network" aria-hidden="true"></div>
+          <article class="project-card feature">
+            <div class="project-art preview">
+              <iframe src="dragonball-character-sociogram/?preview=1" title="Live preview of the Dragon Ball Sociogram relationship map" loading="eager"></iframe>
+            </div>
             <div class="project-content">
               <div class="status-row">
-                <span class="status-pill live">Live prototype</span>
-                <span class="project-number">001</span>
+                <span class="status-pill live">Live<br />prototype</span>
+                <span class="project-number">Project 001</span>
               </div>
               <h3>Dragon Ball Sociogram</h3>
               <span class="jp-label">ドラゴンボール・ソシオグラム</span>
               <p>An interactive relationship map exploring character connections, alliances, rivalries, families, mentors, and transformations across the Dragon Ball universe.</p>
-              <a class="btn" href="/otaku-data-viz/dragonball-character-sociogram/">Open Project</a>
+              <a class="btn" href="dragonball-character-sociogram/">Open Project →</a>
             </div>
           </article>
-
-          <article class="project-card">
+          <article class="project-card timeline">
             <div class="project-art timeline" aria-hidden="true"></div>
             <div class="project-content">
               <div class="status-row">
-                <span class="status-pill soon">Coming soon</span>
-                <span class="project-number">002</span>
+                <span class="status-pill soon">Coming<br />soon</span>
+                <span class="project-number">Project 002</span>
               </div>
               <h3>Manga Timeline</h3>
               <span class="jp-label">マンガ・タイムライン</span>
@@ -1008,13 +255,12 @@
               <a class="btn disabled" aria-disabled="true" href="#projects">Coming Soon</a>
             </div>
           </article>
-
-          <article class="project-card">
+          <article class="project-card future">
             <div class="project-art grid" aria-hidden="true"></div>
             <div class="project-content">
               <div class="status-row">
-                <span class="status-pill soon">More soon</span>
-                <span class="project-number">003+</span>
+                <span class="status-pill soon">Next<br />chapter</span>
+                <span class="project-number">Project 003+</span>
               </div>
               <h3>Future Experiments</h3>
               <span class="jp-label">フューチャー・エクスペリメンツ</span>
@@ -1027,20 +273,26 @@
     </section>
 
     <section id="about" class="section">
-      <div class="site-shell manifesto">
-        <blockquote class="big-quote">Fan culture has timelines, systems, rivalries, eras, and invisible architectures worth mapping.</blockquote>
-        <span class="jp-label">ファン・カルチャー・マッピング</span>
-        <div class="copy-block">
-          <p><strong>Otaku Data Viz</strong> is a collection of fan-made data visualization experiments by <a href="https://www.linkedin.com/in/michaelbuquet/" target="_blank" rel="noopener noreferrer">Michael Buquet</a>. Each project uses public research, structured data, and interactive design to make complex fictional worlds easier to explore.</p>
-          <p>Every data-viz project can have its own interface and personality. The main site stays separate: a retro-modern index, archive, and launchpad for the experiments.</p>
-          <p>This site is unofficial and not affiliated with any anime, manga, game, publisher, studio, or rights holder.</p>
-          <div class="chips" aria-label="Project type tags">
-            <span class="chip">Relationship Maps</span>
-            <span class="chip">Timelines</span>
-            <span class="chip">Influence Graphs</span>
-            <span class="chip">Lore Systems</span>
-            <span class="chip">Character Networks</span>
-            <span class="chip">Genre Evolution</span>
+      <div class="site-shell">
+        <div class="page-divider"><span>P.002</span><span>The Method</span><span>分析</span></div>
+        <div class="about-spread">
+          <div class="quote-panel">
+            <span class="caption-box">Why map fictional worlds?</span>
+            <blockquote class="big-quote">Fan culture has timelines, systems, rivalries, eras, and invisible architectures worth mapping.</blockquote>
+            <span class="jp-label">ファン・カルチャー・マッピング</span>
+          </div>
+          <div class="copy-panel">
+            <p><strong>Otaku Data Viz</strong> is a collection of fan-made data visualization experiments by <a href="https://www.linkedin.com/in/michaelbuquet/" target="_blank" rel="noopener noreferrer">Michael Buquet</a>. Each project uses public research, structured data, and interactive design to make complex fictional worlds easier to explore.</p>
+            <p>Every project can have its own interface and personality. The main site acts like an issue cover, archive, and table of contents for the experiments.</p>
+            <p>This site is unofficial and not affiliated with any anime, manga, game, publisher, studio, or rights holder.</p>
+            <div class="chips" aria-label="Project type tags">
+              <span class="chip">Relationship Maps</span>
+              <span class="chip">Timelines</span>
+              <span class="chip">Influence Graphs</span>
+              <span class="chip">Lore Systems</span>
+              <span class="chip">Character Networks</span>
+              <span class="chip">Genre Evolution</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1048,11 +300,12 @@
 
     <section id="collaborate" class="section">
       <div class="site-shell">
+        <div class="page-divider"><span>P.003</span><span>Next Chapter</span><span>連絡</span></div>
         <div class="contact-band">
           <h2>Want a custom lore map, timeline, or pop-culture data story?</h2>
           <span class="jp-label">カスタム・ロア・マップ</span>
           <p>I’m exploring commissions, collaborations, and data-viz templates for creators, writers, educators, and fandom communities.</p>
-          <a class="btn" href="mailto:mpbuquet@gmail.com">Contact Me</a>
+          <a class="btn" href="mailto:mpbuquet@gmail.com">Contact Me →</a>
         </div>
       </div>
     </section>
@@ -1060,10 +313,7 @@
 
   <footer>
     <div class="site-shell footer-grid">
-      <div>
-        <strong>Otaku Data Viz</strong><br />
-        Unofficial fan-made data visualization projects. All franchise names referenced in individual projects belong to their respective owners. This site does not claim ownership of third-party intellectual property.
-      </div>
+      <div><strong>Otaku Data Viz</strong><br />Unofficial fan-made data visualization projects. All franchise names referenced in individual projects belong to their respective owners. This site does not claim ownership of third-party intellectual property.</div>
       <div class="footer-links">
         <a href="#projects">Projects</a>
         <a href="#about">About</a>
@@ -1071,19 +321,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    const cards = document.querySelectorAll('.project-card');
-
-    cards.forEach((card) => {
-      card.addEventListener('mousemove', (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        card.style.setProperty('--x', `${x}px`);
-        card.style.setProperty('--y', `${y}px`);
-      });
-    });
-  </script>
 </body>
 </html>

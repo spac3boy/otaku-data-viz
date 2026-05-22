@@ -613,31 +613,36 @@
     }
 
     .timeline-scroll::after {
-      content: "Scroll →";
+      content: "Swipe timeline →";
       position: sticky;
-      right: 10px;
-      bottom: 10px;
-      z-index: 6;
+      right: 16px;
+      bottom: 16px;
+      z-index: 12;
       float: right;
-      margin: -34px 10px 8px 0;
+      margin: -54px 16px 14px 0;
       display: inline-flex;
-      padding: 6px 9px;
+      align-items: center;
+      min-height: 42px;
+      padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(17,17,17,.14);
-      color: var(--muted);
-      font-size: 11px;
+      background: #151515;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      font-size: 12px;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: .08em;
+      letter-spacing: .105em;
       pointer-events: none;
-      box-shadow: 0 8px 20px rgba(31,35,28,.1);
-      animation: scrollHintNudge 1.35s ease-in-out 4;
+      box-shadow: 0 14px 30px rgba(31,35,28,.24), 0 0 0 4px rgba(240,180,41,.26);
+      animation: scrollHintNudge 1.15s ease-in-out infinite;
+      transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
     }
 
-    .timeline-scroll.has-scrolled::after {
+    .timeline-scroll.has-dismissed-swipe-hint::after {
       opacity: 0;
+      visibility: hidden;
       animation: none;
+      transform: translateX(12px);
     }
 
     .year-ruler {
@@ -1782,7 +1787,13 @@
       }
 
       .timeline-scroll::after {
-        content: "Swipe →";
+        content: "Swipe timeline →";
+        right: 12px;
+        bottom: 12px;
+        margin: -54px 12px 12px 0;
+        min-height: 44px;
+        padding: 10px 13px;
+        font-size: 11px;
       }
 
       .year-ruler {
@@ -2732,6 +2743,8 @@
     const yearRuler = document.getElementById('yearRuler');
     const timelineGrid = document.getElementById('timelineGrid');
     const svg = document.getElementById('timeline');
+
+    let timelineUserGestureStart = null;
     const details = document.getElementById('details');
     const tooltip = document.getElementById('tooltip');
     const mangaList = document.getElementById('mangaList');
@@ -3892,7 +3905,8 @@
         details.dataset.hasSelection = isMobileViewport() ? 'mobile-hidden' : '';
         details.dataset.mobileInitialized = isMobileViewport() ? 'true' : '';
         document.body.classList.remove('details-open');
-        timelineScroll.classList.remove('has-scrolled');
+        timelineScroll.classList.remove('has-dismissed-swipe-hint');
+        timelineUserGestureStart = null;
         timelineScroll.scrollLeft = 0;
         populateFilters();
         renderLegend();
@@ -3913,10 +3927,28 @@
       zoomSlider.value = 1;
       applyZoom(false);
     });
+    function beginTimelineUserGesture() {
+      timelineUserGestureStart = timelineScroll.scrollLeft;
+    }
+
+    function dismissSwipeHintIfUserScrolled() {
+      if (timelineUserGestureStart === null) return;
+      if (Math.abs(timelineScroll.scrollLeft - timelineUserGestureStart) > 8) {
+        timelineScroll.classList.add('has-dismissed-swipe-hint');
+        timelineUserGestureStart = null;
+      }
+    }
+
+    timelineScroll.addEventListener('pointerdown', beginTimelineUserGesture, { passive: true });
+    timelineScroll.addEventListener('touchstart', beginTimelineUserGesture, { passive: true });
+    timelineScroll.addEventListener('keydown', event => {
+      if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) beginTimelineUserGesture();
+    });
     timelineScroll.addEventListener('scroll', () => {
-      if (timelineScroll.scrollLeft > 8) timelineScroll.classList.add('has-scrolled');
+      dismissSwipeHintIfUserScrolled();
     }, { passive: true });
     timelineScroll.addEventListener('wheel', event => {
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) beginTimelineUserGesture();
       const isMostlyVertical = Math.abs(event.deltaY) > Math.abs(event.deltaX);
       if (!event.shiftKey && isMostlyVertical) {
         window.scrollBy({ top: event.deltaY, left: 0, behavior: 'auto' });

@@ -59,11 +59,10 @@
     .jp-label{display:block;margin-top:12px;font-family:var(--mono);font-size:clamp(.78rem,1.3vw,.98rem);font-weight:950;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
     .hero-label{color:var(--ink);font-size:clamp(1rem,2vw,1.35rem);margin-bottom:22px}
     .hero-copy{position:relative;max-width:640px;margin-top:28px;border:4px solid var(--ink);background:var(--paper-3);padding:clamp(18px,3vw,28px);box-shadow:var(--shadow-soft);font-size:clamp(1.1rem,2vw,1.48rem);line-height:1.35;font-weight:750}
-    .hero-copy:after{content:"";position:absolute;right:50px;bottom:-28px;width:42px;height:30px;background:var(--paper-3);border-right:4px solid var(--ink);border-bottom:4px solid var(--ink);transform:skewX(-28deg) rotate(10deg)}
     .hero-copy p{margin:0}
-    .side-panel{align-self:stretch;display:grid;grid-template-rows:auto 1fr auto;gap:14px}
-    .sfx{font-size:clamp(3.6rem,8vw,7rem);line-height:.75;font-weight:950;letter-spacing:-.1em;text-transform:uppercase;transform:rotate(5deg);text-shadow:4px 4px 0 var(--paper-3),7px 7px 0 var(--ink)}
-    .meta-panel{border:4px solid var(--ink);background:repeating-linear-gradient(135deg,rgba(5,5,5,.1) 0 2px,transparent 2px 8px),var(--paper-2);padding:18px;box-shadow:var(--shadow-soft);align-self:end}
+    .side-panel{align-self:stretch;display:grid;grid-template-rows:auto 1fr auto;gap:14px;justify-items:end;padding-top:74px}
+    .side-panel .caption-box{grid-row:3;align-self:end;justify-self:end}
+    .meta-panel{max-width:330px;border:4px solid var(--ink);background:repeating-linear-gradient(135deg,rgba(5,5,5,.1) 0 2px,transparent 2px 8px),var(--paper-2);padding:18px;box-shadow:var(--shadow-soft);align-self:start}
     .meta-panel p{margin:0;font-family:var(--mono);font-size:.78rem;line-height:1.55;text-transform:uppercase;letter-spacing:.05em}
     .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
     .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 18px;border:3px solid var(--ink);background:var(--ink);color:var(--paper-3);text-decoration:none;font-weight:950;text-transform:uppercase;letter-spacing:-.02em;box-shadow:5px 5px 0 rgba(5,5,5,.24);transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
@@ -88,6 +87,7 @@
     .project-art.preview:before{display:none}
     .project-art.preview iframe{display:block;width:100%;height:100%;min-height:430px;border:0;background:#071018;pointer-events:none}
     .project-art.network:after,.project-art.preview:after{content:"RELATIONSHIP MAP";position:absolute;left:18px;bottom:18px;border:3px solid var(--ink);background:var(--paper-3);padding:8px 10px;font-family:var(--mono);font-size:.74rem;font-weight:950;letter-spacing:.1em}
+    .project-art.preview.timeline-preview:after{content:"MANGA TIMELINE"}
     .project-art.timeline{background:linear-gradient(90deg,transparent 8%,var(--ink) 8% 10%,transparent 10% 28%,var(--ink) 28% 30%,transparent 30% 51%,var(--ink) 51% 53%,transparent 53% 76%,var(--ink) 76% 78%,transparent 78%),linear-gradient(0deg,transparent 48%,var(--ink) 48% 52%,transparent 52%),repeating-linear-gradient(90deg,rgba(5,5,5,.16) 0 2px,transparent 2px 9px),var(--paper-3)}
     .project-art.grid{background:repeating-radial-gradient(circle at center,rgba(5,5,5,.26) 0 2px,transparent 2px 7px),repeating-linear-gradient(45deg,transparent 0 12px,rgba(5,5,5,.22) 12px 14px),var(--paper-2)}
     .project-art.grid:after{content:"???";position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(4rem,10vw,8rem);font-weight:950;color:var(--paper-3);-webkit-text-stroke:3px var(--ink);text-shadow:5px 5px 0 var(--ink)}
@@ -124,8 +124,8 @@
 
     @media (max-width:980px){
       .splash-panel{grid-template-columns:1fr;min-height:auto}
-      .side-panel{grid-template-columns:1fr 1fr;grid-template-rows:auto;align-items:stretch}
-      .sfx{font-size:clamp(3rem,13vw,6rem)}
+      .side-panel{grid-template-columns:1fr 1fr;grid-template-rows:auto;align-items:end;padding-top:0}
+      .side-panel .caption-box{grid-row:auto}
       .projects-grid{grid-template-columns:1fr;grid-template-areas:"feature" "timeline" "future"}
       .project-card.feature{min-height:auto}
       .project-card.feature .project-art{min-height:310px}
@@ -147,8 +147,9 @@
       h3{font-size:clamp(1.85rem,9vw,3rem)}
       .timeline h3,.future h3{font-size:clamp(1.7rem,8vw,2.6rem)}
       .hero-copy{border-width:3px;font-size:1.05rem}
-      .hero-copy:after{display:none}
-      .side-panel{grid-template-columns:1fr}
+      .side-panel{grid-template-columns:1fr;justify-items:stretch}
+      .caption-box{width:100%;justify-content:center}
+      .side-panel .caption-box{justify-self:stretch}
       .meta-panel{padding:14px}
       .hero-actions{display:grid;grid-template-columns:1fr}
       .btn{width:100%}
@@ -197,7 +198,7 @@
       <div class="site-shell manga-page">
         <div class="splash-panel">
           <div>
-            <div class="chapter-tag">Chapter 001 / Fan-made Data Experiments</div>
+            <div class="chapter-tag">Volume 001 / Data Visualization Stories</div>
             <h1>Otaku Data Viz</h1>
             <span class="jp-label hero-label">オタク・データ・ビズ</span>
             <div class="hero-copy">
@@ -209,9 +210,8 @@
             </div>
           </div>
           <aside class="side-panel" aria-label="Issue metadata">
-            <div class="sfx" aria-hidden="true">DATA!!</div>
             <div class="meta-panel">
-              <p>Issue type: interactive archive<br />Visual language: manga panels, lore maps, timeline systems<br />Status: ongoing</p>
+              <p>Issue type: data storytelling archive<br />Visual language: manga panels, lore maps, timeline systems<br />Status: ongoing</p>
             </div>
             <div class="caption-box">Unofficial / original UI / no panels or character art used</div>
           </aside>
@@ -229,11 +229,11 @@
         <div class="projects-grid">
           <article class="project-card feature">
             <div class="project-art preview">
-              <iframe src="dragonball-character-sociogram/?preview=1" title="Live preview of the Dragon Ball Sociogram relationship map" loading="eager"></iframe>
+              <iframe src="dragonball-character-sociogram/index.html?preview=1" title="Live preview of the Dragon Ball Sociogram relationship map" loading="eager"></iframe>
             </div>
             <div class="project-content">
               <div class="status-row">
-                <span class="status-pill live">Live<br />prototype</span>
+                <span class="status-pill live">Live<br />data viz</span>
                 <span class="project-number">Project 001</span>
               </div>
               <h3>Dragon Ball Sociogram</h3>
@@ -243,16 +243,18 @@
             </div>
           </article>
           <article class="project-card timeline">
-            <div class="project-art timeline" aria-hidden="true"></div>
+            <div class="project-art preview timeline-preview">
+              <iframe src="manga-timeline.html?preview=1" title="Live preview of the manga and anime timeline data visualization" loading="lazy"></iframe>
+            </div>
             <div class="project-content">
               <div class="status-row">
-                <span class="status-pill soon">Coming<br />soon</span>
+                <span class="status-pill live">Live<br />data viz</span>
                 <span class="project-number">Project 002</span>
               </div>
-              <h3>Manga Timeline</h3>
-              <span class="jp-label">マンガ・タイムライン</span>
-              <p>A visual timeline of major manga releases, creative influence, genre shifts, and cultural impact from early foundations to modern hits.</p>
-              <a class="btn disabled" aria-disabled="true" href="#projects">Coming Soon</a>
+              <h3>Manga & Anime Evolution</h3>
+              <span class="jp-label">マンガとアニメの進化</span>
+              <p>A comparative timeline of manga serialization history and anime releases, tracing adaptations, franchise growth, genre shifts, and global breakout moments.</p>
+              <a class="btn" href="manga-timeline.html">Open Timeline</a>
             </div>
           </article>
           <article class="project-card future">
@@ -262,9 +264,9 @@
                 <span class="status-pill soon">Next<br />chapter</span>
                 <span class="project-number">Project 003+</span>
               </div>
-              <h3>Future Experiments</h3>
+              <h3>Future Data Stories</h3>
               <span class="jp-label">フューチャー・エクスペリメンツ</span>
-              <p>Future projects may explore anime power systems, game franchise timelines, studio histories, genre evolution, and character archetype networks.</p>
+              <p>Future data stories may explore anime power systems, game franchise timelines, studio histories, genre evolution, and character archetype networks.</p>
               <a class="btn disabled" aria-disabled="true" href="#projects">More Soon</a>
             </div>
           </article>
@@ -282,8 +284,8 @@
             <span class="jp-label">ファン・カルチャー・マッピング</span>
           </div>
           <div class="copy-panel">
-            <p><strong>Otaku Data Viz</strong> is a collection of fan-made data visualization experiments by <a href="https://www.linkedin.com/in/michaelbuquet/" target="_blank" rel="noopener noreferrer">Michael Buquet</a>. Each project uses public research, structured data, and interactive design to make complex fictional worlds easier to explore.</p>
-            <p>Every project can have its own interface and personality. The main site acts like an issue cover, archive, and table of contents for the experiments.</p>
+            <p><strong>Otaku Data Viz</strong> is a collection of fan-made data visualizations by <a href="https://www.linkedin.com/in/michaelbuquet/" target="_blank" rel="noopener noreferrer">Michael Buquet</a>. Each project uses public research, structured data, and interactive design to make complex fictional worlds easier to explore.</p>
+            <p>Every project can have its own interface and personality. The main site acts like an issue cover, archive, and table of contents for the data stories.</p>
             <p>This site is unofficial and not affiliated with any anime, manga, game, publisher, studio, or rights holder.</p>
             <div class="chips" aria-label="Project type tags">
               <span class="chip">Relationship Maps</span>

@@ -1412,6 +1412,11 @@
       50% { transform: translateX(8px); }
     }
 
+    @keyframes mobileSwipeHintNudge {
+      0%, 100% { transform: translateX(-50%); }
+      50% { transform: translateX(calc(-50% + 10px)); }
+    }
+
     @keyframes currentYearPulse {
       0%, 100% { opacity: .3; }
       50% { opacity: .78; }
@@ -1788,12 +1793,23 @@
 
       .timeline-scroll::after {
         content: "Swipe timeline →";
-        right: 12px;
-        bottom: 12px;
-        margin: -54px 12px 12px 0;
+        position: fixed;
+        left: 50%;
+        right: auto;
+        bottom: calc(16px + env(safe-area-inset-bottom));
+        z-index: 90;
+        float: none;
+        margin: 0;
+        justify-content: center;
+        max-width: calc(100vw - 32px);
         min-height: 44px;
         padding: 10px 13px;
         font-size: 11px;
+        animation-name: mobileSwipeHintNudge;
+      }
+
+      .timeline-scroll.has-dismissed-swipe-hint::after {
+        transform: translate(-50%, 12px);
       }
 
       .year-ruler {

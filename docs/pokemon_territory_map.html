@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon Treemap | Otaku Data Viz</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --dex-red: #d4202f;
+      --dex-red-deep: #8f111d;
+      --dex-red-bright: #f04452;
+      --dex-blue: #43c6ff;
+      --dex-yellow: #ffd84a;
+      --dex-screen: #172033;
+      --dex-screen-2: #0f172a;
+      --ink: #101827;
+      --panel: #fff7df;
+      --border: #111827;
+      --metal: #d9e2ec;
+      --metal-dark: #9aa8b7;
+      --glass: rgba(255,255,255,.72);
+      --shadow-hard: 0 7px 0 var(--border);
+      --shadow-soft: 0 18px 42px rgba(15,23,42,.24);
+      --muted: #64748b;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 14% 8%, rgba(67, 198, 255, .2) 0 92px, transparent 94px),
+        radial-gradient(circle at 88% 12%, rgba(255, 216, 74, .18) 0 120px, transparent 122px),
+        linear-gradient(135deg, #eef4fb 0%, #f8fafc 42%, #e3edf8 100%);
+      min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(rgba(17,24,39,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17,24,39,.035) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.58), transparent 72%);
+      pointer-events: none;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; touch-action: manipulation; }
+    :focus-visible { outline: 4px solid rgba(67,198,255,.95); outline-offset: 3px; }
+
+    .page-shell {
+      width: min(100%, 1680px);
+      margin: 0 auto;
+      padding: 8px 8px calc(28px + var(--safe-bottom));
+    }
+    .dot { width: 9px; height: 9px; border: 2px solid var(--border); border-radius: 50%; background: var(--dot, #22c55e); }
+    .pokedex-header-title {
+      display: grid;
+      gap: 1px;
+      color: #fff;
+      justify-self: start;
+      min-width: 0;
+    }
+    .pokedex-header-title h1 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(19px, 5vw, 42px);
+      line-height: 1;
+      letter-spacing: 0;
+      font-weight: 950;
+      text-shadow: 0 2px 0 rgba(0,0,0,.22);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .pokedex-header-title span {
+      display: block;
+      color: rgba(255,255,255,.82);
+      font-size: clamp(10px, 2.4vw, 14px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      white-space: nowrap;
+    }
+
+    .status-card {
+      background:
+        radial-gradient(circle at 16% 18%, rgba(67,198,255,.28), transparent 32%),
+        linear-gradient(180deg, var(--dex-screen), var(--dex-screen-2));
+      color: #dff7ff;
+      border: 3px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 4px 0 var(--border), inset 0 0 0 1px rgba(255,255,255,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .status-card:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 2px, transparent 2px 7px);
+      pointer-events: none;
+    }
+    .status-card strong,
+    .status-card span {
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+    .status-card strong {
+      color: #fff;
+      font-size: 22px;
+      line-height: .95;
+      letter-spacing: -.04em;
+    }
+    .status-card span {
+      margin-top: 6px;
+      color: #bfdbfe;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .pokedex-shell {
+      margin-top: 12px;
+      background:
+        radial-gradient(circle at 22px 22px, rgba(255,255,255,.34), transparent 52px),
+        linear-gradient(145deg, var(--dex-red-bright) 0%, var(--dex-red) 38%, var(--dex-red-deep) 100%);
+      padding: 10px;
+      border: 4px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow-hard), 0 28px 70px rgba(15,23,42,.32), inset 0 2px rgba(255,255,255,.28), inset 0 -12px rgba(0,0,0,.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .pokedex-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.18), transparent 18%, transparent 82%, rgba(0,0,0,.22)),
+        repeating-linear-gradient(90deg, transparent 0 34px, rgba(17,24,39,.08) 34px 35px);
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .dex-lid {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 3px solid rgba(17,24,39,.96);
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.2), transparent 42%),
+        linear-gradient(135deg, #e72b39, #ad1826);
+      box-shadow: inset 0 2px rgba(255,255,255,.26), inset 0 -6px rgba(0,0,0,.18), 0 4px 0 rgba(17,24,39,.88);
+      color: #fff;
+    }
+    .dex-lights { display: flex; gap: 7px; align-items: center; }
+    .big-light {
+      width: 38px;
+      height: 38px;
+      border: 3px solid var(--border);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 25%, #fff 0 7px, transparent 8px),
+        radial-gradient(circle, #67e8f9, #0ea5e9 68%, #075985 69% 100%);
+      box-shadow: inset -4px -5px rgba(0,0,0,.25), 0 0 0 3px rgba(255,255,255,.35), 0 0 24px rgba(67,198,255,.68);
+      animation: lensPulse 2.8s ease-in-out infinite;
+    }
+    .small-light { width: 13px; height: 13px; border: 2px solid var(--border); border-radius: 50%; background: radial-gradient(circle at 30% 25%, #fff 0 2px, transparent 3px), var(--light, #f87171); box-shadow: inset -2px -3px rgba(0,0,0,.18), 0 1px 0 rgba(255,255,255,.28); animation: statusBlink 3.2s ease-in-out infinite; }
+    .small-light:nth-child(3) { animation-delay: .42s; }
+    .small-light:nth-child(4) { animation-delay: .86s; }
+    .dex-title {
+      grid-column: 1 / -1;
+      font-size: 9px;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      text-shadow: 0 2px 0 rgba(0,0,0,.18);
+      line-height: 1.2;
+    }
+
+    .breadcrumb {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 2px 0 4px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      scrollbar-width: none;
+    }
+    .breadcrumb::-webkit-scrollbar { display: none; }
+    .crumb { flex: 0 0 auto; min-height: 34px; border: 2px solid var(--border); background: linear-gradient(180deg, #fff, #eef2f7); color: var(--ink); border-radius: 999px; padding: 7px 10px; box-shadow: 0 2px 0 var(--border), inset 0 -2px rgba(17,24,39,.08); }
+
+    .dex-grid { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: stretch; }
+    .screen-bezel {
+      position: relative;
+      background:
+        linear-gradient(145deg, #f7fafc, var(--metal) 42%, var(--metal-dark));
+      border: 3px solid var(--border);
+      border-radius: 22px;
+      padding: 10px;
+      box-shadow: inset 0 2px rgba(255,255,255,.78), inset 0 -10px rgba(0,0,0,.18), 0 5px 0 rgba(17,24,39,.82);
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 8px;
+    }
+    .screen-bezel::before,
+    .screen-bezel::after {
+      content: "";
+      position: absolute;
+      top: 10px;
+      width: 9px;
+      height: 9px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: inset -1px -2px rgba(0,0,0,.2);
+      pointer-events: none;
+    }
+    .screen-bezel::before { left: 14px; }
+    .screen-bezel::after { left: 30px; background: #38bdf8; }
+
+    .screen-top {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      align-items: center;
+      position: sticky;
+      top: 86px;
+      z-index: 18;
+      padding: 16px 2px 2px;
+      background: transparent;
+    }
+    .screen-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(72px, .58fr);
+      gap: 8px;
+      align-items: center;
+    }
+    .search, .select {
+      appearance: none;
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      border: 3px solid var(--border);
+      border-radius: 18px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      background: linear-gradient(180deg, #fff, #eef2f7);
+      box-shadow: 0 4px 0 rgba(17,24,39,.86), inset 0 1px rgba(255,255,255,.78), inset 0 -4px rgba(17,24,39,.1);
+    }
+    .search { grid-column: 1 / -1; }
+    .controls .btn { width: 100%; }
+    .select {
+      padding-right: 46px;
+      background:
+        linear-gradient(45deg, transparent 50%, #111827 50%) right 22px center / 8px 8px no-repeat,
+        linear-gradient(135deg, #111827 50%, transparent 50%) right 14px center / 8px 8px no-repeat,
+        linear-gradient(180deg, #fff, #eef2f7);
+    }
+    .select::-ms-expand { display: none; }
+
+    .btn { appearance: none; min-height: 42px; border: 3px solid var(--border); border-radius: 18px; padding: 8px 14px; font-weight: 850; background: linear-gradient(180deg, #fff, #e8edf3); color: var(--ink); box-shadow: 0 4px 0 var(--border), inset 0 1px rgba(255,255,255,.7), inset 0 -4px rgba(17,24,39,.12); transition: transform .16s ease, box-shadow .16s ease, filter .16s ease; }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--border); }
+    .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--border); }
+    .btn.yellow { background: linear-gradient(180deg, #ffe96f, var(--dex-yellow) 58%, #eab308); }
+    .btn.dark { background: linear-gradient(180deg, #263244, #111827); color: #fff; }
+    .btn.small { min-height: 42px; padding: 8px 12px; border-width: 3px; box-shadow: 0 4px 0 var(--border), inset 0 1px rgba(255,255,255,.12), inset 0 -4px rgba(255,255,255,.05); font-size: 12px; }
+
+    .treemap-wrap {
+      position: relative;
+      border: 4px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 0, rgba(255,255,255,.12), transparent 40%),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+        var(--dex-screen);
+      min-height: min(72vh, 560px);
+      height: min(72vh, 560px);
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,.08), inset 0 0 38px rgba(0,0,0,.46), 0 4px 0 rgba(17,24,39,.82);
+    }
+    .treemap-wrap::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 7px;
+      height: 28%;
+      z-index: 13;
+      border-radius: 14px 14px 45% 45%;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), transparent);
+      pointer-events: none;
+      mix-blend-mode: screen;
+      animation: glassDrift 6.5s ease-in-out infinite alternate;
+    }
+    .treemap-wrap:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 2px, transparent 2px 8px),
+        linear-gradient(90deg, rgba(67,198,255,.08), transparent 18%, transparent 82%, rgba(255,216,74,.08));
+      pointer-events: none;
+      z-index: 12;
+      background-size: auto, 220% 100%;
+      animation: screenScan 3.6s linear infinite;
+    }
+    .treemap { position: relative; height: 100%; min-height: 100%; width: 100%; padding: 8px; isolation: isolate; }
+
+    .type-tile, .pokemon-tile {
+      position: absolute;
+      border: 2px solid rgba(255,255,255,.68);
+      overflow: hidden;
+      cursor: pointer;
+      transition: left .22s ease, top .22s ease, width .22s ease, height .22s ease, opacity .18s ease, filter .18s ease, box-shadow .18s ease, transform .18s ease;
+      animation: tileBoot .24s ease-out both;
+    }
+    .type-tile {
+      border-radius: 10px;
+      background:
+        linear-gradient(155deg, rgba(255,255,255,.36), transparent 28%),
+        linear-gradient(135deg, color-mix(in srgb, var(--tile-color) 94%, #ffffff 6%), color-mix(in srgb, var(--tile-color) 70%, #000000 30%));
+      border-color: var(--tile-stroke, rgba(255,255,255,.86));
+      color: var(--tile-fg, #111827);
+      box-shadow: inset 0 0 0 2px rgba(17,24,39,.38), inset -12px -16px rgba(0,0,0,.18), inset 7px 7px rgba(255,255,255,.14);
+    }
+    .type-tile:hover,
+    .type-tile.active,
+    .type-tile.dpad-focused {
+      box-shadow: inset 0 0 0 3px var(--tile-focus, rgba(255,255,255,.9)), 0 0 0 4px rgba(67,198,255,.78), inset -10px -14px rgba(0,0,0,.18);
+      z-index: 8;
+      animation: tileFocusPulse .55s ease-out both;
+    }
+    .type-tile.dimmed, .pokemon-tile.dimmed { opacity: .22; filter: grayscale(.5); }
+
+    .type-label {
+      position: absolute;
+      inset: 7px;
+      display: block;
+      color: var(--tile-fg, #111827);
+      text-align: left;
+      text-shadow: var(--tile-text-shadow, 0 1px 2px rgba(0,0,0,.32));
+      pointer-events: none;
+      z-index: 2;
+    }
+    .type-label > div:first-child {
+      display: inline-block;
+      max-width: calc(100% - 36px);
+      min-width: 0;
+      padding: 5px 6px;
+      border: 1px solid rgba(255,255,255,.62);
+      border-radius: 10px;
+      background: var(--tile-label-bg, rgba(255,255,255,.82));
+      box-shadow: 0 2px 0 rgba(17,24,39,.22), 0 10px 20px rgba(17,24,39,.12);
+      backdrop-filter: blur(8px);
+    }
+    .type-label strong {
+      display: block;
+      max-width: 100%;
+      font-size: clamp(12px, 3.1vw, 20px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 950;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .type-label small {
+      display: block;
+      max-width: 100%;
+      margin-top: 3px;
+      font-size: clamp(7px, 1.9vw, 10px);
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .type-corner-icon,
+    .family-corner-icon {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      z-index: 3;
+      opacity: .92;
+      pointer-events: none;
+    }
+    .family-corner-icon { color: var(--tile-icon-color, rgba(17,24,39,.86)); }
+
+    .type-icon {
+      width: clamp(18px, 5vw, 30px);
+      height: clamp(18px, 5vw, 30px);
+      font-size: clamp(18px, 5vw, 30px);
+      color: var(--tile-icon-color, var(--tile-fg, #111827));
+      filter: drop-shadow(0 2px 0 rgba(255,255,255,.32));
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+    }
+    .type-badge-icon { width: 16px; height: 16px; font-size: 16px; color: #111827; flex: 0 0 auto; display: inline-grid; place-items: center; }
+    .tile-inline-icon { width: 17px; height: 17px; font-size: 15px; color: currentColor; vertical-align: -2px; margin-right: 5px; display: inline-grid; place-items: center; }
+    .fallback-tile-icon { width: 36px; height: 36px; font-size: 34px; color: #111827; justify-self: center; align-self: center; opacity: .78; display: inline-grid; place-items: center; }
+
+    .pokemon-tile {
+      border-width: 1px;
+      border-radius: 9px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.98), rgba(237,242,247,.9)),
+        var(--tile-soft-bg, rgba(255,255,255,.9));
+      color: var(--tile-soft-fg, #111827);
+      border-color: var(--tile-soft-stroke, rgba(17,24,39,.42));
+      display: block;
+      padding: 7px;
+      box-shadow: inset -5px -6px rgba(0,0,0,.08), inset 3px 3px rgba(255,255,255,.68);
+      z-index: 3;
+    }
+    .pokemon-tile:hover,
+    .pokemon-tile.focused,
+    .pokemon-tile.dpad-focused { background: var(--tile-soft-hover, #fff); box-shadow: 0 0 0 4px rgba(255,216,74,.9), inset -5px -6px rgba(0,0,0,.08); z-index: 10; animation: tileFocusPulse .55s ease-out both; }
+    .pokemon-tile-info { min-width: 0; align-self: start; justify-self: start; text-align: left; max-width: calc(100% - 28px); z-index: 2; }
+    .pokemon-tile.family-tile { display: block; padding: 7px; }
+    .pokemon-tile.family-tile .pokemon-tile-info { position: absolute; left: 7px; top: 7px; right: 34px; max-width: none; }
+    .pokemon-tile.micro span { display: none; }
+    .pokemon-tile strong { display: block; font-size: clamp(11px, 2.8vw, 15px); line-height: 1.08; letter-spacing: 0; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pokemon-tile span { display: block; margin-top: 3px; font-size: clamp(7px, 1.9vw, 9px); font-weight: 800; text-transform: uppercase; color: var(--tile-soft-muted, rgba(17,24,39,.72)); letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .type-tile.compact .type-label > div:first-child,
+    .pokemon-tile.compact .pokemon-tile-info {
+      max-width: calc(100% - 28px);
+    }
+    .type-tile.compact .type-label strong,
+    .pokemon-tile.compact strong {
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .type-tile.compact .type-label small,
+    .pokemon-tile.compact span {
+      font-size: 7px;
+      letter-spacing: .03em;
+    }
+    .type-tile.tiny .type-label > div:first-child,
+    .pokemon-tile.tiny .pokemon-tile-info {
+      max-width: calc(100% - 20px);
+      padding: 4px 5px;
+    }
+    .type-tile.tiny .type-label strong,
+    .pokemon-tile.tiny strong {
+      font-size: 10px;
+      line-height: 1;
+    }
+    .type-tile.tiny .type-label small,
+    .pokemon-tile.tiny span {
+      display: none;
+    }
+    .type-tile.micro .type-label > div:first-child,
+    .pokemon-tile.micro .pokemon-tile-info {
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+      max-width: calc(100% - 16px);
+    }
+    .type-tile.micro .type-label strong,
+    .pokemon-tile.micro strong {
+      font-size: 0;
+    }
+    .type-tile.micro .type-label strong::first-letter,
+    .pokemon-tile.micro strong::first-letter {
+      font-size: 11px;
+    }
+    .type-tile.micro .type-label small,
+    .pokemon-tile.micro span {
+      display: none;
+    }
+    .type-tile.compact .type-icon,
+    .pokemon-tile.compact .type-icon {
+      width: 22px;
+      height: 22px;
+      font-size: 22px;
+    }
+    .type-tile.tiny .type-icon,
+    .pokemon-tile.tiny .type-icon,
+    .type-tile.micro .type-icon,
+    .pokemon-tile.micro .type-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+    }
+
+    .tooltip { display: none; position: absolute; left: 0; top: 0; transform: translate(-9999px, -9999px); z-index: 30; pointer-events: none; background: rgba(255,255,255,.94); color: var(--ink); border: 3px solid var(--border); border-radius: 14px; padding: 10px 12px; box-shadow: 0 5px 0 var(--border), 0 18px 32px rgba(15,23,42,.22); min-width: 180px; font-weight: 850; backdrop-filter: blur(10px); }
+    .tooltip strong { display: block; font-size: 15px; line-height: 1.12; letter-spacing: 0; }
+    .tooltip span { display: block; margin-top: 4px; font-size: 12px; line-height: 1.3; color: var(--muted); font-weight: 750; }
+    .tooltip-preview { display: block; }
+    .tooltip.dpad-visible { display: block; animation: tooltipPop .18s ease-out both; }
+
+    .screen-bottom { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: center; min-height: 42px; }
+    .treemap-guide {
+      position: absolute;
+      left: 13px;
+      right: 13px;
+      top: 12px;
+      z-index: 20;
+      padding: 6px 10px;
+      border: 2px solid rgba(34,197,94,.58);
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(15,23,42,.86), rgba(2,6,23,.72));
+      color: #bbf7d0;
+      box-shadow: 0 0 18px rgba(34,197,94,.16), inset 0 1px rgba(255,255,255,.08);
+      font-family: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+      font-size: clamp(10px, 2.4vw, 12px);
+      font-weight: 850;
+      line-height: 1.28;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .dex-panel { display: grid; gap: 10px; align-content: start; }
+    .side-card { background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,247,223,.94)); padding: 13px; border: 3px solid var(--border); border-radius: 18px; box-shadow: 0 4px 0 var(--border), 0 16px 28px rgba(15,23,42,.14), inset 0 1px rgba(255,255,255,.72); }
+    .panel-header { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .panel-header h3 { margin: 0; font-size: clamp(18px, 4vw, 24px); line-height: 1.08; letter-spacing: 0; font-weight: 950; }
+    .panel-subheader { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 10px 0 6px; padding-top: 10px; border-top: 2px solid rgba(17,24,39,.18); }
+    .panel-subheader h4 { margin: 0; font-size: 12px; line-height: 1; letter-spacing: .08em; font-weight: 900; text-transform: uppercase; color: #475569; }
+    .chip { display: inline-flex; align-items: center; justify-content: center; padding: 4px 7px; border: 2px solid var(--border); border-radius: 999px; background: linear-gradient(180deg, #ffe96f, var(--dex-yellow)); font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; box-shadow: inset 0 -2px rgba(17,24,39,.1); }
+
+    .selected-type-card { padding: 0; background: transparent; min-height: 0; }
+    .selected-type-card > * { animation: dexReveal .28s ease-out both; }
+    .selected-type-card > *:nth-child(2) { animation-delay: .04s; }
+    .selected-type-card > *:nth-child(3) { animation-delay: .08s; }
+    .selected-type-card > *:nth-child(4) { animation-delay: .12s; }
+    .selected-type-card h4 { margin: 0 0 6px; font-size: clamp(24px, 7vw, 36px); line-height: 1.02; letter-spacing: 0; font-weight: 950; }
+    .selected-type-card p { margin: 0; font-size: 13px; line-height: 1.45; font-weight: 650; color: rgba(17,24,39,.82); }
+    .dex-entry-hero { display: grid; grid-template-columns: 112px 1fr; gap: 12px; align-items: center; }
+    .dex-entry-art,
+    .dex-entry-placeholder { width: 112px; height: 112px; border: 2px solid var(--border); border-radius: 18px; background: radial-gradient(circle at 34% 22%, rgba(255,255,255,.96), rgba(255,255,255,.76)); box-shadow: inset -3px -4px rgba(0,0,0,.08), 0 3px 0 var(--border), 0 12px 22px rgba(15,23,42,.14); }
+    .dex-entry-art { object-fit: contain; filter: drop-shadow(0 4px 0 rgba(17,24,39,.18)); }
+    .dex-entry-placeholder { display: grid; place-items: center; }
+
+    .dex-description { margin-top: 12px; padding-top: 10px; border-top: 2px solid rgba(17,24,39,.2); }
+    .dex-description strong { display: block; margin-bottom: 5px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; color: #475569; }
+    .dex-description p { margin: 0; font-size: 13px; line-height: 1.5; font-weight: 650; color: rgba(17,24,39,.82); }
+    .card-section { margin-top: 12px; padding-top: 10px; border-top: 2px solid rgba(17,24,39,.2); background: transparent; }
+    .card-section-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; color: #475569; }
+    .attack-list { display: grid; gap: 7px; }
+    .attack-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; padding: 8px 0; border-top: 1px solid rgba(17,24,39,.18); }
+    .attack-row:first-child { border-top: 0; padding-top: 0; }
+    .attack-row strong { display: block; font-size: 13px; line-height: 1.15; font-weight: 900; }
+    .attack-row span { display: block; margin-top: 3px; font-size: 11px; color: #64748b; font-weight: 650; line-height: 1.35; }
+    .attack-power { min-width: 34px; height: 26px; display: inline-grid; place-items: center; border: 2px solid var(--border); border-radius: 999px; background: var(--dex-yellow); font-size: 11px; font-weight: 900; }
+    .ability-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .ability-tag { display: inline-flex; align-items: center; padding: 4px 7px; border: 2px solid var(--border); border-radius: 999px; background: #fff; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; }
+
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 2px solid rgba(17,24,39,.2); }
+    .metric { padding: 0; background: transparent; }
+    .metric small { display: block; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 9px; }
+    .metric strong { display: block; font-size: 20px; line-height: 1.05; margin-top: 3px; font-weight: 950; }
+
+    .bars { display: grid; gap: 8px; margin-top: 10px; }
+    .bar-row { display: grid; grid-template-columns: 58px 1fr 30px; gap: 7px; align-items: center; font-size: 10px; font-weight: 850; text-transform: uppercase; letter-spacing: .05em; }
+    .bar-track { height: 13px; border: 2px solid var(--border); border-radius: 999px; overflow: hidden; background: linear-gradient(180deg, #f8fafc, #dbe3ec); box-shadow: inset 0 2px rgba(17,24,39,.12); }
+    .bar-fill { height: 100%; width: var(--bar, 50%); background: linear-gradient(90deg, color-mix(in srgb, var(--selected-color, var(--dex-yellow)) 78%, #ffffff 22%), var(--selected-color, var(--dex-yellow))); border-right: 2px solid var(--border); box-shadow: inset 0 1px rgba(255,255,255,.42); transform-origin: left center; animation: statFill .45s ease-out both; }
+
+    .character-list { display: grid; max-height: 360px; min-height: 160px; overflow: auto; padding-right: 2px; -webkit-overflow-scrolling: touch; scrollbar-color: #64748b transparent; }
+    .character-card { display: grid; grid-template-columns: 48px 1fr auto; gap: 9px; align-items: center; min-height: 64px; border: 0; border-top: 1px solid rgba(17,24,39,.18); border-radius: 0; padding: 9px 0; background: transparent; cursor: pointer; box-shadow: none; transition: transform .12s ease, filter .12s ease; }
+    .character-card:first-child { border-top: 0; padding-top: 0; }
+    .character-card:hover { transform: translateX(2px); filter: saturate(1.08); }
+    .character-card.selected { color: #0f172a; filter: saturate(1.08); }
+    .character-card.selected strong { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    .character-card:focus-visible { outline-offset: 2px; }
+    .sprite-dot { width: 48px; height: 48px; border-radius: 12px; border: 2px solid var(--border); background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.9) 0 9px, transparent 10px), var(--sprite-color, #e5e7eb); display: grid; place-items: center; overflow: hidden; }
+    .sprite-dot img { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 2px 0 rgba(17,24,39,.2)); }
+    .character-card strong { display: block; font-size: 13px; line-height: 1.15; font-weight: 900; }
+    .character-card span { display: block; font-size: 10px; color: var(--muted); font-weight: 650; line-height: 1.3; margin-top: 2px; }
+    .power-pill { font-size: 10px; font-weight: 900; border: 2px solid var(--border); border-radius: 999px; padding: 4px 6px; background: #f8fafc; white-space: nowrap; }
+    .index-pager {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 2px solid rgba(17,24,39,.18);
+    }
+    .index-page-meta {
+      display: grid;
+      gap: 2px;
+      justify-items: center;
+      min-width: 0;
+      color: #475569;
+      font-size: 10px;
+      font-weight: 850;
+      line-height: 1.2;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .index-page-meta strong {
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .index-pager .btn {
+      min-width: 42px;
+      padding-inline: 10px;
+    }
+    .index-pager .btn:disabled {
+      cursor: not-allowed;
+      filter: grayscale(.45);
+      opacity: .55;
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--border), inset 0 1px rgba(255,255,255,.7), inset 0 -3px rgba(17,24,39,.12);
+    }
+
+    .dpad-card { background: #fff; border: 3px solid var(--border); border-radius: 16px; padding: 11px; box-shadow: 0 4px 0 var(--border); display: grid; grid-template-columns: 44px 1fr; gap: 10px; align-items: center; }
+    .dpad { width: 44px; height: 44px; position: relative; }
+    .dpad:before, .dpad:after { content: ""; position: absolute; background: #111827; box-shadow: inset -4px -5px rgba(255,255,255,.12); }
+    .dpad:before { left: 16px; top: 0; width: 13px; height: 44px; border-radius: 6px; }
+    .dpad:after { top: 16px; left: 0; width: 44px; height: 13px; border-radius: 6px; }
+    .dpad-copy strong { display: block; font-size: 14px; letter-spacing: 0; margin-bottom: 3px; }
+    .dpad-copy span { color: var(--muted); font-size: 11px; font-weight: 800; line-height: 1.35; }
+
+    .footer-card { margin-top: 14px; padding: 14px; display: grid; grid-template-columns: 1fr; gap: 12px; align-items: center; background: radial-gradient(circle at 12% 10%, rgba(67,198,255,.18), transparent 34%), linear-gradient(180deg, #1f2937, #111827); color: #fff; border: 3px solid var(--border); border-radius: 20px; box-shadow: 0 4px 0 var(--border), 0 18px 36px rgba(15,23,42,.2); }
+    .footer-card h2 { margin: 0 0 8px; font-size: clamp(24px, 9vw, 34px); line-height: 1.02; letter-spacing: 0; }
+    .footer-card p { margin: 0; color: #cbd5e1; font-size: 12px; font-weight: 750; line-height: 1.4; max-width: 980px; }
+    .disclaimer { font-size: 11px; line-height: 1.35; color: #94a3b8; font-weight: 750; margin-top: 12px; }
+
+    .data-warning { position: absolute; left: 10px; right: 10px; bottom: 10px; z-index: 40; padding: 10px 11px; border: 3px solid #111827; border-radius: 13px; background: #ffd84a; color: #111827; font-size: 11px; line-height: 1.3; font-weight: 950; box-shadow: 0 4px 0 #111827; }
+
+    .sticky-dpad {
+      position: fixed;
+      right: max(12px, env(safe-area-inset-right, 0px));
+      bottom: max(12px, calc(12px + var(--safe-bottom)));
+      z-index: 60;
+      width: 104px;
+      height: 104px;
+      border: 3px solid var(--border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 34% 22%, rgba(255,255,255,.72), transparent 30%),
+        linear-gradient(145deg, #f8fafc, #b7c3d0 58%, #7d8b9c);
+      box-shadow: 0 6px 0 var(--border), 0 18px 36px rgba(15,23,42,.28), inset 0 2px rgba(255,255,255,.82), inset 0 -8px rgba(17,24,39,.18);
+    }
+    .sticky-dpad::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 88px;
+      height: 88px;
+      transform: translate(-50%, -50%);
+      border: 2px solid rgba(17,24,39,.75);
+      background: linear-gradient(180deg, #263244, #111827);
+      clip-path: polygon(
+        35% 0,
+        65% 0,
+        65% 35%,
+        100% 35%,
+        100% 65%,
+        65% 65%,
+        65% 100%,
+        35% 100%,
+        35% 65%,
+        0 65%,
+        0 35%,
+        35% 35%
+      );
+      filter: drop-shadow(0 3px 0 var(--border));
+      box-shadow: inset 0 1px rgba(255,255,255,.18), inset -5px -8px rgba(255,255,255,.06);
+      pointer-events: none;
+      animation: dpadIdleShine 3.8s ease-in-out infinite;
+    }
+    .dpad-button {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      display: inline-grid;
+      place-items: center;
+      z-index: 2;
+      box-shadow: none;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .dpad-button:hover { filter: brightness(1.25); }
+    .dpad-button:active { transform: translateY(2px); }
+    .dpad-button i { display: none; }
+    .dpad-button.up { left: 35px; top: 8px; }
+    .dpad-button.right { right: 8px; top: 35px; }
+    .dpad-button.down { left: 35px; bottom: 8px; }
+    .dpad-button.left { left: 8px; top: 35px; }
+
+    @keyframes lensPulse {
+      0%, 100% { filter: brightness(1); box-shadow: inset -4px -5px rgba(0,0,0,.25), 0 0 0 3px rgba(255,255,255,.35), 0 0 18px rgba(67,198,255,.52); }
+      50% { filter: brightness(1.16); box-shadow: inset -4px -5px rgba(0,0,0,.22), 0 0 0 3px rgba(255,255,255,.42), 0 0 34px rgba(67,198,255,.86); }
+    }
+    @keyframes statusBlink {
+      0%, 72%, 100% { filter: brightness(.9); }
+      78%, 88% { filter: brightness(1.65); }
+    }
+    @keyframes glassDrift {
+      from { transform: translateX(-3%); opacity: .7; }
+      to { transform: translateX(3%); opacity: 1; }
+    }
+    @keyframes screenScan {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 0 24px, 220% 0; }
+    }
+    @keyframes tileBoot {
+      from { opacity: 0; transform: scale(.985); filter: saturate(.7); }
+      to { opacity: 1; transform: scale(1); filter: saturate(1); }
+    }
+    @keyframes tileFocusPulse {
+      0% { transform: scale(.992); }
+      55% { transform: scale(1.012); }
+      100% { transform: scale(1); }
+    }
+    @keyframes tooltipPop {
+      from { opacity: 0; filter: blur(2px); }
+      to { opacity: 1; filter: blur(0); }
+    }
+    @keyframes dexReveal {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes statFill {
+      from { transform: scaleX(.02); }
+      to { transform: scaleX(1); }
+    }
+    @keyframes dpadIdleShine {
+      0%, 100% { filter: drop-shadow(0 3px 0 var(--border)) brightness(1); }
+      50% { filter: drop-shadow(0 3px 0 var(--border)) brightness(1.12); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    @media (min-width: 700px) {
+      .page-shell { padding: 14px 12px 42px; }
+      .pokedex-header-title { grid-column: auto; }
+      .pokedex-header-title h1 { font-size: clamp(22px, 2.4vw, 32px); }
+      .dex-title { grid-column: 1 / -1; }
+      .pokedex-shell { padding: 14px; border-radius: 28px; }
+      .dex-lid { grid-template-columns: auto minmax(0, 1fr) auto; }
+      .breadcrumb { grid-column: auto; justify-content: flex-end; }
+      .screen-top { position: static; grid-template-columns: 1fr; }
+      .controls {
+        display: grid;
+        grid-template-columns: minmax(210px, 1.4fr) minmax(150px, .9fr) minmax(150px, .9fr) auto;
+        justify-content: stretch;
+      }
+      .search,
+      .select { width: 100%; }
+      .search { grid-column: auto; min-width: 0; }
+      .screen-bottom { grid-template-columns: 1fr auto; }
+      .treemap-guide {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .treemap-wrap { height: min(70vh, 680px); min-height: 560px; }
+      .dex-panel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .status-card { grid-column: 1 / -1; }
+      .footer-card { grid-template-columns: 1fr auto; padding: 18px; }
+      .tooltip { display: block; }
+    }
+
+    @media (min-width: 1180px) {
+      .page-shell { width: min(1680px, calc(100vw - 24px)); }
+      .dex-grid { grid-template-columns: minmax(0, 1fr) minmax(310px, 360px); }
+      .screen-bezel { min-height: calc(100vh - 210px); }
+      .treemap-wrap { min-height: calc(100vh - 335px); height: calc(100vh - 335px); }
+      .dex-panel { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr) auto; }
+      .character-list { max-height: min(460px, calc(100vh - 520px)); }
+      .type-label strong { font-size: clamp(13px, 1.35vw, 22px); }
+      .type-label small { font-size: 10px; letter-spacing: .08em; }
+      .type-icon { width: clamp(22px, 2vw, 36px); height: clamp(22px, 2vw, 36px); font-size: clamp(22px, 2vw, 36px); }
+      .pokemon-tile strong { font-size: clamp(10px, 1vw, 15px); }
+      .pokemon-tile span { font-size: 10px; }
+    }
+
+    @media (max-width: 520px) {
+      .sticky-dpad {
+        width: 88px;
+        height: 88px;
+        border-radius: 20px;
+      }
+      .sticky-dpad::before {
+        width: 74px;
+        height: 74px;
+      }
+      .dpad-button {
+        width: 30px;
+        height: 30px;
+      }
+      .dpad-button.up { left: 29px; top: 6px; }
+      .dpad-button.right { right: 6px; top: 29px; }
+      .dpad-button.down { left: 29px; bottom: 6px; }
+      .dpad-button.left { left: 6px; top: 29px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="pokedex-shell" id="treemap-section">
+      <div class="dex-lid">
+        <div class="dex-lights" aria-hidden="true">
+          <div class="big-light"></div>
+          <div class="small-light" style="--light:#ef4444"></div>
+          <div class="small-light" style="--light:#facc15"></div>
+          <div class="small-light" style="--light:#22c55e"></div>
+        </div>
+        <div class="pokedex-header-title">
+          <span>OTAKU DATA VIZ</span>
+          <h1>Pokédex Treemap</h1>
+        </div>
+        <div class="breadcrumb" id="breadcrumb"></div>
+      </div>
+
+      <div class="dex-grid">
+        <article class="screen-bezel">
+          <div class="screen-top">
+            <span class="screen-label" id="activeChip" aria-live="polite">All Types</span>
+            <div class="controls">
+              <input class="search" id="searchInput" type="search" placeholder="Search Pokémon, type, or role…" aria-label="Search Pokémon" />
+              <select class="select" id="sortSelect" aria-label="Sort Pokémon">
+                <option value="featured">Featured order</option>
+                <option value="power">Power high → low</option>
+                <option value="name">Name A-Z</option>
+              </select>
+              <select class="select" id="sizeSelect" aria-label="Treemap sizing">
+                <option value="power">Size by base stats</option>
+                <option value="count">Size by count</option>
+              </select>
+              <button class="btn small dark" type="button" id="backButton">Back</button>
+            </div>
+          </div>
+
+          <div class="treemap-wrap">
+            <div class="treemap-guide" id="treemapGuide">Overview: each block is a primary type. Click a type to zoom into evolution families. Search filters the treemap and Index together.</div>
+            <div class="treemap" id="treemap" role="region" aria-label="Interactive Pokédex-style Pokémon type treemap"></div>
+            <div class="tooltip" id="tooltip"></div>
+          </div>
+        </article>
+
+        <aside class="dex-panel">
+          <section class="side-card">
+            <div class="panel-header">
+              <h3>Dex Entry</h3>
+              <span class="chip" id="countChip">0 Pokémon</span>
+            </div>
+            <div class="selected-type-card" id="selectedTypeCard"></div>
+            <div class="panel-subheader">
+              <h4>Stats</h4>
+              <span class="chip">Base Stats</span>
+            </div>
+            <div class="bars" id="bars"></div>
+          </section>
+
+          <section class="side-card">
+            <div class="panel-header">
+              <h3>Index</h3>
+              <span class="chip" id="indexRangeChip">0 of 0</span>
+            </div>
+            <div class="character-list" id="characterList"></div>
+            <div class="index-pager" aria-label="Index pagination">
+              <button class="btn small" type="button" id="indexPrevButton" aria-label="Previous Index page"><i class="fa-solid fa-caret-left" aria-hidden="true"></i></button>
+              <div class="index-page-meta" id="indexPageMeta" aria-live="polite">
+                <strong>Page 1 / 1</strong>
+                <span>Showing 0 of 0</span>
+              </div>
+              <button class="btn small" type="button" id="indexNextButton" aria-label="Next Index page"><i class="fa-solid fa-caret-right" aria-hidden="true"></i></button>
+            </div>
+          </section>
+
+          <section class="status-card">
+            <strong id="heroReadout">1025 SPECIES LOADED</strong>
+            <span>Data source: embedded data, static JSON, or live PokéAPI fallback.</span>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="footer-card">
+      <div>
+        <h2>Built for Otaku Data Viz</h2>
+        <p>A playful, brand-adjacent data viz concept designed to feel like a Pokédex interface while behaving like a traditional interactive treemap.</p>
+        <div class="disclaimer">Fan-made visualization concept. Pokémon names/types are used for commentary and data visualization purposes. This project is not affiliated with or endorsed by Nintendo, Game Freak, Creatures, or The Pokémon Company.</div>
+      </div>
+      <a class="btn yellow" href="index.html" aria-label="Go to the Otaku Data Viz homepage">Otaku Data Viz Home</a>
+    </footer>
+  </main>
+
+  <nav class="sticky-dpad" aria-label="Treemap navigation controls">
+    <button class="dpad-button up" type="button" data-scroll-direction="up" aria-label="Move treemap focus up"><i class="fa-solid fa-caret-up" aria-hidden="true"></i></button>
+    <button class="dpad-button right" type="button" data-scroll-direction="right" aria-label="Move treemap focus right"><i class="fa-solid fa-caret-right" aria-hidden="true"></i></button>
+    <button class="dpad-button down" type="button" data-scroll-direction="down" aria-label="Move treemap focus down"><i class="fa-solid fa-caret-down" aria-hidden="true"></i></button>
+    <button class="dpad-button left" type="button" data-scroll-direction="left" aria-label="Move treemap focus left"><i class="fa-solid fa-caret-left" aria-hidden="true"></i></button>
+  </nav>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const DATA_URL = 'assets/data/pokemon-treemap-data.json';
+      const POKEAPI_SPECIES_URL = 'https://pokeapi.co/api/v2/pokemon-species?limit=1302';
+      const INLINE_POKEMON_DATA = null;
+
+      const TYPE_META = {
+        Normal: { color: '#A8A77A', icon: 'fa-regular fa-circle-dot', vibe: 'Everyday companions, flexible builds, and early-route nostalgia.' },
+        Fire: { color: '#EE8130', icon: 'fa-solid fa-fire-flame-curved', vibe: 'Starter drama, volcanic energy, rival arcs, and big final forms.' },
+        Water: { color: '#6390F0', icon: 'fa-solid fa-droplet', vibe: 'Surf routes, starter nostalgia, sea monsters, and utility icons.' },
+        Electric: { color: '#F7D02C', icon: 'fa-solid fa-bolt', vibe: 'High-energy mascots, fast attackers, and instantly recognizable partners.' },
+        Grass: { color: '#7AC74C', icon: 'fa-solid fa-leaf', vibe: 'Forests, healing loops, vines, spores, and calm utility.' },
+        Ice: { color: '#96D9D6', icon: 'fa-regular fa-snowflake', vibe: 'Cold routes, fragile offense, elegant designs, and late-game drama.' },
+        Fighting: { color: '#C22E28', icon: 'fa-solid fa-hand-fist', vibe: 'Dojo energy, close combat, and training montage characters.' },
+        Poison: { color: '#A33EA1', icon: 'fa-solid fa-skull-crossbones', vibe: 'Status effects, toxins, punk attitude, and urban grime.' },
+        Ground: { color: '#E2BF65', icon: 'fa-solid fa-mountain', vibe: 'Deserts, caves, earthquake power, and rugged map zones.' },
+        Flying: { color: '#A98FF3', icon: 'fa-solid fa-feather', vibe: 'Sky routes, movement, early birds, and legendary flight.' },
+        Psychic: { color: '#F95587', icon: 'fa-solid fa-wand-magic-sparkles', vibe: 'Mind games, mysterious towers, and high special attack energy.' },
+        Bug: { color: '#A6B91A', icon: 'fa-solid fa-bug', vibe: 'Early forests, collection loops, fast evolutions, and hidden depth.' },
+        Rock: { color: '#B6A136', icon: 'fa-regular fa-gem', vibe: 'First gyms, fossils, mountain passes, and defensive walls.' },
+        Ghost: { color: '#735797', icon: 'fa-solid fa-ghost', vibe: 'Haunted fan favorites, spooky silhouettes, and trickster mechanics.' },
+        Dragon: { color: '#6F35FC', icon: 'fa-solid fa-dragon', vibe: 'Rare encounters, late-game strength, and pseudo-legendary appeal.' },
+        Dark: { color: '#705746', icon: 'fa-regular fa-moon', vibe: 'Night routes, anti-heroes, bite moves, and stylish menace.' },
+        Steel: { color: '#B7B7CE', icon: 'fa-solid fa-gear', vibe: 'Armor, resistance charts, factory energy, and metallic power.' },
+        Fairy: { color: '#D685AD', icon: 'fa-solid fa-star', vibe: 'Cute power, moonlit designs, and surprising dragon counters.' }
+      };
+      const TYPE_ORDER = Object.keys(TYPE_META);
+
+      const FALLBACK_SPECIES = [
+        { dexNumber: 172, name: 'Pichu', types: ['Electric'], primaryType: 'Electric', generation: 2, baseStatsTotal: 205, evolutionFamilyId: 'pichu-family', evolutionFamilyName: 'Pichu → Pikachu → Raichu', evolutionStage: 1, evolvesFrom: null, evolvesTo: ['Pikachu'] },
+        { dexNumber: 25, name: 'Pikachu', types: ['Electric'], primaryType: 'Electric', generation: 1, baseStatsTotal: 320, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png', evolutionFamilyId: 'pichu-family', evolutionFamilyName: 'Pichu → Pikachu → Raichu', evolutionStage: 2, evolvesFrom: 'Pichu', evolvesTo: ['Raichu'] },
+        { dexNumber: 26, name: 'Raichu', types: ['Electric'], primaryType: 'Electric', generation: 1, baseStatsTotal: 485, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png', evolutionFamilyId: 'pichu-family', evolutionFamilyName: 'Pichu → Pikachu → Raichu', evolutionStage: 3, evolvesFrom: 'Pikachu', evolvesTo: [] },
+        { dexNumber: 4, name: 'Charmander', types: ['Fire'], primaryType: 'Fire', generation: 1, baseStatsTotal: 309, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png', description: 'A spirited fire-type Pokémon with a brave, eager personality. Charmander’s flame reflects its vitality and makes it feel like a classic adventure partner.', genus: 'Lizard Pokémon', abilities: ['Blaze', 'Solar Power'], attacks: [{ name: 'Ember', type: 'Fire', power: 40, text: 'A small flame attack that can burn the opponent.' }, { name: 'Scratch', type: 'Normal', power: 40, text: 'A quick claw strike.' }], evolutionFamilyId: 'charmander-family', evolutionFamilyName: 'Charmander → Charmeleon → Charizard', evolutionStage: 1, evolvesFrom: null, evolvesTo: ['Charmeleon'] },
+        { dexNumber: 5, name: 'Charmeleon', types: ['Fire'], primaryType: 'Fire', generation: 1, baseStatsTotal: 405, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png', evolutionFamilyId: 'charmander-family', evolutionFamilyName: 'Charmander → Charmeleon → Charizard', evolutionStage: 2, evolvesFrom: 'Charmander', evolvesTo: ['Charizard'] },
+        { dexNumber: 6, name: 'Charizard', types: ['Fire', 'Flying'], primaryType: 'Fire', generation: 1, baseStatsTotal: 534, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', evolutionFamilyId: 'charmander-family', evolutionFamilyName: 'Charmander → Charmeleon → Charizard', evolutionStage: 3, evolvesFrom: 'Charmeleon', evolvesTo: [] },
+        { dexNumber: 7, name: 'Squirtle', types: ['Water'], primaryType: 'Water', generation: 1, baseStatsTotal: 314, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png', description: 'A cool-headed water Pokémon with a playful but tactical personality. Squirtle uses its shell defensively and attacks with precise water bursts.', genus: 'Tiny Turtle Pokémon', abilities: ['Torrent', 'Rain Dish'], attacks: [{ name: 'Water Gun', type: 'Water', power: 40, text: 'Shoots water with focused pressure.' }, { name: 'Withdraw', type: 'Water', power: 0, text: 'Tucks into its shell to raise defense.' }], evolutionFamilyId: 'squirtle-family', evolutionFamilyName: 'Squirtle → Wartortle → Blastoise', evolutionStage: 1, evolvesFrom: null, evolvesTo: ['Wartortle'] },
+        { dexNumber: 8, name: 'Wartortle', types: ['Water'], primaryType: 'Water', generation: 1, baseStatsTotal: 405, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png', evolutionFamilyId: 'squirtle-family', evolutionFamilyName: 'Squirtle → Wartortle → Blastoise', evolutionStage: 2, evolvesFrom: 'Squirtle', evolvesTo: ['Blastoise'] },
+        { dexNumber: 9, name: 'Blastoise', types: ['Water'], primaryType: 'Water', generation: 1, baseStatsTotal: 530, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png', evolutionFamilyId: 'squirtle-family', evolutionFamilyName: 'Squirtle → Wartortle → Blastoise', evolutionStage: 3, evolvesFrom: 'Wartortle', evolvesTo: [] },
+        { dexNumber: 1, name: 'Bulbasaur', types: ['Grass', 'Poison'], primaryType: 'Grass', generation: 1, baseStatsTotal: 318, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png', description: 'A steady and dependable grass-type Pokémon with a calm personality. Bulbasaur feels balanced: defensive, patient, and naturally supportive.', genus: 'Seed Pokémon', abilities: ['Overgrow', 'Chlorophyll'], attacks: [{ name: 'Vine Whip', type: 'Grass', power: 45, text: 'Strikes with flexible vines.' }, { name: 'Leech Seed', type: 'Grass', power: 0, text: 'Plants a seed that drains energy over time.' }], evolutionFamilyId: 'bulbasaur-family', evolutionFamilyName: 'Bulbasaur → Ivysaur → Venusaur', evolutionStage: 1, evolvesFrom: null, evolvesTo: ['Ivysaur'] },
+        { dexNumber: 2, name: 'Ivysaur', types: ['Grass', 'Poison'], primaryType: 'Grass', generation: 1, baseStatsTotal: 405, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png', evolutionFamilyId: 'bulbasaur-family', evolutionFamilyName: 'Bulbasaur → Ivysaur → Venusaur', evolutionStage: 2, evolvesFrom: 'Bulbasaur', evolvesTo: ['Venusaur'] },
+        { dexNumber: 3, name: 'Venusaur', types: ['Grass', 'Poison'], primaryType: 'Grass', generation: 1, baseStatsTotal: 525, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png', evolutionFamilyId: 'bulbasaur-family', evolutionFamilyName: 'Bulbasaur → Ivysaur → Venusaur', evolutionStage: 3, evolvesFrom: 'Ivysaur', evolvesTo: [] },
+        { dexNumber: 133, name: 'Eevee', types: ['Normal'], primaryType: 'Normal', generation: 1, baseStatsTotal: 325, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png', evolutionFamilyId: 'eevee-family', evolutionFamilyName: 'Eevee Evolution Family', evolutionStage: 1, evolvesFrom: null, evolvesTo: ['Vaporeon', 'Jolteon', 'Flareon', 'Espeon', 'Umbreon', 'Leafeon', 'Glaceon', 'Sylveon'] },
+        { dexNumber: 150, name: 'Mewtwo', types: ['Psychic'], primaryType: 'Psychic', generation: 1, baseStatsTotal: 680, spriteUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png', evolutionFamilyId: 'mewtwo-family', evolutionFamilyName: 'Mewtwo', evolutionStage: 1, evolvesFrom: null, evolvesTo: [], isLegendary: true }
+      ];
+
+      const INDEX_PAGE_SIZE = 200;
+
+      const state = {
+        rawSpecies: [],
+        typeData: [],
+        allPokemon: [],
+        selectedType: null,
+        selectedFamily: null,
+        selectedPokemon: null,
+        indexPage: 1,
+        searchTerm: '',
+        sortMode: 'featured',
+        sizeMode: 'power',
+        usingFallbackData: true,
+        dataMode: 'preview'
+      };
+
+      const dom = {};
+      let dpadAudioContext = null;
+      function $(id) { return document.getElementById(id); }
+      function setHTML(el, html) { if (el) el.innerHTML = html; }
+      function setText(el, text) { if (el) el.textContent = text; }
+
+      function getAudioContext() {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        dpadAudioContext = dpadAudioContext || new AudioContextClass();
+        if (dpadAudioContext.state === 'suspended') dpadAudioContext.resume();
+        return dpadAudioContext;
+      }
+
+      function playSynthBlip({ startFrequency = 520, endFrequency = 300, duration = 0.08, volume = 0.07, type = 'square' } = {}) {
+        try {
+          const audioContext = getAudioContext();
+          if (!audioContext) return;
+          const now = audioContext.currentTime;
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          oscillator.type = type;
+          oscillator.frequency.setValueAtTime(startFrequency, now);
+          oscillator.frequency.exponentialRampToValueAtTime(endFrequency, now + Math.max(0.02, duration * 0.65));
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(volume, now + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+          oscillator.connect(gain);
+          gain.connect(audioContext.destination);
+          oscillator.start(now);
+          oscillator.stop(now + duration + 0.01);
+        } catch (error) {
+          console.warn('Pokédex sound unavailable:', error.message);
+        }
+      }
+
+      function playTreemapSelectSound() {
+        playSynthBlip({ startFrequency: 360, endFrequency: 620, duration: 0.11, volume: 0.075, type: 'triangle' });
+      }
+
+      function requiredDomIsReady() {
+        const requiredIds = ['treemap', 'characterList', 'selectedTypeCard', 'bars', 'activeChip', 'countChip', 'searchInput', 'sortSelect', 'sizeSelect', 'breadcrumb', 'tooltip', 'heroReadout', 'treemapGuide', 'indexRangeChip', 'indexPageMeta', 'indexPrevButton', 'indexNextButton'];
+        const optionalIds = ['typeBadges', 'backButton', 'allTypesButton'];
+        const missing = requiredIds.filter(id => !$(id));
+        if (missing.length) {
+          console.error('Missing required DOM nodes:', missing);
+          return false;
+        }
+        requiredIds.forEach(id => { dom[id] = $(id); });
+        optionalIds.forEach(id => { dom[id] = $(id); });
+        return true;
+      }
+
+      function iconSvg(name, className = 'type-icon') {
+        const faClass = String(name || 'fa-regular fa-circle-dot').trim();
+        const normalized = faClass.includes('fa-') ? faClass : 'fa-regular fa-circle-dot';
+        return `<i class="${className} ${normalized}" aria-hidden="true"></i>`;
+      }
+
+      function normalizeName(name = '') {
+        return String(name).replaceAll('-', ' ').split(' ').filter(Boolean).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+      }
+      function slugify(text = '') { return normalizeName(text).toLowerCase().split(' ').join('-'); }
+      function escapeHtml(value = '') {
+        return String(value)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      }
+      function escapeAttr(value = '') { return escapeHtml(value); }
+
+      function normalizeBaseStats(stats = {}) {
+        const emptyStats = { hp: 0, attack: 0, defense: 0, specialAttack: 0, specialDefense: 0, speed: 0 };
+        if (!stats || typeof stats !== 'object') return emptyStats;
+        return {
+          hp: Number(stats.hp || stats.HP || 0),
+          attack: Number(stats.attack || stats.Attack || 0),
+          defense: Number(stats.defense || stats.Defense || 0),
+          specialAttack: Number(stats.specialAttack || stats.special_attack || stats['special-attack'] || stats.SpAtk || stats['Sp. Atk'] || 0),
+          specialDefense: Number(stats.specialDefense || stats.special_defense || stats['special-defense'] || stats.SpDef || stats['Sp. Def'] || 0),
+          speed: Number(stats.speed || stats.Speed || 0)
+        };
+      }
+
+      function totalBaseStats(stats) {
+        const safeStats = normalizeBaseStats(stats);
+        return safeStats.hp + safeStats.attack + safeStats.defense + safeStats.specialAttack + safeStats.specialDefense + safeStats.speed;
+      }
+
+      function hasBaseStats(pokemon) {
+        return totalBaseStats(pokemon.stats) > 0;
+      }
+
+      function averageStats(pokemonList = []) {
+        const valid = pokemonList.filter(hasBaseStats);
+        if (!valid.length) return normalizeBaseStats();
+        const totals = valid.reduce((acc, pokemon) => {
+          const stats = normalizeBaseStats(pokemon.stats);
+          acc.hp += stats.hp;
+          acc.attack += stats.attack;
+          acc.defense += stats.defense;
+          acc.specialAttack += stats.specialAttack;
+          acc.specialDefense += stats.specialDefense;
+          acc.speed += stats.speed;
+          return acc;
+        }, normalizeBaseStats());
+        Object.keys(totals).forEach(key => { totals[key] = Math.round(totals[key] / valid.length); });
+        return totals;
+      }
+
+      function cleanFlavorText(text = '') {
+        return String(text)
+          .split(String.fromCharCode(12)).join(' ')
+          .split(String.fromCharCode(10)).join(' ')
+          .replaceAll('  ', ' ')
+          .trim();
+      }
+
+      function normalizeAttacks(attacks = []) {
+        if (!Array.isArray(attacks)) return [];
+        return attacks.slice(0, 4).map((attack, index) => {
+          if (typeof attack === 'string') {
+            return { name: normalizeName(attack), type: 'Move', power: 0, text: 'A known move from this Pokémon’s battle toolkit.' };
+          }
+          return {
+            name: normalizeName(attack.name || attack.move || `Move ${index + 1}`),
+            type: normalizeName(attack.type || 'Move'),
+            power: Number(attack.power || attack.damage || 0),
+            text: attack.text || attack.description || 'A known move from this Pokémon’s battle toolkit.'
+          };
+        });
+      }
+
+      function defaultDescription(pokemon) {
+        const typeText = Array.isArray(pokemon.types) ? pokemon.types.join(' / ') : pokemon.primaryType || 'Unknown';
+        const family = pokemon.evolutionFamilyName || 'its evolution family';
+        return `${pokemon.name} is a ${typeText}-type Pokémon from ${family}. Its profile combines battle stats, evolution context, and card-style move data for quick comparison.`;
+      }
+
+      function normalizeSpecies(pokemon) {
+        const types = pokemon.types && pokemon.types.length ? pokemon.types.map(normalizeName) : ['Unknown'];
+        const primaryType = normalizeName(pokemon.primaryType || types[0]);
+        return {
+          dexNumber: pokemon.dexNumber || pokemon.id || 0,
+          name: normalizeName(pokemon.name),
+          types,
+          primaryType,
+          generation: Number(pokemon.generation) || null,
+          baseStatsTotal: Number(pokemon.baseStatsTotal || pokemon.power || pokemon.value || 1),
+          stats: normalizeBaseStats(pokemon.stats),
+          spriteUrl: pokemon.spriteUrl || pokemon.thumbnailUrl || pokemon.imageUrl || pokemon.officialArtworkUrl || '',
+          description: pokemon.description || pokemon.flavorText || pokemon.personality || '',
+          genus: pokemon.genus || pokemon.category || '',
+          abilities: Array.isArray(pokemon.abilities) ? pokemon.abilities.map(normalizeName) : [],
+          attacks: normalizeAttacks(pokemon.attacks || pokemon.moves || []),
+          evolutionFamilyId: pokemon.evolutionFamilyId || pokemon.familyId || slugify(pokemon.name) + '-family',
+          evolutionFamilyName: pokemon.evolutionFamilyName || pokemon.familyName || normalizeName(pokemon.name) + ' Family',
+          evolutionStage: Number(pokemon.evolutionStage) || 1,
+          evolvesFrom: pokemon.evolvesFrom || null,
+          evolvesTo: Array.isArray(pokemon.evolvesTo) ? pokemon.evolvesTo : [],
+          isLegendary: Boolean(pokemon.isLegendary),
+          isMythical: Boolean(pokemon.isMythical)
+        };
+      }
+
+      function getPokemonValue(pokemon) { return state.sizeMode === 'count' ? 1 : Math.max(1, pokemon.baseStatsTotal || 1); }
+      function getFamilyValue(family) { return family.pokemon.reduce((sum, pokemon) => sum + getPokemonValue(pokemon), 0); }
+      function getTypeWeight(type) { return type.families.reduce((sum, family) => sum + getFamilyValue(family), 0); }
+
+      function buildTypeData(species) {
+        const normalized = species.map(normalizeSpecies).filter(pokemon => pokemon.name && pokemon.primaryType);
+        state.allPokemon = normalized.sort((a, b) => a.dexNumber - b.dexNumber || a.name.localeCompare(b.name));
+
+        const byType = new Map();
+        TYPE_ORDER.forEach(type => byType.set(type, { type, ...TYPE_META[type], families: [], pokemon: [] }));
+
+        state.allPokemon.forEach(pokemon => {
+          const meta = TYPE_META[pokemon.primaryType] || { color: '#cbd5e1', icon: 'fa-regular fa-circle-dot', vibe: 'Uncategorized or unknown type grouping.' };
+          if (!byType.has(pokemon.primaryType)) byType.set(pokemon.primaryType, { type: pokemon.primaryType, ...meta, families: [], pokemon: [] });
+          byType.get(pokemon.primaryType).pokemon.push(pokemon);
+        });
+
+        byType.forEach(typeGroup => {
+          const familyMap = new Map();
+          typeGroup.pokemon.forEach(pokemon => {
+            if (!familyMap.has(pokemon.evolutionFamilyId)) {
+              familyMap.set(pokemon.evolutionFamilyId, { id: pokemon.evolutionFamilyId, name: pokemon.evolutionFamilyName, type: typeGroup.type, color: typeGroup.color, icon: typeGroup.icon, pokemon: [] });
+            }
+            familyMap.get(pokemon.evolutionFamilyId).pokemon.push(pokemon);
+          });
+          typeGroup.families = [...familyMap.values()].map(family => ({
+            ...family,
+            pokemon: family.pokemon.sort((a, b) => a.evolutionStage - b.evolutionStage || a.dexNumber - b.dexNumber),
+            count: family.pokemon.length,
+            value: family.pokemon.reduce((sum, pokemon) => sum + pokemon.baseStatsTotal, 0)
+          }));
+        });
+
+        return [...byType.values()].filter(type => type.pokemon.length).sort((a, b) => TYPE_ORDER.indexOf(a.type) - TYPE_ORDER.indexOf(b.type));
+      }
+
+      function getGenerationNumber(generationName = '') {
+        const generationMap = { 'generation-i': 1, 'generation-ii': 2, 'generation-iii': 3, 'generation-iv': 4, 'generation-v': 5, 'generation-vi': 6, 'generation-vii': 7, 'generation-viii': 8, 'generation-ix': 9 };
+        return generationMap[generationName] || null;
+      }
+
+      function setLoadingState(message) {
+        setText(dom.heroReadout, message.toUpperCase());
+        setHTML(dom.selectedTypeCard, `<h4>Loading…</h4><p>${escapeHtml(message)}</p><div class="metric-grid"><div class="metric"><small>Status</small><strong>Wait</strong></div><div class="metric"><small>Source</small><strong>Data</strong></div></div>`);
+        setText(dom.treemapGuide, message);
+      }
+
+      async function fetchJson(url) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Request failed: ' + url);
+        return response.json();
+      }
+
+      function validateStaticPayload(data) {
+        if (!data || typeof data !== 'object') throw new Error('Static JSON is not an object');
+        if (!Array.isArray(data.species) || !data.species.length) throw new Error('Static JSON has no species array');
+        if (!data.generatedAt || !data.source) console.warn('Static JSON should include generatedAt and source metadata.');
+        const requiredFields = ['dexNumber', 'name', 'types', 'primaryType', 'baseStatsTotal', 'evolutionFamilyId', 'evolutionFamilyName'];
+        const incomplete = data.species.slice(0, 25).filter(pokemon => requiredFields.some(field => pokemon[field] === undefined || pokemon[field] === null || pokemon[field] === ''));
+        if (incomplete.length) console.warn('Static JSON has species missing recommended fields:', incomplete.map(pokemon => pokemon.name || pokemon.dexNumber || 'unknown'));
+        return data.species;
+      }
+
+      async function mapWithConcurrency(items, limit, mapper) {
+        const results = new Array(items.length);
+        let cursor = 0;
+        const workers = Array.from({ length: limit }, async () => {
+          while (cursor < items.length) {
+            const index = cursor++;
+            try {
+              results[index] = await mapper(items[index], index);
+            } catch (error) {
+              console.warn('Skipped item', index, error.message);
+              results[index] = null;
+            }
+            if (index > 0 && index % 50 === 0) setLoadingState(`Loading live PokéAPI data… ${index}/${items.length}`);
+          }
+        });
+        await Promise.all(workers);
+        return results.filter(Boolean);
+      }
+
+      function flattenEvolutionChain(chainNode, stage = 1, parent = null, rows = []) {
+        if (!chainNode || !chainNode.species) return rows;
+        const name = normalizeName(chainNode.species.name);
+        const evolvesTo = Array.isArray(chainNode.evolves_to) ? chainNode.evolves_to : [];
+        rows.push({ name, stage, evolvesFrom: parent, evolvesTo: evolvesTo.map(child => normalizeName(child.species.name)) });
+        evolvesTo.forEach(child => flattenEvolutionChain(child, stage + 1, name, rows));
+        return rows;
+      }
+
+      async function loadFromPokeApi() {
+        const list = await fetchJson(POKEAPI_SPECIES_URL);
+        const speciesList = list.results || [];
+        if (!speciesList.length) throw new Error('PokéAPI returned no species.');
+
+        const speciesDetails = await mapWithConcurrency(speciesList, 8, async (item) => {
+          const species = await fetchJson(item.url);
+          const defaultVariety = species.varieties && species.varieties.find(variety => variety.is_default);
+          const pokemonUrl = defaultVariety && defaultVariety.pokemon && defaultVariety.pokemon.url;
+          if (!pokemonUrl) throw new Error('No default Pokémon variety for ' + species.name);
+          const pokemon = await fetchJson(pokemonUrl);
+          const types = pokemon.types.sort((a, b) => a.slot - b.slot).map(entry => normalizeName(entry.type.name));
+          const statMap = {};
+          pokemon.stats.forEach(stat => { statMap[stat.stat.name] = stat.base_stat; });
+          const stats = {
+            hp: statMap.hp || 0,
+            attack: statMap.attack || 0,
+            defense: statMap.defense || 0,
+            specialAttack: statMap['special-attack'] || 0,
+            specialDefense: statMap['special-defense'] || 0,
+            speed: statMap.speed || 0
+          };
+          const baseStatsTotal = totalBaseStats(stats);
+          const spriteUrl = pokemon.sprites?.other?.['official-artwork']?.front_default || pokemon.sprites?.other?.home?.front_default || pokemon.sprites?.front_default || '';
+          const englishFlavor = [...(species.flavor_text_entries || [])].reverse().find(entry => entry.language && entry.language.name === 'en');
+          const englishGenus = (species.genera || []).find(entry => entry.language && entry.language.name === 'en');
+          const abilities = (pokemon.abilities || []).map(entry => normalizeName(entry.ability.name));
+          const attacks = (pokemon.moves || []).slice(0, 4).map((entry, index) => ({
+            name: normalizeName(entry.move.name),
+            type: types[0] || 'Move',
+            power: index === 0 ? Math.max(10, Math.round(baseStatsTotal / 8)) : Math.max(0, Math.round(baseStatsTotal / (10 + index * 2))),
+            text: index === 0 ? 'A signature-style move drawn from this Pokémon’s known move list.' : 'A card-style attack option based on a known move.'
+          }));
+          return { species, dexNumber: species.id, name: normalizeName(species.name), types, baseStatsTotal, stats, spriteUrl, description: cleanFlavorText(englishFlavor ? englishFlavor.flavor_text : ''), genus: englishGenus ? englishGenus.genus : '', abilities, attacks };
+        });
+
+        if (speciesDetails.length < 1000) throw new Error('Live API loaded only ' + speciesDetails.length + ' species, below expected full-Pokédex coverage.');
+
+        const chainUrls = [...new Set(speciesDetails.map(item => item.species.evolution_chain && item.species.evolution_chain.url).filter(Boolean))];
+        const chainDetails = await mapWithConcurrency(chainUrls, 8, async (url) => fetchJson(url));
+        const chainMap = new Map();
+        chainDetails.forEach(chain => {
+          const rows = flattenEvolutionChain(chain.chain);
+          const familyName = rows.map(row => row.name).join(' → ');
+          rows.forEach(row => chainMap.set(row.name, { familyId: 'evolution-chain-' + chain.id, familyName, stage: row.stage, evolvesFrom: row.evolvesFrom, evolvesTo: row.evolvesTo }));
+        });
+
+        return speciesDetails.map(item => {
+          const family = chainMap.get(item.name) || {};
+          return {
+            dexNumber: item.dexNumber,
+            name: item.name,
+            types: item.types,
+            primaryType: item.types[0],
+            generation: getGenerationNumber(item.species.generation && item.species.generation.name),
+            baseStatsTotal: item.baseStatsTotal,
+            stats: item.stats,
+            spriteUrl: item.spriteUrl,
+            description: item.description,
+            genus: item.genus,
+            abilities: item.abilities,
+            attacks: item.attacks,
+            evolutionFamilyId: family.familyId || slugify(item.name) + '-family',
+            evolutionFamilyName: family.familyName || item.name,
+            evolutionStage: family.stage || 1,
+            evolvesFrom: family.evolvesFrom || null,
+            evolvesTo: family.evolvesTo || [],
+            isLegendary: Boolean(item.species.is_legendary),
+            isMythical: Boolean(item.species.is_mythical)
+          };
+        });
+      }
+
+      async function loadStaticData() {
+        setLoadingState('Loading Pokémon data…');
+        try {
+          if (INLINE_POKEMON_DATA && Array.isArray(INLINE_POKEMON_DATA.species) && INLINE_POKEMON_DATA.species.length) {
+            state.usingFallbackData = false;
+            state.dataMode = 'inline';
+            state.rawSpecies = INLINE_POKEMON_DATA.species;
+          } else {
+            const response = await fetch(DATA_URL, { cache: 'no-store' });
+            if (!response.ok) throw new Error('Missing static JSON file');
+            const data = await response.json();
+            state.usingFallbackData = false;
+            state.dataMode = 'json';
+            state.rawSpecies = validateStaticPayload(data);
+          }
+        } catch (staticError) {
+          console.warn('Static data unavailable:', staticError.message);
+          try {
+            setLoadingState('Static JSON missing. Loading live PokéAPI data…');
+            state.rawSpecies = await loadFromPokeApi();
+            state.usingFallbackData = false;
+            state.dataMode = 'live';
+          } catch (apiError) {
+            console.warn('Using fallback preview data:', apiError.message);
+            state.usingFallbackData = true;
+            state.dataMode = 'preview';
+            state.rawSpecies = FALLBACK_SPECIES;
+          }
+        }
+        state.typeData = buildTypeData(state.rawSpecies);
+        drawBadges();
+        render();
+      }
+
+      function getTypeByName(name) { return state.typeData.find(type => type.type === name); }
+      function getFamilyById(id) { return state.typeData.flatMap(type => type.families).find(family => family.id === id); }
+      function getPokemonByName(name) { return state.allPokemon.find(pokemon => pokemon.name === name); }
+
+      function getFamilyItems(type) {
+        let items = type.families.map(family => ({ ...family, value: state.sizeMode === 'count' ? family.count : family.value, displayScore: state.sizeMode === 'count' ? family.count : family.value }));
+        if (state.sortMode === 'power') items = [...items].sort((a, b) => b.value - a.value);
+        if (state.sortMode === 'name') items = [...items].sort((a, b) => a.name.localeCompare(b.name));
+        return items;
+      }
+
+      function getPokemonItems(family) {
+        let items = family.pokemon.map(pokemon => ({ ...pokemon, type: family.type, color: family.color, icon: family.icon, value: getPokemonValue(pokemon) }));
+        if (state.sortMode === 'power') items = [...items].sort((a, b) => b.baseStatsTotal - a.baseStatsTotal);
+        if (state.sortMode === 'name') items = [...items].sort((a, b) => a.name.localeCompare(b.name));
+        return items;
+      }
+
+      function binaryTreemap(items, x, y, width, height) {
+        const total = items.reduce((sum, item) => sum + Math.max(0, item.value || 0), 0);
+        if (!items.length) return [];
+        if (items.length === 1) return [{ ...items[0], x, y, width, height }];
+        const sorted = [...items].sort((a, b) => b.value - a.value);
+        const half = total / 2;
+        let sum = 0;
+        let splitIndex = 0;
+        for (let i = 0; i < sorted.length; i++) {
+          if (i > 0 && Math.abs(half - sum) < Math.abs(half - (sum + sorted[i].value))) break;
+          sum += sorted[i].value;
+          splitIndex = i + 1;
+        }
+        splitIndex = Math.max(1, Math.min(splitIndex, sorted.length - 1));
+        const left = sorted.slice(0, splitIndex);
+        const right = sorted.slice(splitIndex);
+        const leftValue = left.reduce((acc, item) => acc + item.value, 0);
+        const ratio = total ? leftValue / total : 0.5;
+        if (width >= height) {
+          const leftW = width * ratio;
+          return [...binaryTreemap(left, x, y, leftW, height), ...binaryTreemap(right, x + leftW, y, width - leftW, height)];
+        }
+        const topH = height * ratio;
+        return [...binaryTreemap(left, x, y, width, topH), ...binaryTreemap(right, x, y + topH, width, height - topH)];
+      }
+
+      function matchesSearch(item) {
+        if (!state.searchTerm) return true;
+        const text = [item.name, item.type, item.primaryType, item.evolutionFamilyName, item.evolvesFrom, Array.isArray(item.types) ? item.types.join(' ') : '', Array.isArray(item.evolvesTo) ? item.evolvesTo.join(' ') : ''].join(' ');
+        return text.toLowerCase().includes(state.searchTerm.toLowerCase());
+      }
+
+      function getSearchableTypeItems() {
+        return state.typeData.map(type => {
+          const typeMatches = state.searchTerm && type.type.toLowerCase().includes(state.searchTerm.toLowerCase());
+          const pokemon = state.searchTerm && !typeMatches ? type.pokemon.filter(matchesSearch) : type.pokemon;
+          const matchedFamilyIds = new Set(pokemon.map(item => item.evolutionFamilyId));
+          const families = type.families
+            .map(family => {
+              const familyMatches = state.searchTerm && matchesSearch(family);
+              const familyPokemon = state.searchTerm && !typeMatches && !familyMatches ? family.pokemon.filter(matchesSearch) : family.pokemon;
+              return { ...family, pokemon: familyPokemon, count: familyPokemon.length, value: familyPokemon.reduce((sum, item) => sum + getPokemonValue(item), 0) };
+            })
+            .filter(family => !state.searchTerm || typeMatches || family.count || matchedFamilyIds.has(family.id) || matchesSearch(family));
+          return { ...type, pokemon, families, count: pokemon.length, value: pokemon.reduce((sum, item) => sum + getPokemonValue(item), 0) };
+        }).filter(type => !state.searchTerm || type.pokemon.length || type.families.length || type.type.toLowerCase().includes(state.searchTerm.toLowerCase()));
+      }
+
+      function placeTile(element, rect) {
+        const gutter = 4;
+        const tileWidth = Math.max(0, rect.width - gutter * 2);
+        const tileHeight = Math.max(0, rect.height - gutter * 2);
+        element.style.left = `${rect.x + gutter}px`;
+        element.style.top = `${rect.y + gutter}px`;
+        element.style.width = `${tileWidth}px`;
+        element.style.height = `${tileHeight}px`;
+        element.classList.toggle('compact', tileWidth < 170 || tileHeight < 118);
+        element.classList.toggle('tiny', tileWidth < 96 || tileHeight < 72);
+        element.classList.toggle('micro', tileWidth < 58 || tileHeight < 46);
+      }
+
+      function setTileTooltipData(tile, title, detail) {
+        tile.dataset.tooltipTitle = title;
+        tile.dataset.tooltipDetail = detail;
+      }
+
+      function drawTreemap() {
+        if (!dom.treemap) return;
+        dom.treemap.innerHTML = '';
+        const w = Math.max(0, dom.treemap.clientWidth - 20);
+        const guideRectHeight = dom.treemapGuide ? dom.treemapGuide.getBoundingClientRect().height : 0;
+        const guideHeight = guideRectHeight ? Math.min(guideRectHeight, window.innerWidth >= 700 ? 34 : guideRectHeight) + 16 : 0;
+        const h = Math.max(0, dom.treemap.clientHeight - guideHeight - 20);
+        const xInset = 10;
+        const yInset = xInset + guideHeight;
+        if (state.selectedFamily) drawFocusedFamily(w, h, xInset, yInset);
+        else if (state.selectedType) drawFocusedType(w, h, xInset, yInset);
+        else drawOverview(w, h, xInset, yInset);
+      }
+
+      function drawOverview(w, h, xInset, yInset) {
+        const typeItems = getSearchableTypeItems().map(type => ({ ...type, value: getTypeWeight(type), name: type.type }));
+        if (!typeItems.length) return drawEmptyTreemapState();
+        binaryTreemap(typeItems, xInset, yInset, w, h).forEach(typeRect => {
+          const tile = document.createElement('button');
+          tile.type = 'button';
+          tile.className = 'type-tile';
+          tile.style.setProperty('--tile-color', typeRect.color);
+          placeTile(tile, typeRect);
+          tile.setAttribute('aria-label', `${typeRect.type} type block, ${typeRect.pokemon.length} Pokémon`);
+          setTileTooltipData(tile, typeRect.type, `${typeRect.pokemon.length} Pokémon · ${typeRect.families.length} evolution families`);
+          tile.addEventListener('click', () => { playTreemapSelectSound(); selectType(typeRect.type); });
+          tile.addEventListener('mousemove', event => showTooltip(event, typeRect.type, `${typeRect.pokemon.length} Pokémon · ${typeRect.families.length} evolution families`));
+          tile.addEventListener('mouseleave', hideTooltip);
+          tile.innerHTML = `<div class="type-label"><div><strong>${escapeHtml(typeRect.type)}</strong><small>${typeRect.pokemon.length} species · ${typeRect.families.length} families</small></div><div class="type-corner-icon">${iconSvg(typeRect.icon, 'type-icon')}</div></div>`;
+          dom.treemap.appendChild(tile);
+        });
+        if (state.dataMode === 'preview') drawDataWarning('Preview data only. Full JSON was not found and live PokéAPI loading failed. Open DevTools console for the exact fetch error.');
+      }
+
+      function drawFocusedType(w, h, xInset, yInset) {
+        const type = getSearchableTypeItems().find(item => item.type === state.selectedType) || getTypeByName(state.selectedType);
+        if (!type) return resetView();
+        const headerHeight = 82;
+        const header = makeHeaderTile(type.color, type.type, `${type.families.length} evolution families · ${type.pokemon.length} species`, type.icon);
+        placeTile(header, { x: xInset, y: yInset, width: w, height: headerHeight });
+        header.addEventListener('click', () => { playTreemapSelectSound(); state.selectedFamily = null; state.selectedPokemon = null; render(); });
+        dom.treemap.appendChild(header);
+
+        const familyItems = getFamilyItems(type);
+        if (state.searchTerm && !familyItems.length) return drawEmptyTreemapState('No matching evolution families in this type.');
+        binaryTreemap(familyItems, xInset, yInset + headerHeight + 8, w, h - headerHeight - 8).forEach(familyRect => {
+          const tile = document.createElement('button');
+          tile.type = 'button';
+          tile.className = 'pokemon-tile family-tile';
+          placeTile(tile, familyRect);
+          tile.setAttribute('aria-label', `${familyRect.name}, ${familyRect.count} Pokémon`);
+          setTileTooltipData(tile, familyRect.name, `${familyRect.count} species · ${familyRect.value} total score`);
+          tile.innerHTML = `<div class="pokemon-tile-info"><strong>${escapeHtml(familyRect.name)}</strong><span>${familyRect.count} species · ${familyRect.displayScore} ${state.sizeMode === 'count' ? 'count' : 'BST'}</span></div><div class="family-corner-icon">${iconSvg(familyRect.icon, 'type-icon')}</div>`;
+          tile.addEventListener('click', () => { playTreemapSelectSound(); selectFamily(familyRect.id, familyRect.type); });
+          tile.addEventListener('mousemove', event => showTooltip(event, familyRect.name, `${familyRect.count} species · ${familyRect.value} total score`));
+          tile.addEventListener('mouseleave', hideTooltip);
+          dom.treemap.appendChild(tile);
+        });
+      }
+
+      function drawFocusedFamily(w, h, xInset, yInset) {
+        const filteredType = getSearchableTypeItems().find(item => item.type === state.selectedType);
+        const family = (filteredType && filteredType.families.find(item => item.id === state.selectedFamily)) || getFamilyById(state.selectedFamily);
+        if (!family) return stepBack();
+        const headerHeight = 82;
+        const header = makeHeaderTile(family.color, family.name, `${family.count} species · ${family.type} primary type`, family.icon);
+        placeTile(header, { x: xInset, y: yInset, width: w, height: headerHeight });
+        header.addEventListener('click', () => { playTreemapSelectSound(); state.selectedPokemon = null; render(); });
+        dom.treemap.appendChild(header);
+
+        const pokemonItems = state.searchTerm ? getPokemonItems(family).filter(matchesSearch) : getPokemonItems(family);
+        if (state.searchTerm && !pokemonItems.length) return drawEmptyTreemapState('No matching Pokémon in this evolution family.');
+        binaryTreemap(pokemonItems, xInset, yInset + headerHeight + 8, w, h - headerHeight - 8).forEach(pokemonRect => {
+          const tile = document.createElement('button');
+          tile.type = 'button';
+          tile.className = 'pokemon-tile';
+          placeTile(tile, pokemonRect);
+          tile.setAttribute('aria-label', `${pokemonRect.name}, base stats ${pokemonRect.baseStatsTotal}`);
+          setTileTooltipData(tile, `#${pokemonRect.dexNumber} ${pokemonRect.name}`, `${pokemonRect.types.join('/')} · Stage ${pokemonRect.evolutionStage} · ${pokemonRect.baseStatsTotal} BST`);
+          
+          tile.innerHTML = `<div class="pokemon-tile-info"><strong>#${pokemonRect.dexNumber} ${escapeHtml(pokemonRect.name)}</strong><span>${pokemonRect.types.map(escapeHtml).join('/')} · Stage ${pokemonRect.evolutionStage} · ${pokemonRect.baseStatsTotal} BST</span></div><div class="family-corner-icon">${iconSvg(family.icon, 'type-icon')}</div>`;
+          tile.addEventListener('click', () => { playTreemapSelectSound(); selectPokemon(pokemonRect.name, family.id, family.type); });
+          tile.addEventListener('mousemove', event => showPokemonTooltip(event, pokemonRect));
+          tile.addEventListener('mouseleave', hideTooltip);
+          if (state.selectedPokemon === pokemonRect.name) tile.classList.add('focused');
+          dom.treemap.appendChild(tile);
+        });
+      }
+
+      function drawEmptyTreemapState(message = 'No matching Pokémon. Try another search.') {
+        if (!dom.treemap) return;
+        const empty = document.createElement('div');
+        empty.className = 'data-warning';
+        empty.textContent = message;
+        dom.treemap.appendChild(empty);
+      }
+
+      function drawDataWarning(message) {
+        if (!dom.treemap) return;
+        const warning = document.createElement('div');
+        warning.className = 'data-warning';
+        warning.textContent = message;
+        dom.treemap.appendChild(warning);
+      }
+
+      function makeHeaderTile(color, title, subtitle, icon) {
+        const header = document.createElement('button');
+        header.type = 'button';
+        header.className = 'type-tile active';
+        header.style.setProperty('--tile-color', color);
+        setTileTooltipData(header, title, subtitle);
+        header.addEventListener('mousemove', event => showTooltip(event, title, subtitle));
+        header.addEventListener('mouseleave', hideTooltip);
+        header.innerHTML = `<div class="type-label"><div><strong>${escapeHtml(title)}</strong><small>${escapeHtml(subtitle)}</small></div><div class="type-corner-icon">${iconSvg(icon, 'type-icon')}</div></div>`;
+        return header;
+      }
+
+      function showTooltip(event, title, detail) {
+        if (!dom.tooltip || !dom.treemap) return;
+        const bounds = dom.treemap.getBoundingClientRect();
+        dom.tooltip.classList.remove('dpad-visible');
+        dom.tooltip.innerHTML = `<strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span>`;
+        dom.tooltip.style.transform = `translate(${event.clientX - bounds.left + 14}px, ${event.clientY - bounds.top + 14}px)`;
+      }
+
+      function showPokemonTooltip(event, pokemon) {
+        if (!dom.tooltip || !dom.treemap) return;
+        const bounds = dom.treemap.getBoundingClientRect();
+        dom.tooltip.classList.remove('dpad-visible');
+        dom.tooltip.innerHTML = `<strong>#${pokemon.dexNumber} ${escapeHtml(pokemon.name)}</strong><span>${pokemon.types.map(escapeHtml).join('/')} · Stage ${pokemon.evolutionStage} · ${pokemon.baseStatsTotal} BST</span>`;
+        dom.tooltip.style.transform = `translate(${event.clientX - bounds.left + 14}px, ${event.clientY - bounds.top + 14}px)`;
+      }
+      function hideTooltip() {
+        if (!dom.tooltip || dom.tooltip.classList.contains('dpad-visible')) return;
+        dom.tooltip.style.transform = 'translate(-9999px, -9999px)';
+      }
+
+      function showTileTooltip(tile) {
+        if (!dom.tooltip || !dom.treemap || !tile) return;
+        dom.treemap.querySelectorAll('.dpad-focused').forEach(item => item.classList.remove('dpad-focused'));
+        tile.classList.add('dpad-focused');
+        tile.focus({ preventScroll: true });
+        tile.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+
+        const treemapBounds = dom.treemap.getBoundingClientRect();
+        const tileBounds = tile.getBoundingClientRect();
+        const title = tile.dataset.tooltipTitle || tile.textContent.trim() || 'Treemap tile';
+        const detail = tile.dataset.tooltipDetail || tile.getAttribute('aria-label') || '';
+        dom.tooltip.innerHTML = `<strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span>`;
+        dom.tooltip.classList.add('dpad-visible');
+
+        const tooltipWidth = Math.min(260, Math.max(180, treemapBounds.width - 24));
+        const x = Math.max(10, Math.min(tileBounds.left - treemapBounds.left + 14, treemapBounds.width - tooltipWidth - 10));
+        const y = Math.max(10, Math.min(tileBounds.top - treemapBounds.top + 14, treemapBounds.height - 92));
+        dom.tooltip.style.minWidth = `${tooltipWidth}px`;
+        dom.tooltip.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      function drawBadges() {
+        if (!dom.typeBadges) return;
+        dom.typeBadges.innerHTML = '';
+        TYPE_ORDER.filter(type => state.typeData.some(group => group.type === type)).forEach(typeName => {
+          const meta = TYPE_META[typeName];
+          const badge = document.createElement('button');
+          badge.type = 'button';
+          badge.className = 'type-badge';
+          badge.style.setProperty('--type-color', meta.color);
+          badge.innerHTML = `${iconSvg(meta.icon, 'type-badge-icon')}<span>${escapeHtml(typeName)}</span>`;
+          badge.addEventListener('click', () => selectType(typeName));
+          dom.typeBadges.appendChild(badge);
+        });
+      }
+
+      function resetIndexPage() { state.indexPage = 1; }
+      function selectType(type) { state.selectedType = type; state.selectedFamily = null; state.selectedPokemon = null; resetIndexPage(); render(); }
+      function selectFamily(familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = null; resetIndexPage(); render(); }
+      function selectPokemon(name, familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = state.selectedPokemon === name ? null : name; render(); }
+      function stepBack() {
+        if (state.selectedPokemon) state.selectedPokemon = null;
+        else if (state.selectedFamily) state.selectedFamily = null;
+        else if (state.selectedType) state.selectedType = null;
+        resetIndexPage();
+        render();
+      }
+      function resetView() { state.selectedType = null; state.selectedFamily = null; state.selectedPokemon = null; state.searchTerm = ''; resetIndexPage(); if (dom.searchInput) dom.searchInput.value = ''; render(); }
+
+      function filteredPokemon() {
+        let list = state.allPokemon.filter(pokemon => {
+          const matchesType = state.selectedType ? pokemon.primaryType === state.selectedType : true;
+          const matchesFamily = state.selectedFamily ? pokemon.evolutionFamilyId === state.selectedFamily : true;
+          return matchesType && matchesFamily && matchesSearch(pokemon);
+        });
+        if (state.sortMode === 'power') list = [...list].sort((a, b) => b.baseStatsTotal - a.baseStatsTotal);
+        if (state.sortMode === 'name') list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+        return list;
+      }
+
+      function renderSelectedCard() {
+        const type = state.selectedType ? getTypeByName(state.selectedType) : null;
+        const family = state.selectedFamily ? getFamilyById(state.selectedFamily) : null;
+        const pokemon = state.selectedPokemon ? getPokemonByName(state.selectedPokemon) : null;
+        const list = filteredPokemon();
+        const dataLabel = state.dataMode === 'preview' ? 'Preview data' : state.dataMode === 'live' ? 'Live PokéAPI data' : state.dataMode === 'inline' ? 'Embedded data' : 'Static JSON';
+
+        setHTML(dom.activeChip, pokemon ? `#${pokemon.dexNumber} ${escapeHtml(pokemon.name)}` : family ? escapeHtml(family.name) : type ? `${iconSvg(type.icon, 'type-badge-icon')}${escapeHtml(type.type)}` : 'All Types');
+        setText(dom.countChip, `${list.length} Pokémon`);
+        setText(dom.heroReadout, state.dataMode === 'preview' ? 'PREVIEW DATA LOADED' : `${state.allPokemon.length} SPECIES LOADED`);
+        setText(dom.treemapGuide, state.selectedFamily ? 'Family view: compare species within this evolution family. Search narrows visible Pokémon here and in the Index.' : state.selectedType ? 'Type view: each block is an evolution family. Click a family to drill into individual species. Search narrows visible families here and in the Index.' : 'Overview: each block is a primary type. Click a type to zoom into evolution families. Search filters the treemap and Index together.');
+
+        if (!dom.selectedTypeCard) return;
+        if (pokemon) {
+          const meta = TYPE_META[pokemon.primaryType] || TYPE_META.Normal;
+          dom.selectedTypeCard.style.setProperty('--selected-color', meta.color);
+          const description = pokemon.description || defaultDescription(pokemon);
+          const abilityTags = (pokemon.abilities || []).slice(0, 4).map(ability => `<span class="ability-tag">${escapeHtml(ability)}</span>`).join('');
+          const attacks = (pokemon.attacks && pokemon.attacks.length ? pokemon.attacks : normalizeAttacks(pokemon.moves || [])).slice(0, 3);
+          const attackMarkup = attacks.length ? attacks.map(attack => `<div class="attack-row"><div><strong>${escapeHtml(attack.name)}</strong><span>${escapeHtml(attack.type)}${attack.text ? ' · ' + escapeHtml(attack.text) : ''}</span></div><div class="attack-power">${escapeHtml(attack.power || '—')}</div></div>`).join('') : '<div class="attack-row"><div><strong>No card moves loaded</strong><span>Add attacks to the static JSON or load live PokéAPI data.</span></div><div class="attack-power">—</div></div>';
+          const safeSpriteUrl = escapeAttr(pokemon.spriteUrl);
+          const typeText = pokemon.types.map(escapeHtml).join(' / ');
+          const genusText = pokemon.genus ? escapeHtml(pokemon.genus) + ' · ' : '';
+          dom.selectedTypeCard.innerHTML = `<div class="dex-entry-hero">${pokemon.spriteUrl ? `<img class="dex-entry-art" src="${safeSpriteUrl}" alt="${escapeAttr(pokemon.name)} thumbnail" loading="lazy" decoding="async" />` : `<div class="dex-entry-placeholder">${iconSvg(meta.icon, 'type-icon')}</div>`}<div><h4>#${pokemon.dexNumber} ${escapeHtml(pokemon.name)}</h4><p>${genusText}${typeText} · Stage ${pokemon.evolutionStage} · ${escapeHtml(pokemon.evolutionFamilyName)}</p>${abilityTags ? `<div class="ability-tags">${abilityTags}</div>` : ''}</div></div><div class="dex-description"><strong>Characteristics & Personality</strong><p>${escapeHtml(description)}</p></div><div class="card-section"><div class="card-section-header"><span>Card-style attacks</span><span>${escapeHtml(pokemon.types[0] || 'Move')}</span></div><div class="attack-list">${attackMarkup}</div></div><div class="metric-grid"><div class="metric"><small>BST</small><strong>${pokemon.baseStatsTotal}</strong></div><div class="metric"><small>Gen</small><strong>${pokemon.generation || '—'}</strong></div></div>`;
+          return;
+        }
+        if (family) {
+          dom.selectedTypeCard.style.setProperty('--selected-color', family.color);
+          dom.selectedTypeCard.innerHTML = `<h4>${escapeHtml(family.name)}</h4><p>${escapeHtml(family.type)} primary type · ${family.count} species in this evolution family.</p><div class="metric-grid"><div class="metric"><small>Species</small><strong>${family.count}</strong></div><div class="metric"><small>Total BST</small><strong>${family.value}</strong></div></div>`;
+          return;
+        }
+        if (type) {
+          dom.selectedTypeCard.style.setProperty('--selected-color', type.color);
+          dom.selectedTypeCard.innerHTML = `<h4>${iconSvg(type.icon, 'tile-inline-icon')}${escapeHtml(type.type)}</h4><p>${escapeHtml(type.vibe)}</p><div class="metric-grid"><div class="metric"><small>Species</small><strong>${type.pokemon.length}</strong></div><div class="metric"><small>Families</small><strong>${type.families.length}</strong></div></div>`;
+          return;
+        }
+        dom.selectedTypeCard.style.setProperty('--selected-color', '#ffd84a');
+        dom.selectedTypeCard.innerHTML = `<h4>All Types</h4><p>${escapeHtml(dataLabel)}: ${state.allPokemon.length} species grouped by primary type and evolution family.</p><div class="metric-grid"><div class="metric"><small>Types</small><strong>${state.typeData.length}</strong></div><div class="metric"><small>Families</small><strong>${new Set(state.allPokemon.map(p => p.evolutionFamilyId)).size}</strong></div></div>`;
+      }
+
+      function renderCharacters() {
+        if (!dom.characterList) return;
+        const list = filteredPokemon();
+        const totalPages = Math.max(1, Math.ceil(list.length / INDEX_PAGE_SIZE));
+        if (state.selectedPokemon) {
+          const selectedIndex = list.findIndex(pokemon => pokemon.name === state.selectedPokemon);
+          if (selectedIndex >= 0) state.indexPage = Math.floor(selectedIndex / INDEX_PAGE_SIZE) + 1;
+        }
+        state.indexPage = Math.max(1, Math.min(state.indexPage, totalPages));
+        const start = (state.indexPage - 1) * INDEX_PAGE_SIZE;
+        const end = Math.min(start + INDEX_PAGE_SIZE, list.length);
+        const pageItems = list.slice(start, end);
+        if (dom.indexRangeChip) setText(dom.indexRangeChip, list.length ? `${start + 1}-${end} of ${list.length}` : '0 of 0');
+        if (dom.indexPageMeta) {
+          setHTML(dom.indexPageMeta, `<strong>Page ${state.indexPage} / ${totalPages}</strong><span>${list.length ? `Showing ${start + 1}-${end} of ${list.length}` : 'No matches'}</span>`);
+          dom.indexPageMeta.setAttribute('aria-label', list.length ? `Page ${state.indexPage} of ${totalPages}. Showing ${start + 1} through ${end} of ${list.length} Pokémon.` : 'Page 1 of 1. No matching Pokémon.');
+        }
+        if (dom.indexPrevButton) dom.indexPrevButton.disabled = state.indexPage <= 1;
+        if (dom.indexNextButton) dom.indexNextButton.disabled = state.indexPage >= totalPages;
+        dom.characterList.innerHTML = pageItems.map(pokemon => {
+          const meta = TYPE_META[pokemon.primaryType] || TYPE_META.Normal;
+          const selectedClass = state.selectedPokemon === pokemon.name ? ' selected' : '';
+          return `<article class="character-card${selectedClass}" role="button" tabindex="0" aria-label="Open ${escapeAttr(pokemon.name)} Dex Entry" data-pokemon="${escapeAttr(pokemon.name)}" data-family="${escapeAttr(pokemon.evolutionFamilyId)}" data-type="${escapeAttr(pokemon.primaryType)}"><div class="sprite-dot" style="--sprite-color:${meta.color}">${pokemon.spriteUrl ? `<img src="${escapeAttr(pokemon.spriteUrl)}" alt="${escapeAttr(pokemon.name)} thumbnail" loading="lazy" decoding="async" fetchpriority="low" />` : iconSvg(meta.icon, 'type-badge-icon')}</div><div><strong>#${pokemon.dexNumber} ${escapeHtml(pokemon.name)}</strong><span>${pokemon.types.map(escapeHtml).join('/')} · ${escapeHtml(pokemon.evolutionFamilyName)}</span></div><div class="power-pill">${pokemon.baseStatsTotal}</div></article>`;
+        }).join('') || '<p style="font-weight:850;color:#64748b;">No matching Pokémon. Try another search.</p>';
+      }
+
+      function percent(value, max) { return Math.max(2, Math.min(100, Math.round((value / max) * 100))); }
+
+      function renderStatBars(stats, color) {
+        if (!dom.bars) return;
+        const labels = [
+          ['HP', stats.hp],
+          ['ATK', stats.attack],
+          ['DEF', stats.defense],
+          ['SP ATK', stats.specialAttack],
+          ['SP DEF', stats.specialDefense],
+          ['SPD', stats.speed]
+        ];
+        dom.bars.style.setProperty('--selected-color', color);
+        dom.bars.innerHTML = labels.map(([key, value]) => `
+          <div class="bar-row">
+            <span>${key}</span>
+            <div class="bar-track"><div class="bar-fill" style="--bar:${percent(value, 255)}%"></div></div>
+            <span>${value}</span>
+          </div>
+        `).join('');
+      }
+
+      function renderBars() {
+        const type = state.selectedType ? getTypeByName(state.selectedType) : null;
+        const family = state.selectedFamily ? getFamilyById(state.selectedFamily) : null;
+        const pokemon = state.selectedPokemon ? getPokemonByName(state.selectedPokemon) : null;
+
+        if (pokemon) {
+          const meta = TYPE_META[pokemon.primaryType] || TYPE_META.Normal;
+          renderStatBars(normalizeBaseStats(pokemon.stats), meta.color);
+          return;
+        }
+
+        if (family) {
+          renderStatBars(averageStats(family.pokemon), family.color);
+          return;
+        }
+
+        if (type) {
+          renderStatBars(averageStats(type.pokemon), type.color);
+          return;
+        }
+
+        renderStatBars(averageStats(state.allPokemon), '#ffd84a');
+      }
+
+      function updateBadges() {
+        document.querySelectorAll('.type-badge').forEach(badge => badge.classList.toggle('active', badge.textContent.includes(state.selectedType || '__none__')));
+      }
+
+      function renderBreadcrumb() {
+        if (!dom.breadcrumb) return;
+        const family = state.selectedFamily ? getFamilyById(state.selectedFamily) : null;
+        dom.breadcrumb.innerHTML = '';
+        if (state.selectedType) dom.breadcrumb.innerHTML += `<button class="crumb" type="button" data-action="reset">All Types</button><span>›</span><button class="crumb" type="button" data-type="${escapeAttr(state.selectedType)}">${escapeHtml(state.selectedType)}</button>`;
+        if (family) dom.breadcrumb.innerHTML += `<span>›</span><button class="crumb" type="button" data-family="${escapeAttr(family.id)}" data-type="${escapeAttr(family.type)}">${escapeHtml(family.name)}</button>`;
+        if (state.selectedPokemon) dom.breadcrumb.innerHTML += `<span>›</span><button class="crumb" type="button" data-pokemon="${escapeAttr(state.selectedPokemon)}" data-family="${escapeAttr(state.selectedFamily)}" data-type="${escapeAttr(state.selectedType)}">${escapeHtml(state.selectedPokemon)}</button>`;
+      }
+
+      function render() {
+        drawTreemap();
+        updateBadges();
+        renderSelectedCard();
+        renderCharacters();
+        renderBars();
+        renderBreadcrumb();
+      }
+
+      function bindEvents() {
+        function openCharacterCard(card) {
+          selectPokemon(card.dataset.pokemon, card.dataset.family, card.dataset.type);
+        }
+        function playDpadSound() {
+          playSynthBlip({ startFrequency: 520, endFrequency: 300, duration: 0.08, volume: 0.07, type: 'square' });
+        }
+        function getNavigableTiles() {
+          if (!dom.treemap) return [];
+          return [...dom.treemap.querySelectorAll('button.type-tile, button.pokemon-tile')]
+            .filter(tile => {
+              const rect = tile.getBoundingClientRect();
+              return rect.width > 0 && rect.height > 0 && getComputedStyle(tile).visibility !== 'hidden';
+            });
+        }
+        function navigateTreemapWithDpad(direction) {
+          const tiles = getNavigableTiles();
+          if (!tiles.length) return;
+          const current = dom.treemap.querySelector('.dpad-focused');
+          if (!current || !tiles.includes(current)) {
+            const firstTile = [...tiles].sort((a, b) => {
+              const aRect = a.getBoundingClientRect();
+              const bRect = b.getBoundingClientRect();
+              return aRect.top - bRect.top || aRect.left - bRect.left;
+            })[0];
+            showTileTooltip(firstTile);
+            return;
+          }
+
+          const currentRect = current.getBoundingClientRect();
+          const currentCenter = {
+            x: currentRect.left + currentRect.width / 2,
+            y: currentRect.top + currentRect.height / 2
+          };
+          const candidates = tiles
+            .filter(tile => tile !== current)
+            .map(tile => {
+              const rect = tile.getBoundingClientRect();
+              const center = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+              const dx = center.x - currentCenter.x;
+              const dy = center.y - currentCenter.y;
+              const isMatch = direction === 'up' ? dy < -4 : direction === 'down' ? dy > 4 : direction === 'left' ? dx < -4 : dx > 4;
+              const primary = direction === 'up' || direction === 'down' ? Math.abs(dy) : Math.abs(dx);
+              const secondary = direction === 'up' || direction === 'down' ? Math.abs(dx) : Math.abs(dy);
+              return { tile, isMatch, score: primary + secondary * 0.7 };
+            })
+            .filter(candidate => candidate.isMatch)
+            .sort((a, b) => a.score - b.score);
+
+          showTileTooltip((candidates[0] && candidates[0].tile) || current);
+        }
+        dom.searchInput?.addEventListener('input', event => { state.searchTerm = event.target.value; state.selectedPokemon = null; resetIndexPage(); render(); });
+        dom.sortSelect?.addEventListener('change', event => { state.sortMode = event.target.value; resetIndexPage(); render(); });
+        dom.sizeSelect?.addEventListener('change', event => { state.sizeMode = event.target.value; state.typeData = buildTypeData(state.rawSpecies); resetIndexPage(); render(); });
+        dom.backButton?.addEventListener('click', stepBack);
+        dom.allTypesButton?.addEventListener('click', resetView);
+        dom.indexPrevButton?.addEventListener('click', () => {
+          if (state.indexPage <= 1) return;
+          state.indexPage -= 1;
+          state.selectedPokemon = null;
+          render();
+          window.requestAnimationFrame(() => { if (dom.characterList) dom.characterList.scrollTop = 0; });
+        });
+        dom.indexNextButton?.addEventListener('click', () => {
+          const totalPages = Math.max(1, Math.ceil(filteredPokemon().length / INDEX_PAGE_SIZE));
+          if (state.indexPage >= totalPages) return;
+          state.indexPage += 1;
+          state.selectedPokemon = null;
+          render();
+          window.requestAnimationFrame(() => { if (dom.characterList) dom.characterList.scrollTop = 0; });
+        });
+        dom.characterList?.addEventListener('click', event => {
+          const card = event.target.closest('.character-card');
+          if (!card) return;
+          openCharacterCard(card);
+        });
+        dom.characterList?.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          const card = event.target.closest('.character-card');
+          if (!card) return;
+          event.preventDefault();
+          openCharacterCard(card);
+        });
+        dom.breadcrumb?.addEventListener('click', event => {
+          const button = event.target.closest('button');
+          if (!button) return;
+          if (button.dataset.action === 'reset') return resetView();
+          if (button.dataset.pokemon) return selectPokemon(button.dataset.pokemon, button.dataset.family, button.dataset.type);
+          if (button.dataset.family) return selectFamily(button.dataset.family, button.dataset.type);
+          if (button.dataset.type) return selectType(button.dataset.type);
+        });
+        document.querySelector('.sticky-dpad')?.addEventListener('click', event => {
+          const button = event.target.closest('[data-scroll-direction]');
+          if (!button) return;
+          playDpadSound();
+          navigateTreemapWithDpad(button.dataset.scrollDirection);
+        });
+        window.addEventListener('resize', () => window.requestAnimationFrame(render));
+      }
+
+      function runTests() {
+        console.assert(normalizeName('mr-mime') === 'Mr Mime', 'normalizeName handles dashed names');
+        const previousAllPokemon = state.allPokemon;
+        const testData = buildTypeData(FALLBACK_SPECIES);
+        console.assert(testData.length > 0, 'buildTypeData creates type groups');
+        console.assert(testData.some(type => type.type === 'Fire'), 'buildTypeData includes Fire type');
+        console.assert(binaryTreemap([{ value: 1 }, { value: 1 }], 0, 0, 100, 50).length === 2, 'binaryTreemap creates one rect per item');
+        console.assert(typeof iconSvg('fa-solid fa-fire-flame-curved') === 'string' && iconSvg('fa-solid fa-fire-flame-curved').includes('<i'), 'iconSvg returns Font Awesome markup');
+        console.assert(!drawFocusedFamily.toString().includes('pokemon-tile-art'), 'treemap Pokémon tiles do not render thumbnails');
+        console.assert(normalizeAttacks([{ name: 'thunder-shock', power: 40 }])[0].name === 'Thunder Shock', 'normalizeAttacks formats card-style move names');
+        console.assert(cleanFlavorText('Line one' + String.fromCharCode(10) + 'Line two') === 'Line one Line two', 'cleanFlavorText removes newline characters safely');
+        console.assert(escapeHtml('<Pikachu & Eevee>') === '&lt;Pikachu &amp; Eevee&gt;', 'escapeHtml safely escapes dynamic text');
+        console.assert(validateStaticPayload({ generatedAt: 'test', source: 'test', species: FALLBACK_SPECIES }).length === FALLBACK_SPECIES.length, 'validateStaticPayload accepts expected static JSON shape');
+        console.assert(requiredDomIsReady() === true, 'required DOM nodes exist even when optional typeBadges is absent');
+        state.allPokemon = previousAllPokemon;
+      }
+
+      async function init() {
+        if (!requiredDomIsReady()) return;
+        bindEvents();
+        runTests();
+        await loadStaticData();
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Otaku Data Viz</title>
+  <meta name="description" content="Contact Otaku Data Viz." />
+  <link rel="stylesheet" href="assets/css/site-pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="lab.html">Lab</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+        </details>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">コンタクト</p>
+          <h1>Let's Build Something Amazing.</h1>
+          <p class="intro">Open to collaboration, data ideas, commissions, templates, feedback, and strange fandom questions that deserve a better interface.</p>
+        </div>
+        <div class="visual-panel" aria-hidden="true"></div>
+      </section>
+      <section class="section inner rule-bottom">
+        <div class="split">
+          <div class="contact-box">
+            <h2 class="panel-title">Get In Touch</h2>
+            <p class="form-note">Have a franchise, dataset, classroom idea, creator project, or fandom question worth turning into an interactive visual story? Send the idea, the source material, and what you hope people will discover when they explore it.</p>
+            <div class="contact-list">
+              <a href="mailto:mpbuquet@gmail.com?subject=Otaku%20Data%20Viz%20Collaboration">Email Michael</a>
+              <a href="https://www.linkedin.com/in/michaelbuquet/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+          </div>
+          <div class="contact-box">
+            <h2 class="panel-title">Good Fits</h2>
+            <p class="form-note">Lore maps, relationship networks, franchise timelines, editorial data stories, educational explainers, custom interactive exhibits, and weirdly specific fan datasets with enough structure to become something beautiful.</p>
+            <ul class="note-list">
+              <li>Creators who want a visual companion for a video, essay, course, or community project.</li>
+              <li>Educators who want pop-culture examples for data literacy and visual thinking.</li>
+              <li>Fans with a carefully gathered dataset and a question bigger than a spreadsheet.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="section inner">
+        <div class="section-bar"><h2>What To Send</h2></div>
+        <div class="grid lab-grid">
+          <div class="text-card">
+            <span class="kicker">Project Seed</span>
+            <h3>The Obsession</h3>
+            <p>Tell me the fandom, franchise, game, manga, anime, or system you cannot stop thinking about. The more specific the question, the better.</p>
+          </div>
+          <div class="text-card">
+            <span class="kicker">Raw Material</span>
+            <h3>The Data</h3>
+            <p>Send links, spreadsheets, wiki pages, notes, or source references. Messy is fine. The first step is figuring out what structure is hiding inside it.</p>
+          </div>
+          <div class="text-card">
+            <span class="kicker">Audience</span>
+            <h3>The Reader</h3>
+            <p>Is this for fans, students, creators, a portfolio, a community, or your own curiosity? The answer changes the interface.</p>
+          </div>
+          <div class="text-card">
+            <span class="kicker">Action</span>
+            <h3>Start Here</h3>
+            <p><a href="mailto:mpbuquet@gmail.com?subject=Otaku%20Data%20Viz%20Idea">Email mpbuquet@gmail.com</a> with the rough idea and any source material you already have.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="inner">
+      <div class="disclaimer"><div class="warn" aria-hidden="true">!</div><div><strong>Disclaimer</strong><p>Otaku Data Viz is an unofficial fan-made data visualization project.</p></div></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => {
+        navToggle.open = desktopQuery.matches;
+      };
+
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+  </script>
+</body>
+</html>

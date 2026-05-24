@@ -1,0 +1,319 @@
+{
+  "generatedAt": "2026-05-24T16:32:53.342Z",
+  "source": "Inline fallback dataset from pokemon_territory_map.html",
+  "species": [
+    {
+      "dexNumber": 172,
+      "name": "Pichu",
+      "types": [
+        "Electric"
+      ],
+      "primaryType": "Electric",
+      "generation": 2,
+      "baseStatsTotal": 205,
+      "evolutionFamilyId": "pichu-family",
+      "evolutionFamilyName": "Pichu → Pikachu → Raichu",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [
+        "Pikachu"
+      ]
+    },
+    {
+      "dexNumber": 25,
+      "name": "Pikachu",
+      "types": [
+        "Electric"
+      ],
+      "primaryType": "Electric",
+      "generation": 1,
+      "baseStatsTotal": 320,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+      "evolutionFamilyId": "pichu-family",
+      "evolutionFamilyName": "Pichu → Pikachu → Raichu",
+      "evolutionStage": 2,
+      "evolvesFrom": "Pichu",
+      "evolvesTo": [
+        "Raichu"
+      ]
+    },
+    {
+      "dexNumber": 26,
+      "name": "Raichu",
+      "types": [
+        "Electric"
+      ],
+      "primaryType": "Electric",
+      "generation": 1,
+      "baseStatsTotal": 485,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/26.png",
+      "evolutionFamilyId": "pichu-family",
+      "evolutionFamilyName": "Pichu → Pikachu → Raichu",
+      "evolutionStage": 3,
+      "evolvesFrom": "Pikachu",
+      "evolvesTo": []
+    },
+    {
+      "dexNumber": 4,
+      "name": "Charmander",
+      "types": [
+        "Fire"
+      ],
+      "primaryType": "Fire",
+      "generation": 1,
+      "baseStatsTotal": 309,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png",
+      "description": "A spirited fire-type Pokémon with a brave, eager personality. Charmander’s flame reflects its vitality and makes it feel like a classic adventure partner.",
+      "genus": "Lizard Pokémon",
+      "abilities": [
+        "Blaze",
+        "Solar Power"
+      ],
+      "attacks": [
+        {
+          "name": "Ember",
+          "type": "Fire",
+          "power": 40,
+          "text": "A small flame attack that can burn the opponent."
+        },
+        {
+          "name": "Scratch",
+          "type": "Normal",
+          "power": 40,
+          "text": "A quick claw strike."
+        }
+      ],
+      "evolutionFamilyId": "charmander-family",
+      "evolutionFamilyName": "Charmander → Charmeleon → Charizard",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [
+        "Charmeleon"
+      ]
+    },
+    {
+      "dexNumber": 5,
+      "name": "Charmeleon",
+      "types": [
+        "Fire"
+      ],
+      "primaryType": "Fire",
+      "generation": 1,
+      "baseStatsTotal": 405,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png",
+      "evolutionFamilyId": "charmander-family",
+      "evolutionFamilyName": "Charmander → Charmeleon → Charizard",
+      "evolutionStage": 2,
+      "evolvesFrom": "Charmander",
+      "evolvesTo": [
+        "Charizard"
+      ]
+    },
+    {
+      "dexNumber": 6,
+      "name": "Charizard",
+      "types": [
+        "Fire",
+        "Flying"
+      ],
+      "primaryType": "Fire",
+      "generation": 1,
+      "baseStatsTotal": 534,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png",
+      "evolutionFamilyId": "charmander-family",
+      "evolutionFamilyName": "Charmander → Charmeleon → Charizard",
+      "evolutionStage": 3,
+      "evolvesFrom": "Charmeleon",
+      "evolvesTo": []
+    },
+    {
+      "dexNumber": 7,
+      "name": "Squirtle",
+      "types": [
+        "Water"
+      ],
+      "primaryType": "Water",
+      "generation": 1,
+      "baseStatsTotal": 314,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png",
+      "description": "A cool-headed water Pokémon with a playful but tactical personality. Squirtle uses its shell defensively and attacks with precise water bursts.",
+      "genus": "Tiny Turtle Pokémon",
+      "abilities": [
+        "Torrent",
+        "Rain Dish"
+      ],
+      "attacks": [
+        {
+          "name": "Water Gun",
+          "type": "Water",
+          "power": 40,
+          "text": "Shoots water with focused pressure."
+        },
+        {
+          "name": "Withdraw",
+          "type": "Water",
+          "power": 0,
+          "text": "Tucks into its shell to raise defense."
+        }
+      ],
+      "evolutionFamilyId": "squirtle-family",
+      "evolutionFamilyName": "Squirtle → Wartortle → Blastoise",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [
+        "Wartortle"
+      ]
+    },
+    {
+      "dexNumber": 8,
+      "name": "Wartortle",
+      "types": [
+        "Water"
+      ],
+      "primaryType": "Water",
+      "generation": 1,
+      "baseStatsTotal": 405,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png",
+      "evolutionFamilyId": "squirtle-family",
+      "evolutionFamilyName": "Squirtle → Wartortle → Blastoise",
+      "evolutionStage": 2,
+      "evolvesFrom": "Squirtle",
+      "evolvesTo": [
+        "Blastoise"
+      ]
+    },
+    {
+      "dexNumber": 9,
+      "name": "Blastoise",
+      "types": [
+        "Water"
+      ],
+      "primaryType": "Water",
+      "generation": 1,
+      "baseStatsTotal": 530,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png",
+      "evolutionFamilyId": "squirtle-family",
+      "evolutionFamilyName": "Squirtle → Wartortle → Blastoise",
+      "evolutionStage": 3,
+      "evolvesFrom": "Wartortle",
+      "evolvesTo": []
+    },
+    {
+      "dexNumber": 1,
+      "name": "Bulbasaur",
+      "types": [
+        "Grass",
+        "Poison"
+      ],
+      "primaryType": "Grass",
+      "generation": 1,
+      "baseStatsTotal": 318,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+      "description": "A steady and dependable grass-type Pokémon with a calm personality. Bulbasaur feels balanced: defensive, patient, and naturally supportive.",
+      "genus": "Seed Pokémon",
+      "abilities": [
+        "Overgrow",
+        "Chlorophyll"
+      ],
+      "attacks": [
+        {
+          "name": "Vine Whip",
+          "type": "Grass",
+          "power": 45,
+          "text": "Strikes with flexible vines."
+        },
+        {
+          "name": "Leech Seed",
+          "type": "Grass",
+          "power": 0,
+          "text": "Plants a seed that drains energy over time."
+        }
+      ],
+      "evolutionFamilyId": "bulbasaur-family",
+      "evolutionFamilyName": "Bulbasaur → Ivysaur → Venusaur",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [
+        "Ivysaur"
+      ]
+    },
+    {
+      "dexNumber": 2,
+      "name": "Ivysaur",
+      "types": [
+        "Grass",
+        "Poison"
+      ],
+      "primaryType": "Grass",
+      "generation": 1,
+      "baseStatsTotal": 405,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
+      "evolutionFamilyId": "bulbasaur-family",
+      "evolutionFamilyName": "Bulbasaur → Ivysaur → Venusaur",
+      "evolutionStage": 2,
+      "evolvesFrom": "Bulbasaur",
+      "evolvesTo": [
+        "Venusaur"
+      ]
+    },
+    {
+      "dexNumber": 3,
+      "name": "Venusaur",
+      "types": [
+        "Grass",
+        "Poison"
+      ],
+      "primaryType": "Grass",
+      "generation": 1,
+      "baseStatsTotal": 525,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png",
+      "evolutionFamilyId": "bulbasaur-family",
+      "evolutionFamilyName": "Bulbasaur → Ivysaur → Venusaur",
+      "evolutionStage": 3,
+      "evolvesFrom": "Ivysaur",
+      "evolvesTo": []
+    },
+    {
+      "dexNumber": 133,
+      "name": "Eevee",
+      "types": [
+        "Normal"
+      ],
+      "primaryType": "Normal",
+      "generation": 1,
+      "baseStatsTotal": 325,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png",
+      "evolutionFamilyId": "eevee-family",
+      "evolutionFamilyName": "Eevee Evolution Family",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [
+        "Vaporeon",
+        "Jolteon",
+        "Flareon",
+        "Espeon",
+        "Umbreon",
+        "Leafeon",
+        "Glaceon",
+        "Sylveon"
+      ]
+    },
+    {
+      "dexNumber": 150,
+      "name": "Mewtwo",
+      "types": [
+        "Psychic"
+      ],
+      "primaryType": "Psychic",
+      "generation": 1,
+      "baseStatsTotal": 680,
+      "spriteUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png",
+      "evolutionFamilyId": "mewtwo-family",
+      "evolutionFamilyName": "Mewtwo",
+      "evolutionStage": 1,
+      "evolvesFrom": null,
+      "evolvesTo": [],
+      "isLegendary": true
+    }
+  ]
+}

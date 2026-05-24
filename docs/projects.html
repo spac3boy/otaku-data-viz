@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Otaku Data Viz</title>
+  <meta name="description" content="Featured Otaku Data Viz projects." />
+  <link rel="stylesheet" href="assets/css/site-pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html" aria-current="page">Projects</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="lab.html">Lab</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        </details>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">プロジェクト</p>
+          <h1>Featured Projects</h1>
+          <p class="intro">Interactive maps, timelines, and experiments exploring anime, gaming, manga, and the strange little systems that make fandoms endlessly re-readable.</p>
+        </div>
+        <div class="visual-panel" aria-hidden="true"></div>
+      </section>
+      <section class="section inner rule-bottom">
+        <div class="section-bar"><h2>Live Data Stories</h2></div>
+        <div class="grid">
+          <a class="project-card" href="dragonball-character-sociogram/">
+            <div class="project-art"><iframe src="dragonball-character-sociogram/index.html?preview=1" title="Dragon Ball Sociogram preview" loading="eager"></iframe></div>
+            <div class="card-body">
+              <h3>Dragon Ball Sociogram</h3>
+              <p>An interactive relationship map exploring character connections, alliances, rivalries, families, mentors, and transformations across the Dragon Ball universe.</p>
+              <div class="tags"><span class="tag">Network Analysis</span><span class="tag">Dragon Ball</span></div>
+            </div>
+          </a>
+          <a class="project-card" href="manga-timeline.html">
+            <div class="project-art"><iframe src="manga-timeline.html?preview=1" title="Manga and Anime Evolution preview" loading="lazy"></iframe></div>
+            <div class="card-body">
+              <h3>Manga &amp; Anime Evolution</h3>
+              <p>A comparative timeline of manga serialization history and anime releases, tracing adaptations, franchise growth, genre shifts, and global breakout moments.</p>
+              <div class="tags"><span class="tag">Timeline</span><span class="tag">Manga</span></div>
+            </div>
+          </a>
+          <a class="project-card" href="pokemon_territory_map.html">
+            <div class="project-art"><iframe src="pokemon_territory_map.html?preview=1" title="Animated preview of the Pokedex Treemap" loading="lazy"></iframe></div>
+            <div class="card-body">
+              <h3>Pokedex Treemap</h3>
+              <p>An interactive Pokemon territory map that turns type groups and evolution families into a playful Pokedex-style treemap for exploring species patterns.</p>
+              <div class="tags"><span class="tag">Treemap</span><span class="tag">Pokemon</span></div>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section class="section inner">
+        <div class="section-bar"><h2>Under Construction</h2></div>
+        <div class="grid">
+          <article class="project-card">
+            <div class="project-art concept-art nintendo-art" data-label="Building" aria-hidden="true"></div>
+            <div class="card-body">
+              <span class="kicker">Timeline Concept</span>
+              <h3>Nintendo Game Timeline</h3>
+              <p>A console-era and franchise-release timeline tracing Nintendo's shifts from arcade roots to handheld dominance, mascot ecosystems, motion controls, hybrid hardware, and modern live-service experiments.</p>
+              <div class="tags"><span class="tag">Gaming</span><span class="tag">Timeline</span><span class="tag">Nintendo</span></div>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-art concept-art power-art" data-label="Researching" aria-hidden="true"></div>
+            <div class="card-body">
+              <span class="kicker">Comparison Model</span>
+              <h3>Anime Power Systems</h3>
+              <p>A cross-series framework for comparing transformations, energy systems, rankings, training arcs, and escalation curves without pretending every universe uses the same physics.</p>
+              <div class="tags"><span class="tag">Anime</span><span class="tag">Power Scaling</span><span class="tag">Systems</span></div>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-art concept-art studio-art" data-label="Sketching" aria-hidden="true"></div>
+            <div class="card-body">
+              <span class="kicker">Network Study</span>
+              <h3>Studio Lineage Map</h3>
+              <p>A creator-and-studio network for following director moves, production influence, genre clusters, and the hidden family trees behind iconic anime eras.</p>
+              <div class="tags"><span class="tag">Studios</span><span class="tag">Network</span><span class="tag">Creators</span></div>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="project-art future-art" aria-hidden="true"></div>
+            <div class="card-body">
+              <span class="kicker">Open Slot</span>
+              <h3>Future Data Stories</h3>
+              <p>Future data stories may explore game franchise timelines, studio histories, genre evolution, character archetype networks, tournament brackets, and fandom recommendation paths.</p>
+              <div class="tags"><span class="tag">Experimental</span><span class="tag">Lab</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer class="inner">
+      <div class="disclaimer"><div class="warn" aria-hidden="true">!</div><div><strong>Disclaimer</strong><p>This project is for educational and entertainment purposes only. Otaku Data Viz is not affiliated with or endorsed by any anime, manga, game, publisher, studio, or media franchise.</p></div></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => {
+        navToggle.open = desktopQuery.matches;
+      };
+
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+  </script>
+</body>
+</html>

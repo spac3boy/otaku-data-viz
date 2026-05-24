@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Otaku Data Viz</title>
+  <meta name="description" content="About Otaku Data Viz." />
+  <link rel="stylesheet" href="assets/css/site-pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="about.html" aria-current="page">About</a></li>
+          <li><a href="lab.html">Lab</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        </details>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">アバウト</p>
+          <h1>About The Project</h1>
+          <p class="intro">Otaku Data Viz is a passion project for turning the systems behind our nerdiest obsessions into maps, timelines, interfaces, and visual stories worth exploring.</p>
+        </div>
+        <div class="visual-panel" aria-hidden="true"></div>
+      </section>
+      <section class="section inner rule-bottom">
+        <div class="split">
+          <div class="copy">
+            <h2 class="panel-title">The Origin</h2>
+            <p>Otaku Data Viz started from a familiar fan impulse: the urge to organize the thing you love because loving it somehow makes the world inside it feel real. Character relationships become social systems. Release dates become cultural history. Evolutions, arcs, power tiers, teams, studios, and console generations start to look less like trivia and more like architecture.</p>
+            <p>This project gives that impulse a home. Instead of leaving fandom knowledge scattered across wiki tabs, memory, screenshots, and late-night debates, Otaku Data Viz turns it into interactive artifacts: relationship maps, timelines, treemaps, and visual essays that invite wandering.</p>
+            <p>The goal is not to make fandom colder or more clinical. The goal is the opposite: to make data feel as expressive as the worlds it describes.</p>
+          </div>
+          <div class="copy">
+            <h2 class="panel-title">What Belongs Here</h2>
+            <p>Anything with lore, eras, mechanics, relationships, lineages, taxonomies, or obsessive fan energy is fair game. Anime and manga are the center of gravity, but games, trading-card logic, studio histories, genre movements, and character archetypes all belong in the same cabinet of curiosities.</p>
+            <ul class="note-list">
+              <li>Networks for rivalries, alliances, mentorships, teams, and family trees.</li>
+              <li>Timelines for adaptations, release waves, franchise growth, and cultural moments.</li>
+              <li>Treemaps and taxonomies for types, classes, powers, stats, and collections.</li>
+              <li>Interfaces that feel playful enough for fans and structured enough for analysis.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="section inner">
+        <div class="section-bar"><h2>A Short History</h2></div>
+        <div class="timeline-list">
+          <div class="timeline-item">
+            <strong>Impulse</strong>
+            <p>The seed was simple: fictional worlds are full of data, and fans already analyze them with incredible care. The missing piece was a visual format that felt equal parts useful, stylish, and fun.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>Prototype</strong>
+            <p>The Dragon Ball sociogram became the first proof of concept: a way to see relationships, rivalries, families, mentors, and transformations as a living network instead of a flat list.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>Archive</strong>
+            <p>The project expanded into timelines and treemaps because every fandom asks for a different shape. Some stories want chronology. Some want territory. Some want clusters, influence, or comparison.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>Next</strong>
+            <p>Otaku Data Viz is becoming a small data-storytelling lab for the media that feeds our nerdiest obsessions: anime, manga, games, franchises, studios, and the fan theories that keep them alive.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="inner">
+      <div class="disclaimer"><div class="warn" aria-hidden="true">!</div><div><strong>Disclaimer</strong><p>All trademarks are property of their respective owners.</p></div></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => {
+        navToggle.open = desktopQuery.matches;
+      };
+
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+  </script>
+</body>
+</html>

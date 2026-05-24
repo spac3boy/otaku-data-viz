@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab | Otaku Data Viz</title>
+  <meta name="description" content="Otaku Data Viz experiments and future data stories." />
+  <link rel="stylesheet" href="assets/css/site-pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="lab.html" aria-current="page">Lab</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        </details>
+      </nav>
+    </header>
+    <main>
+      <section class="page-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">ラボ</p>
+          <h1>Lab Notes</h1>
+          <p class="intro">A working methodology for making fan-data interfaces: design thinking, vibe coding, exploratory play, and real datasets held in the same frame.</p>
+        </div>
+        <div class="visual-panel" aria-hidden="true"></div>
+      </section>
+      <section class="section inner rule-bottom">
+        <div class="section-bar"><h2>Methodology</h2></div>
+        <div class="grid lab-grid">
+          <div class="text-card">
+            <span class="kicker">01 / Frame</span>
+            <h3>Start With The Fan Question</h3>
+            <p>Every project begins with the thing a fan actually wants to know: who is connected, what came first, which forms belong together, why a franchise feels bigger in one era than another. The first design task is turning that curiosity into a clear exploration prompt.</p>
+            <ul class="note-list">
+              <li>What would someone want to click first?</li>
+              <li>What argument, debate, or memory does the data help organize?</li>
+              <li>What shape does the subject naturally want: network, timeline, treemap, grid, or dashboard?</li>
+            </ul>
+          </div>
+          <div class="text-card">
+            <span class="kicker">02 / Gather</span>
+            <h3>Use Real Data, Then Clean It By Hand</h3>
+            <p>The work is grounded in public sources, structured references, release records, relationship notes, stats, and hand-built datasets. The data gets normalized enough to support interaction, but not flattened so much that it loses the weirdness fans care about.</p>
+            <ul class="note-list">
+              <li>Names, categories, dates, arcs, families, and relationships are made explicit.</li>
+              <li>Ambiguity is treated as a design constraint, not an inconvenience.</li>
+              <li>Small curated datasets are allowed when they make the prototype sharper.</li>
+            </ul>
+          </div>
+          <div class="text-card">
+            <span class="kicker">03 / Prototype</span>
+            <h3>Vibe Code The Interface</h3>
+            <p>Vibe coding here means building toward the feeling of the world, not just the function of the chart. A Dragon Ball map should not feel like a quarterly sales dashboard. A Pokedex treemap should feel like it belongs in a handheld device from an alternate universe.</p>
+            <ul class="note-list">
+              <li>Prototype fast enough to discover the right interaction.</li>
+              <li>Let visual language borrow from manga panels, game UI, field guides, archives, and console-era ephemera.</li>
+              <li>Keep the interface playful, but make the data legible.</li>
+            </ul>
+          </div>
+          <div class="text-card">
+            <span class="kicker">04 / Iterate</span>
+            <h3>Explore Until It Teaches Back</h3>
+            <p>A project is working when it starts answering questions that were not obvious at the start. The final pass is about tightening hierarchy, improving labels, exposing filters, smoothing motion, and making sure the artifact rewards both quick scanning and deep wandering.</p>
+            <ul class="note-list">
+              <li>Test whether the first screen explains the system without over-explaining it.</li>
+              <li>Look for surprising clusters, gaps, outliers, and awkward edge cases.</li>
+              <li>Keep what makes the fandom feel alive.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="section inner">
+        <div class="section-bar"><h2>Future Experiments</h2></div>
+        <div class="grid lab-grid">
+          <div class="text-card">
+            <h3>Power Systems</h3>
+            <p>Comparative views of rankings, transformations, abilities, and escalation curves across long-running series.</p>
+          </div>
+          <div class="text-card">
+            <h3>Nintendo Game Timeline</h3>
+            <p>A release-history timeline tracing consoles, handhelds, franchise eras, mascot moments, and the design patterns that shaped generations of play.</p>
+          </div>
+          <div class="text-card">
+            <h3>Studio Histories</h3>
+            <p>Networks of creators, studios, genres, and era-defining production patterns.</p>
+          </div>
+          <div class="text-card">
+            <h3>Character Archetypes</h3>
+            <p>Maps of roles, tropes, rivalries, mentors, teams, and evolving character systems.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="inner">
+      <div class="disclaimer"><div class="warn" aria-hidden="true">!</div><div><strong>Disclaimer</strong><p>Experiments are fan-made, educational, and unaffiliated with rights holders.</p></div></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => {
+        navToggle.open = desktopQuery.matches;
+      };
+
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+  </script>
+</body>
+</html>

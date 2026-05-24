@@ -1231,15 +1231,31 @@
         return response.json();
       }
 
-      function validateStaticPayload(data) {
-        if (!data || typeof data !== 'object') throw new Error('Static JSON is not an object');
-        if (!Array.isArray(data.species) || !data.species.length) throw new Error('Static JSON has no species array');
-        if (!data.generatedAt || !data.source) console.warn('Static JSON should include generatedAt and source metadata.');
-        const requiredFields = ['dexNumber', 'name', 'types', 'primaryType', 'baseStatsTotal', 'evolutionFamilyId', 'evolutionFamilyName'];
-        const incomplete = data.species.slice(0, 25).filter(pokemon => requiredFields.some(field => pokemon[field] === undefined || pokemon[field] === null || pokemon[field] === ''));
-        if (incomplete.length) console.warn('Static JSON has species missing recommended fields:', incomplete.map(pokemon => pokemon.name || pokemon.dexNumber || 'unknown'));
-        return data.species;
-      }
+function validateStaticPayload(data) {
+  const MIN_EXPECTED_STATIC_SPECIES = 1000;
+
+  if (!data || typeof data !== 'object') throw new Error('Static JSON is not an object');
+  if (!Array.isArray(data.species) || !data.species.length) throw new Error('Static JSON has no species array');
+
+  if (data.species.length < MIN_EXPECTED_STATIC_SPECIES) {
+    throw new Error(
+      `Static JSON has only ${data.species.length} species; expected at least ${MIN_EXPECTED_STATIC_SPECIES}. Rejecting undersized fallback export.`
+    );
+  }
+
+  if (!data.generatedAt || !data.source) console.warn('Static JSON should include generatedAt and source metadata.');
+
+  const requiredFields = ['dexNumber', 'name', 'types', 'primaryType', 'baseStatsTotal', 'evolutionFamilyId', 'evolutionFamilyName'];
+  const incomplete = data.species
+    .slice(0, 25)
+    .filter(pokemon => requiredFields.some(field => pokemon[field] === undefined || pokemon[field] === null || pokemon[field] === ''));
+
+  if (incomplete.length) {
+    console.warn('Static JSON has species missing recommended fields:', incomplete.map(pokemon => pokemon.name || pokemon.dexNumber || 'unknown'));
+  }
+
+  return data.species;
+}
 
       async function mapWithConcurrency(items, limit, mapper) {
         const results = new Array(items.length);

@@ -1919,7 +1919,15 @@ function validateStaticPayload(data) {
         console.assert(normalizeAttacks([{ name: 'thunder-shock', power: 40 }])[0].name === 'Thunder Shock', 'normalizeAttacks formats card-style move names');
         console.assert(cleanFlavorText('Line one' + String.fromCharCode(10) + 'Line two') === 'Line one Line two', 'cleanFlavorText removes newline characters safely');
         console.assert(escapeHtml('<Pikachu & Eevee>') === '&lt;Pikachu &amp; Eevee&gt;', 'escapeHtml safely escapes dynamic text');
-        console.assert(validateStaticPayload({ generatedAt: 'test', source: 'test', species: FALLBACK_SPECIES }).length === FALLBACK_SPECIES.length, 'validateStaticPayload accepts expected static JSON shape');
+        try {
+          validateStaticPayload({ generatedAt: 'test', source: 'test', species: FALLBACK_SPECIES });
+          console.assert(false, 'validateStaticPayload should reject undersized fallback data');
+        } catch (error) {
+          console.assert(
+            error.message.includes('expected at least'),
+            'validateStaticPayload rejects undersized fallback data'
+          );
+        }
         console.assert(requiredDomIsReady() === true, 'required DOM nodes exist even when optional typeBadges is absent');
         state.allPokemon = previousAllPokemon;
       }

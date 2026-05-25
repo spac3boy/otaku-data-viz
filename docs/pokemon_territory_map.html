@@ -1366,7 +1366,7 @@ function validateStaticPayload(data) {
             state.dataMode = 'inline';
             state.rawSpecies = INLINE_POKEMON_DATA.species;
           } else {
-            const response = await fetch(DATA_URL, { cache: 'no-store' });
+            const response = await fetch(DATA_URL);
             if (!response.ok) throw new Error('Missing static JSON file');
             const data = await response.json();
             state.usingFallbackData = false;

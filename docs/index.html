@@ -790,11 +790,54 @@
       text-transform: uppercase;
     }
     .halftone {
+      position: relative;
       min-height: 220px;
-      background:
-        radial-gradient(circle, var(--ink) 0 1.7px, transparent 2.3px) 0 0 / 12px 12px,
-        radial-gradient(circle at 100% 100%, rgba(9, 11, 9, .7), transparent 56%);
+      background: transparent;
       opacity: .88;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .murmur-field {
+      position: absolute;
+      inset: 0;
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 58%, rgba(0, 0, 0, .52) 78%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 0%, #000 58%, rgba(0, 0, 0, .52) 78%, transparent 100%);
+    }
+    .murmur-dot {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--ink);
+      opacity: .62;
+      transform: translate3d(var(--x0), var(--y0), 0) scale(var(--scale));
+      animation: murmuration var(--duration) cubic-bezier(.43, 0, .24, 1) infinite;
+      animation-delay: var(--delay);
+      will-change: transform, opacity;
+    }
+    @keyframes murmuration {
+      0% {
+        opacity: .42;
+        transform: translate3d(var(--x0), var(--y0), 0) scale(var(--scale));
+      }
+      23% {
+        opacity: .72;
+        transform: translate3d(var(--x1), var(--y1), 0) scale(calc(var(--scale) * 1.18));
+      }
+      47% {
+        opacity: .58;
+        transform: translate3d(var(--x2), var(--y2), 0) scale(calc(var(--scale) * .9));
+      }
+      71% {
+        opacity: .78;
+        transform: translate3d(var(--x3), var(--y3), 0) scale(calc(var(--scale) * 1.08));
+      }
+      100% {
+        opacity: .42;
+        transform: translate3d(var(--x0), var(--y0), 0) scale(var(--scale));
+      }
     }
     .contact-panel h2 {
       margin: 0 0 12px;
@@ -961,7 +1004,9 @@
         border-top: 1.5px solid var(--ink);
       }
       .about-panel { border-right: 0; border-bottom: 2px solid var(--ink); }
-      .halftone { min-height: 150px; }
+      .halftone {
+        min-height: 180px;
+      }
       .project-card { flex-basis: clamp(280px, 46vw, 340px); }
     }
     @media (max-width: 760px) {
@@ -1034,6 +1079,10 @@
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
         transition-duration: .01ms !important;
+      }
+      .murmur-dot {
+        animation: none !important;
+        transform: none !important;
       }
     }
   </style>
@@ -1187,7 +1236,7 @@
             <p>From character connections to narrative timelines, we use data to uncover patterns and insights that deepen our appreciation for the stories we love.</p>
             <div class="byline">Built with heart by a fellow otaku</div>
           </div>
-          <div class="halftone" aria-hidden="true"></div>
+          <div class="halftone" aria-hidden="true"><div class="murmur-field"></div></div>
         </div>
 
         <div id="contact" class="contact-panel">
@@ -1225,6 +1274,43 @@
 
       syncNavMode();
       desktopQuery.addEventListener('change', syncNavMode);
+
+      const murmurField = document.querySelector('.murmur-field');
+      if (murmurField && !murmurField.children.length) {
+        const columns = 32;
+        const rows = 10;
+        const centerX = (columns - 1) / 2;
+        const centerY = (rows - 1) / 2;
+        const dots = [];
+
+        for (let row = 0; row < rows; row += 1) {
+          for (let col = 0; col < columns; col += 1) {
+            const wave = Math.sin((col / columns) * Math.PI * 2 + row * .72);
+            const sweep = Math.cos((row / rows) * Math.PI + col * .22);
+            const depth = Math.hypot(col - centerX, row - centerY);
+            const dot = document.createElement('span');
+
+            dot.className = 'murmur-dot';
+            dot.style.setProperty('--x', `${((col + .5) / columns * 100).toFixed(3)}%`);
+            dot.style.setProperty('--y', `${((row + .5) / rows * 100).toFixed(3)}%`);
+            dot.style.setProperty('--size', `${(2.8 + ((col + row) % 4) * .32).toFixed(2)}px`);
+            dot.style.setProperty('--scale', `${(1 - Math.min(depth / 32, .18)).toFixed(3)}`);
+            dot.style.setProperty('--duration', `${(7.8 + (col % 6) * .36 + (row % 3) * .42).toFixed(2)}s`);
+            dot.style.setProperty('--delay', `${(-1 * ((col * .13 + row * .31) % 4.8)).toFixed(2)}s`);
+            dot.style.setProperty('--x0', `${(wave * 4 - sweep * 2).toFixed(2)}px`);
+            dot.style.setProperty('--y0', `${(sweep * 3 + row * .18).toFixed(2)}px`);
+            dot.style.setProperty('--x1', `${(wave * -8 + sweep * 5).toFixed(2)}px`);
+            dot.style.setProperty('--y1', `${(Math.sin(col * .35) * 7 - row * .32).toFixed(2)}px`);
+            dot.style.setProperty('--x2', `${(Math.cos(row * .9 + col * .17) * 10).toFixed(2)}px`);
+            dot.style.setProperty('--y2', `${(wave * 6 + sweep * -5).toFixed(2)}px`);
+            dot.style.setProperty('--x3', `${(Math.sin(row * .8) * -6 + sweep * 7).toFixed(2)}px`);
+            dot.style.setProperty('--y3', `${(Math.cos(col * .28) * 8).toFixed(2)}px`);
+            dots.push(dot);
+          }
+        }
+
+        murmurField.append(...dots);
+      }
     })();
   </script>
 </body>

@@ -701,27 +701,41 @@
       letter-spacing: .04em;
       text-transform: uppercase;
     }
-    .kanji-card {
+    .app-icon {
       position: absolute;
-      left: 50%;
-      top: 50%;
-      display: grid;
-      place-items: center;
-      width: min(168px, 54%);
-      aspect-ratio: 1;
+      left: 28px;
+      top: 58px;
+      z-index: 3;
+      width: 82px;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background: var(--paper-soft);
+      box-shadow: 6px 6px 0 rgba(9, 11, 9, .18);
+      transform: rotate(-6deg);
+      animation: softFloat 5.8s ease-in-out infinite;
+    }
+    .app-screen {
+      position: absolute;
+      right: 26px;
+      bottom: -86px;
+      z-index: 2;
+      width: min(210px, 58%);
       border: 2px solid var(--ink);
       background: var(--paper-soft);
-      font-family: var(--display);
-      font-size: clamp(5rem, 10vw, 7.4rem);
-      line-height: 1;
-      transform: translate(-50%, -50%) rotate(-4deg);
       box-shadow: 10px 10px 0 rgba(9, 11, 9, .18);
-      animation: softFloat 5.8s ease-in-out infinite;
+      transform: rotate(3deg);
+      overflow: hidden;
+    }
+    .app-screen img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
     .app-stat {
       position: absolute;
-      right: 20px;
-      bottom: 20px;
+      left: 28px;
+      bottom: 26px;
+      z-index: 4;
       border: 1.5px solid var(--ink);
       padding: 8px 10px;
       background: var(--paper-soft);
@@ -990,10 +1004,9 @@
       .app-promo { padding-block: 24px; }
       .app-copy { padding: 24px 20px; }
       .app-copy h3 { font-size: clamp(2.2rem, 12vw, 3.6rem); }
-      .kanji-card {
-        width: 145px;
-        font-size: 5.2rem;
-      }
+      .app-icon { width: 72px; }
+      .app-screen { width: 190px; right: 22px; bottom: -118px; }
+      .app-stat { left: 20px; bottom: 22px; }
       .about-panel,
       .contact-panel { padding: 24px 20px; }
       footer { grid-template-columns: 1fr; }
@@ -1156,9 +1169,12 @@
             <p>Meet Fuda-kun, a playful kanji study app for JLPT N5-N1 with drills, timed mock exams, and smart mistake review. No ads. No subscription.</p>
             <a class="button" href="https://apps.apple.com/ae/app/fuda-kun-master-jlpt-kanji/id6758918085" target="_blank" rel="noopener">Download on the App Store <span aria-hidden="true">--&gt;</span></a>
           </div>
-          <div class="app-art" aria-hidden="true">
-            <div class="kanji-card">字</div>
-            <div class="app-stat">Smart Review</div>
+          <div class="app-art">
+            <img class="app-icon" src="assets/images/fuda-kun-app-icon.png" alt="Fuda-kun app icon" loading="lazy" />
+            <div class="app-screen">
+              <img src="assets/images/fuda-kun-home-screen.webp" alt="Fuda-kun home screen showing study, review, exam, and progress modes" loading="lazy" />
+            </div>
+            <div class="app-stat" aria-hidden="true">Smart Review</div>
           </div>
         </div>
       </section>

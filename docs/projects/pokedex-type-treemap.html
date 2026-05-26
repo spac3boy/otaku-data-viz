@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokédex Type Treemap | Pokémon Type &amp; Evolution Map | Otaku Data Viz</title>
+  <meta name="description" content="Explore an interactive Pokédex-style treemap that groups Pokémon by primary type, evolution family, species count, and base stats through fan-made data visualization." />
+  <link rel="canonical" href="https://otakudataviz.com/projects/pokedex-type-treemap.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Otaku Data Viz" />
+  <meta property="og:title" content="Pokédex Type Treemap | Pokémon Type &amp; Evolution Map" />
+  <meta property="og:description" content="Explore a fan-made Pokédex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats." />
+  <meta property="og:url" content="https://otakudataviz.com/projects/pokedex-type-treemap.html" />
+  <meta property="og:image" content="https://otakudataviz.com/assets/images/pokedex-type-treemap-og.svg" />
+  <meta property="og:image:alt" content="Abstract Pokédex-style treemap preview for the Pokedex Type Treemap by Otaku Data Viz." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pokédex Type Treemap | Otaku Data Viz" />
+  <meta name="twitter:description" content="Explore a fan-made Pokédex-style treemap of Pokémon types, evolution families, species count, and base stats." />
+  <meta name="twitter:image" content="https://otakudataviz.com/assets/images/pokedex-type-treemap-og.svg" />
+  <link rel="stylesheet" href="../assets/css/site-pages.css" />
+  <style>
+    .project-hero {
+      display: grid;
+      grid-template-columns: minmax(320px, .86fr) minmax(320px, 1.14fr);
+      gap: clamp(24px, 5vw, 58px);
+      align-items: center;
+      padding-block: 34px;
+    }
+    .project-hero h1 {
+      max-width: 8.8ch;
+      font-size: 4.5rem;
+      overflow-wrap: normal;
+    }
+    .hero-actions,
+    .cta-actions,
+    .share-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      background: var(--paper-deep);
+    }
+    .hero-preview {
+      min-height: clamp(330px, 39vw, 500px);
+      border: 1.5px solid var(--ink);
+      background: var(--ink);
+      overflow: hidden;
+      box-shadow: 8px 8px 0 rgba(9, 11, 9, .16);
+    }
+    .hero-preview iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: clamp(330px, 39vw, 500px);
+      border: 0;
+      pointer-events: none;
+      transform: scale(1.02);
+      transform-origin: center;
+    }
+    .toc {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding-block: 18px;
+    }
+    .toc strong,
+    .mini-label {
+      font-family: var(--mono);
+      font-size: .75rem;
+      font-weight: 950;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .toc nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .toc a,
+    .share-link,
+    .share-button {
+      border: 1.5px solid var(--ink);
+      padding: 10px 12px;
+      background: rgba(251, 245, 232, .72);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 950;
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .toc a:hover,
+    .toc a:focus-visible,
+    .share-link:hover,
+    .share-link:focus-visible,
+    .share-button:hover,
+    .share-button:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+      outline: none;
+    }
+    .article-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .38fr);
+      grid-template-areas: "content aside";
+      gap: 20px;
+      align-items: start;
+    }
+    .content-stack {
+      grid-area: content;
+      display: grid;
+      gap: 20px;
+    }
+    .article-panel,
+    .aside-panel,
+    .cta-panel,
+    .share-panel {
+      border: 1.5px solid var(--ink);
+      background: rgba(251, 245, 232, .72);
+      padding: clamp(22px, 4vw, 36px);
+    }
+    .article-panel h2,
+    .cta-panel h2,
+    .share-panel h2 {
+      margin-bottom: 18px;
+      font-size: clamp(1.8rem, 3.4vw, 3rem);
+      line-height: .92;
+    }
+    .article-panel h3,
+    .aside-panel h3 {
+      margin: 24px 0 12px;
+      font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+    }
+    .article-panel p,
+    .article-panel li,
+    .aside-panel p,
+    .cta-panel p,
+    .share-panel p {
+      font-family: var(--mono);
+      line-height: 1.62;
+    }
+    .article-panel p:first-of-type,
+    .aside-panel p:first-of-type,
+    .cta-panel p:first-of-type,
+    .share-panel p:first-of-type {
+      margin-top: 0;
+    }
+    .check-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .check-list li {
+      position: relative;
+      padding-left: 24px;
+    }
+    .check-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .64em;
+      width: 10px;
+      height: 10px;
+      background: var(--ink);
+    }
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1.5px solid var(--ink);
+      margin-top: 22px;
+    }
+    .stat-strip div {
+      padding: 14px;
+      border-right: 1.5px solid var(--ink);
+    }
+    .stat-strip div:last-child { border-right: 0; }
+    .stat-strip strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 1.9rem;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+    .stat-strip span {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .sticky-aside {
+      grid-area: aside;
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 20px;
+    }
+    .share-panel.compact {
+      padding: 20px;
+    }
+    .share-panel.compact h2 {
+      font-size: clamp(1.55rem, 2.6vw, 2.2rem);
+    }
+    .share-actions {
+      margin-top: 14px;
+    }
+    .share-button {
+      appearance: none;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .related-card {
+      border: 1.5px solid var(--ink);
+      padding: 18px;
+      background: rgba(251, 245, 232, .72);
+      text-decoration: none;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .related-card:hover,
+    .related-card:focus-visible {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 rgba(9, 11, 9, .2);
+      outline: none;
+    }
+    .related-card h3 {
+      font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+      margin-bottom: 12px;
+    }
+    .related-card p {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .faq details {
+      border-top: 1.5px solid var(--ink);
+      padding: 16px 0;
+    }
+    .faq details:last-child {
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .faq summary {
+      cursor: pointer;
+      font-family: var(--mono);
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .faq summary:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 4px;
+    }
+    .disclaimer-box {
+      border: 1.5px solid var(--ink);
+      padding: 18px;
+      background: var(--paper-deep);
+      font-size: .86rem;
+    }
+    @media (max-width: 980px) {
+      .project-hero,
+      .article-grid {
+        grid-template-columns: 1fr;
+      }
+      .article-grid {
+        grid-template-areas:
+          "aside"
+          "content";
+      }
+      .project-hero h1 {
+        max-width: 10ch;
+        font-size: 4.2rem;
+      }
+      .sticky-aside {
+        position: static;
+      }
+      .related-grid,
+      .stat-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .stat-strip div:nth-child(2) { border-right: 0; }
+      .stat-strip div:nth-child(-n+2) { border-bottom: 1.5px solid var(--ink); }
+    }
+    @media (max-width: 760px) {
+      .project-hero h1 { font-size: 3.4rem; }
+      .toc { grid-template-columns: 1fr; }
+      .hero-actions,
+      .cta-actions,
+      .share-actions { align-items: stretch; }
+      .hero-actions .button,
+      .cta-actions .button,
+      .share-link,
+      .share-button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+      .related-grid,
+      .stat-strip { grid-template-columns: 1fr; }
+      .stat-strip div,
+      .stat-strip div:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1.5px solid var(--ink);
+      }
+      .stat-strip div:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 420px) {
+      .project-hero h1 { font-size: 2.85rem; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Pokédex Type Treemap?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Pokédex Type Treemap is a fan-made interactive visualization that groups Pokémon by primary type, evolution family, species count, and base stats inside a playful Pokédex-style interface."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does this Pokémon treemap work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Visitors can search Pokémon, sort entries, switch treemap sizing between base stats and count, click type blocks to drill into evolution families, click families to compare species, and select Pokémon to open Dex-style details."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this an official Pokémon project?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. This is an unofficial fan-made visualization for exploration, commentary, analysis, and fan discussion. Otaku Data Viz is not affiliated with Nintendo, Game Freak, Creatures, or The Pokémon Company."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What Pokémon data is included?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The visualization uses Pokémon species data grouped by type and evolution family, with fields such as Pokédex number, type, generation, base stats total, evolution stage, sprite references, and selected card-style details when available."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I suggest corrections or additions?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Otaku Data Viz welcomes suggestions, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="../index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="../assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../projects.html" aria-current="page">Projects</a></li>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../lab.html">Lab</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+          </ul>
+        </details>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="project-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">Treemap Analysis</p>
+          <h1>Pokédex Type Treemap</h1>
+          <p class="intro">A fan-made Pokédex-style treemap for exploring Pokémon by primary type, evolution family, species count, base stats, and individual Dex-style details.</p>
+          <div class="hero-actions">
+            <a class="button" href="../pokemon_territory_map.html" data-event="open_interactive_visualization">Open Interactive Visualization <span aria-hidden="true">--&gt;</span></a>
+            <a class="button secondary" href="../projects.html" data-event="click_related_project">Explore More Otaku Data Viz Projects <span aria-hidden="true">--&gt;</span></a>
+          </div>
+        </div>
+        <div class="hero-preview" aria-label="Preview of the Pokedex Type Treemap interactive visualization">
+          <iframe src="../pokemon_territory_map.html?preview=1" title="Animated preview of the Pokedex Type Treemap" loading="eager"></iframe>
+        </div>
+      </section>
+
+      <section class="toc inner rule-bottom" aria-label="On this page">
+        <strong>On this page</strong>
+        <nav>
+          <a href="#what-this-shows">What this shows</a>
+          <a href="#top-insights">Top insights</a>
+          <a href="#how-to-use">How to use it</a>
+          <a href="#methodology">Methodology</a>
+          <a href="#faq">FAQ</a>
+          <a href="#related-projects">Related projects</a>
+        </nav>
+      </section>
+
+      <section class="section inner rule-bottom">
+        <div class="article-grid">
+          <div class="content-stack">
+            <article class="article-panel" id="what-this-shows">
+              <h2>What This Shows</h2>
+              <ul class="check-list">
+                <li><strong>What the chart shows:</strong> Pokémon grouped first by primary type, then by evolution family, with individual species details available inside the interface.</li>
+                <li><strong>Who it is for:</strong> Pokémon fans, game-data explorers, collectors, designers, and anyone who likes seeing a Pokédex reorganized as a visual system.</li>
+                <li><strong>Why it is interesting:</strong> it turns type balance, evolution families, species counts, and base stat totals into a map you can browse instead of a flat list.</li>
+                <li><strong>Best way to use it:</strong> click a type block, drill into an evolution family, then select a Pokémon from the treemap or Index to inspect its Dex-style panel.</li>
+              </ul>
+              <div class="stat-strip" aria-label="Project summary">
+                <div><strong>18</strong><span>Primary types</span></div>
+                <div><strong>BST</strong><span>Size option</span></div>
+                <div><strong>Dex</strong><span>Entry panel</span></div>
+                <div><strong>Fan</strong><span>Exploration model</span></div>
+              </div>
+            </article>
+
+            <article class="article-panel">
+              <h2>What Is A Treemap?</h2>
+              <p>A treemap is a space-filling chart that turns categories into nested rectangles. Bigger rectangles represent larger values, while smaller rectangles fit inside their parent group.</p>
+              <p>For a Pokédex-style visualization, that means Pokémon can be grouped by primary type, then evolution family, then individual species. It is a compact way to compare categories that would be harder to scan in a normal table.</p>
+            </article>
+
+            <article class="article-panel" id="top-insights">
+              <h2>What This Visualization Reveals</h2>
+              <p>The treemap makes it easier to compare how Pokémon types and evolution families occupy visual space. Depending on the sizing mode, the chart can emphasize either species count or total base stat weight.</p>
+              <p>Drilling from type to family to species helps fans move from broad patterns into individual Pokémon. A big type block gives one kind of overview; a selected Dex entry gives another kind of close reading.</p>
+              <p>The interface is playful on purpose. It borrows the feeling of a Pokédex while using a standard data-visualization structure underneath: nested categories, sortable lists, filtered views, and detail panels.</p>
+              <div class="cta-panel">
+                <p class="mini-label">Mid-page jump</p>
+                <h2>Ready To Explore The Treemap?</h2>
+                <p>Open the live visualization, choose a type, and drill into evolution families and Pokémon details.</p>
+                <div class="cta-actions">
+                  <a class="button" href="../pokemon_territory_map.html" data-event="open_interactive_visualization">Open Interactive Visualization <span aria-hidden="true">--&gt;</span></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="article-panel" id="how-to-use">
+              <h2>How To Use The Visualization</h2>
+              <ul class="check-list">
+                <li><strong>Search Pokémon:</strong> use the search box to find Pokémon, type names, or role text across the treemap and Index.</li>
+                <li><strong>Click type blocks:</strong> select a primary type to zoom into its evolution families.</li>
+                <li><strong>Click evolution families:</strong> drill from a family block into individual species tiles.</li>
+                <li><strong>Select Pokémon:</strong> click a species tile or Index card to open its Dex-style entry, stats, abilities, and available move details.</li>
+                <li><strong>Change sorting:</strong> sort the Index by featured order, power high-to-low, or name A-Z.</li>
+                <li><strong>Change sizing:</strong> switch the treemap between base-stat sizing and species-count sizing.</li>
+                <li><strong>Navigate back:</strong> use the Back button or breadcrumb pills to move up from Pokémon to family, type, or all types.</li>
+                <li><strong>Use the D-pad controls:</strong> move focus around the treemap with the on-screen directional pad.</li>
+              </ul>
+            </article>
+
+            <article class="article-panel">
+              <h2>Why This Matters For Fans</h2>
+              <p>Pokémon fans often know the Pokédex through lists, stats pages, team builders, and type charts. This project gives the same world a different shape: a visual territory map of types, families, and species.</p>
+              <p>That makes it useful for pattern spotting, team-building inspiration, design comparison, collecting conversations, or just browsing Pokémon data in a more tactile way.</p>
+            </article>
+
+            <article class="article-panel" id="methodology">
+              <h2>Methodology And Data Note</h2>
+              <p>The visualization uses embedded data, a static JSON file, or a live PokéAPI fallback depending on what is available. The interface groups Pokémon by primary type and evolution family, then displays species-level details where the data exists.</p>
+              <p>The scope is designed for interactive exploration, not as a complete competitive database. Values such as base stats total, type, generation, evolution stage, sprite references, abilities, and card-style move details are used to support browsing and comparison.</p>
+              <p>Known limitations: some detailed fields may depend on available static or fallback data, type grouping uses primary type for the treemap, and card-style move details are simplified for presentation. Verify any formal data need against official game resources or dedicated databases.</p>
+              <p><strong>Last updated:</strong> May 26, 2026. Interpret tile size as a visualization setting, not an official importance ranking.</p>
+              <p class="disclaimer-box">This is an unofficial fan-made data visualization. Otaku Data Viz is not affiliated with Pokémon, Nintendo, Game Freak, Creatures, The Pokémon Company, or any related rights holders. All names and references are used for commentary, analysis, and fan discussion.</p>
+            </article>
+
+            <article class="article-panel faq" id="faq">
+              <h2>FAQ</h2>
+              <details>
+                <summary>What is the Pokédex Type Treemap?</summary>
+                <p>It is a fan-made interactive treemap that groups Pokémon by primary type, evolution family, species count, and base stats inside a playful Pokédex-style interface.</p>
+              </details>
+              <details>
+                <summary>How does this Pokémon treemap work?</summary>
+                <p>You can search, sort, change sizing, click types, drill into evolution families, select Pokémon, use breadcrumbs or Back, and browse Index cards.</p>
+              </details>
+              <details>
+                <summary>Is this an official Pokémon project?</summary>
+                <p>No. It is an unofficial fan-made visualization for exploration, commentary, analysis, and fan discussion.</p>
+              </details>
+              <details>
+                <summary>What Pokémon data is included?</summary>
+                <p>The visualization uses species data grouped by type and evolution family, with details such as Pokédex number, type, generation, base stats total, evolution stage, sprite references, and selected Dex-style fields where available.</p>
+              </details>
+              <details>
+                <summary>Can I suggest corrections or additions?</summary>
+                <p>Yes. Feedback, corrections, and new visualization ideas are welcome through the Otaku Data Viz contact form.</p>
+              </details>
+            </article>
+          </div>
+
+          <aside class="sticky-aside" aria-label="Sharing and project details">
+            <section class="share-panel compact" id="share-this-project">
+              <p class="mini-label">Share this project</p>
+              <h2>Send The Treemap</h2>
+              <p>Share the Pokédex Type Treemap with fans who like Pokémon data, type charts, evolution families, stats, and playful interfaces.</p>
+              <div class="share-actions" data-share-module>
+                <a class="share-link" href="#" data-share-channel="x" data-event="share_x" aria-label="Share Pokedex Type Treemap on X">X / Twitter</a>
+                <a class="share-link" href="#" data-share-channel="reddit" data-event="share_reddit" aria-label="Share Pokedex Type Treemap on Reddit">Reddit</a>
+                <a class="share-link" href="#" data-share-channel="facebook" data-event="share_facebook" aria-label="Share Pokedex Type Treemap on Facebook">Facebook</a>
+                <a class="share-link" href="#" data-share-channel="linkedin" data-event="share_linkedin" aria-label="Share Pokedex Type Treemap on LinkedIn">LinkedIn</a>
+                <a class="share-link" href="#" data-share-channel="pinterest" data-event="share_pinterest" aria-label="Share Pokedex Type Treemap on Pinterest">Pinterest</a>
+                <button class="share-button" type="button" data-share-channel="native" aria-label="Open native sharing options">Share</button>
+                <button class="share-button" type="button" data-copy-link data-event="copy_link" aria-label="Copy Pokedex Type Treemap link">Copy link</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section inner rule-bottom" id="related-projects">
+        <div class="section-bar"><h2>Explore More Visualizations</h2></div>
+        <div class="related-grid">
+          <a class="related-card" href="dragon-ball-sociogram.html" data-event="click_related_project">
+            <h3>Dragon Ball Sociogram</h3>
+            <p>Map character relationships, rivalries, families, mentors, and alliances.</p>
+          </a>
+          <a class="related-card" href="manga-anime-timeline.html" data-event="click_related_project">
+            <h3>Manga Timeline</h3>
+            <p>Trace manga serialization history, anime releases, adaptations, and breakout moments.</p>
+          </a>
+          <a class="related-card" href="../lab.html" data-event="click_related_project">
+            <h3>Otaku Lab</h3>
+            <p>Browse experiments, prototypes, and new ideas from Otaku Data Viz.</p>
+          </a>
+          <a class="related-card" href="../index.html" data-event="click_related_project">
+            <h3>Homepage</h3>
+            <p>Return to the main Otaku Data Viz project hub.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section inner">
+        <div class="cta-panel">
+          <p class="mini-label">Suggest a data story</p>
+          <h2>Have An Idea For The Next Anime, Manga, Or Gaming Data Viz?</h2>
+          <p>Send a series, dataset, fan question, or collaboration idea. The best Otaku Data Viz projects usually start with someone asking what a fandom would look like as a map, timeline, or system.</p>
+          <div class="cta-actions">
+            <a class="button" href="../pokemon_territory_map.html" data-event="open_interactive_visualization">Open Interactive Visualization <span aria-hidden="true">--&gt;</span></a>
+            <a class="button secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfhKCLhgBhyn3vMmPKuDVkNkqIGHHo4f11_ppTZ2r59vSGAsA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" data-event="click_contact_cta">Get In Touch <span aria-hidden="true">--&gt;</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="inner">
+      <div class="disclaimer">
+        <div class="warn" aria-hidden="true">!</div>
+        <div>
+          <strong>Disclaimer</strong>
+          <p>This project is for educational and entertainment purposes only. Otaku Data Viz is not affiliated with or endorsed by any anime, manga, game, publisher, studio, or media franchise. All trademarks are property of their respective owners.</p>
+        </div>
+      </div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (navToggle) {
+        const desktopQuery = window.matchMedia('(min-width: 901px)');
+        const syncNavMode = () => { navToggle.open = desktopQuery.matches; };
+        syncNavMode();
+        desktopQuery.addEventListener('change', syncNavMode);
+      }
+
+      const shareConfig = {
+        pageTitle: 'Pokédex Type Treemap | Otaku Data Viz',
+        pageUrl: 'https://otakudataviz.com/projects/pokedex-type-treemap.html',
+        pageDescription: 'Explore an interactive Pokédex-style treemap that groups Pokémon by primary type, evolution family, species count, and base stats.',
+        shareImage: 'https://otakudataviz.com/assets/images/pokedex-type-treemap-og.svg',
+        pinterestImage: 'https://otakudataviz.com/assets/images/pokedex-type-treemap-pinterest.svg',
+        shareText: 'Explore a fan-made Pokédex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats.'
+      };
+
+      const withUtm = (source) => {
+        const url = new URL(shareConfig.pageUrl);
+        url.searchParams.set('utm_source', source);
+        url.searchParams.set('utm_medium', 'social');
+        url.searchParams.set('utm_campaign', 'pokedex_type_treemap');
+        return url.toString();
+      };
+
+      const shareLinks = {
+        x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareConfig.shareText)}&url=${encodeURIComponent(withUtm('x'))}`,
+        reddit: `https://www.reddit.com/submit?url=${encodeURIComponent(withUtm('reddit'))}&title=${encodeURIComponent(shareConfig.shareText)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(withUtm('facebook'))}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(withUtm('linkedin'))}`,
+        pinterest: `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(withUtm('pinterest'))}&media=${encodeURIComponent(shareConfig.pinterestImage)}&description=${encodeURIComponent(shareConfig.shareText)}`
+      };
+
+      document.querySelectorAll('[data-share-channel]').forEach((control) => {
+        const channel = control.dataset.shareChannel;
+        if (shareLinks[channel]) {
+          control.setAttribute('href', shareLinks[channel]);
+          control.setAttribute('target', '_blank');
+          control.setAttribute('rel', 'noopener noreferrer');
+        }
+        if (channel === 'native') {
+          control.hidden = !navigator.share;
+          control.addEventListener('click', async () => {
+            try {
+              await navigator.share({
+                title: shareConfig.pageTitle,
+                text: shareConfig.shareText,
+                url: withUtm('native_share')
+              });
+            } catch (error) {
+              if (error.name !== 'AbortError') {
+                window.open(shareLinks.x, '_blank', 'noopener,noreferrer');
+              }
+            }
+          });
+        }
+      });
+
+      const copyButton = document.querySelector('[data-copy-link]');
+      if (copyButton) {
+        const originalText = copyButton.textContent;
+        copyButton.addEventListener('click', async () => {
+          const copyUrl = withUtm('copy_link');
+          try {
+            await navigator.clipboard.writeText(copyUrl);
+            copyButton.textContent = 'Copied!';
+          } catch (error) {
+            const helper = document.createElement('textarea');
+            helper.value = copyUrl;
+            helper.setAttribute('readonly', '');
+            helper.style.position = 'fixed';
+            helper.style.opacity = '0';
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand('copy');
+            helper.remove();
+            copyButton.textContent = 'Copied!';
+          }
+          window.setTimeout(() => { copyButton.textContent = originalText; }, 1800);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

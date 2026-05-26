@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Pokedex Type Treemap Pinterest preview</title>
+  <desc id="desc">Vertical abstract Otaku Data Viz Pokédex-style treemap preview for sharing the Pokedex Type Treemap project.</desc>
+  <defs>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#090b09" stroke-width="1" opacity=".16"/>
+      <circle cx="4" cy="4" r="1.8" fill="#090b09" opacity=".2"/>
+    </pattern>
+  </defs>
+  <rect width="1000" height="1500" fill="#fbf5e8"/>
+  <rect width="1000" height="1500" fill="url(#grid)"/>
+  <rect x="54" y="54" width="892" height="1392" fill="none" stroke="#090b09" stroke-width="6"/>
+  <text x="92" y="180" font-family="Impact, Arial Black, sans-serif" font-size="100" fill="#090b09">POKÉDEX</text>
+  <text x="92" y="280" font-family="Impact, Arial Black, sans-serif" font-size="100" fill="#090b09">TYPE</text>
+  <text x="92" y="380" font-family="Impact, Arial Black, sans-serif" font-size="100" fill="#090b09">TREEMAP</text>
+  <text x="96" y="462" font-family="Consolas, Menlo, monospace" font-size="28" font-weight="900" fill="#090b09">A fan-made Pokémon</text>
+  <text x="96" y="502" font-family="Consolas, Menlo, monospace" font-size="28" font-weight="900" fill="#090b09">type and evolution map</text>
+  <g transform="translate(128 610)" stroke="#090b09" stroke-width="7">
+    <rect x="0" y="0" width="744" height="520" rx="26" fill="#d4202f"/>
+    <circle cx="78" cy="70" r="38" fill="#43c6ff"/>
+    <circle cx="150" cy="70" r="18" fill="#ffd84a"/>
+    <rect x="52" y="136" width="640" height="330" rx="16" fill="#172033"/>
+    <rect x="82" y="166" width="238" height="164" fill="#f97316"/>
+    <rect x="334" y="166" width="156" height="164" fill="#22c55e"/>
+    <rect x="506" y="166" width="154" height="92" fill="#38bdf8"/>
+    <rect x="506" y="274" width="154" height="68" fill="#a78bfa"/>
+    <rect x="82" y="346" width="138" height="86" fill="#facc15"/>
+    <rect x="236" y="346" width="254" height="86" fill="#fb7185"/>
+    <rect x="506" y="358" width="154" height="74" fill="#94a3b8"/>
+  </g>
+  <rect x="92" y="1246" width="400" height="70" fill="#090b09"/>
+  <text x="118" y="1291" font-family="Consolas, Menlo, monospace" font-size="24" font-weight="900" fill="#fbf5e8">OTAKU DATA VIZ</text>
+  <text x="96" y="1374" font-family="Consolas, Menlo, monospace" font-size="22" font-weight="900" fill="#090b09">otakudataviz.com</text>
+</svg>

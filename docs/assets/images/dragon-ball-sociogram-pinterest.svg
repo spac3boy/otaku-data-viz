@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Dragon Ball Sociogram Pinterest preview</title>
+  <desc id="desc">Vertical abstract Otaku Data Viz network map preview for sharing the Dragon Ball Sociogram project.</desc>
+  <defs>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#090b09" stroke-width="1" opacity=".16"/>
+      <circle cx="4" cy="4" r="1.8" fill="#090b09" opacity=".22"/>
+    </pattern>
+  </defs>
+  <rect width="1000" height="1500" fill="#fbf5e8"/>
+  <rect width="1000" height="1500" fill="url(#grid)"/>
+  <rect x="54" y="54" width="892" height="1392" fill="none" stroke="#090b09" stroke-width="6"/>
+  <text x="92" y="178" font-family="Impact, Arial Black, sans-serif" font-size="102" fill="#090b09">DRAGON</text>
+  <text x="92" y="278" font-family="Impact, Arial Black, sans-serif" font-size="102" fill="#090b09">BALL</text>
+  <text x="92" y="378" font-family="Impact, Arial Black, sans-serif" font-size="102" fill="#090b09">SOCIOGRAM</text>
+  <text x="96" y="462" font-family="Consolas, Menlo, monospace" font-size="28" font-weight="900" fill="#090b09">A fan-made character</text>
+  <text x="96" y="502" font-family="Consolas, Menlo, monospace" font-size="28" font-weight="900" fill="#090b09">relationship network map</text>
+  <g stroke="#090b09" stroke-width="9" stroke-linecap="round" opacity=".74">
+    <path d="M500 770 342 640 212 760"/>
+    <path d="M500 770 675 622 808 780"/>
+    <path d="M500 770 355 930 230 1080"/>
+    <path d="M500 770 686 956 820 1110"/>
+    <path d="M342 640 675 622 686 956 355 930Z"/>
+    <path d="M212 760 355 930 808 780 686 956"/>
+  </g>
+  <g>
+    <circle cx="500" cy="770" r="64" fill="#ffb000" stroke="#090b09" stroke-width="8"/>
+    <circle cx="342" cy="640" r="44" fill="#ff79c7" stroke="#090b09" stroke-width="7"/>
+    <circle cx="675" cy="622" r="44" fill="#67ec7b" stroke="#090b09" stroke-width="7"/>
+    <circle cx="212" cy="760" r="34" fill="#ffe46e" stroke="#090b09" stroke-width="7"/>
+    <circle cx="808" cy="780" r="38" fill="#bf7cff" stroke="#090b09" stroke-width="7"/>
+    <circle cx="355" cy="930" r="42" fill="#56b8ff" stroke="#090b09" stroke-width="7"/>
+    <circle cx="686" cy="956" r="42" fill="#ff5a5f" stroke="#090b09" stroke-width="7"/>
+    <circle cx="230" cy="1080" r="34" fill="#b3bcc7" stroke="#090b09" stroke-width="7"/>
+    <circle cx="820" cy="1110" r="34" fill="#67ec7b" stroke="#090b09" stroke-width="7"/>
+  </g>
+  <rect x="92" y="1246" width="400" height="70" fill="#090b09"/>
+  <text x="118" y="1291" font-family="Consolas, Menlo, monospace" font-size="24" font-weight="900" fill="#fbf5e8">OTAKU DATA VIZ</text>
+  <text x="96" y="1374" font-family="Consolas, Menlo, monospace" font-size="22" font-weight="900" fill="#090b09">otakudataviz.com</text>
+</svg>

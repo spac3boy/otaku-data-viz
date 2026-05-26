@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Pokedex Type Treemap social preview</title>
+  <desc id="desc">Abstract Otaku Data Viz Pokédex-style treemap preview for the Pokedex Type Treemap project page.</desc>
+  <defs>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#090b09" opacity=".18"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#fbf5e8"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <path d="M0 96H1200M0 534H1200M96 0V630M1104 0V630" stroke="#090b09" stroke-width="4"/>
+  <g fill="#090b09">
+    <text x="92" y="145" font-family="Impact, Arial Black, sans-serif" font-size="86">POKÉDEX</text>
+    <text x="92" y="232" font-family="Impact, Arial Black, sans-serif" font-size="86">TYPE</text>
+    <text x="92" y="319" font-family="Impact, Arial Black, sans-serif" font-size="86">TREEMAP</text>
+    <text x="96" y="386" font-family="Consolas, Menlo, monospace" font-size="23" font-weight="800">Primary types, evolution families,</text>
+    <text x="96" y="420" font-family="Consolas, Menlo, monospace" font-size="23" font-weight="800">species count, and base stats</text>
+    <text x="96" y="496" font-family="Consolas, Menlo, monospace" font-size="22" font-weight="900">OTAKU DATA VIZ</text>
+  </g>
+  <g transform="translate(560 120)" stroke="#090b09" stroke-width="5">
+    <rect x="0" y="0" width="508" height="390" rx="18" fill="#d4202f"/>
+    <circle cx="54" cy="48" r="26" fill="#43c6ff"/>
+    <circle cx="104" cy="48" r="12" fill="#ffd84a"/>
+    <rect x="36" y="92" width="436" height="260" rx="12" fill="#172033"/>
+    <rect x="56" y="112" width="160" height="130" fill="#f97316"/>
+    <rect x="224" y="112" width="102" height="130" fill="#22c55e"/>
+    <rect x="334" y="112" width="118" height="76" fill="#38bdf8"/>
+    <rect x="334" y="196" width="118" height="56" fill="#a78bfa"/>
+    <rect x="56" y="250" width="96" height="82" fill="#facc15"/>
+    <rect x="160" y="250" width="166" height="82" fill="#fb7185"/>
+    <rect x="334" y="260" width="118" height="72" fill="#94a3b8"/>
+  </g>
+  <rect x="92" y="446" width="258" height="58" fill="#090b09"/>
+  <text x="116" y="484" font-family="Consolas, Menlo, monospace" font-size="20" font-weight="900" fill="#fbf5e8">INTERACTIVE</text>
+</svg>

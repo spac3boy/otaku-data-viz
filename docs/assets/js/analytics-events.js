@@ -45,6 +45,13 @@
       };
     }
 
+    if (path.includes('nintendo-game-universe-map')) {
+      return {
+        project_name: 'Nintendo Game Universe Map',
+        project_category: 'bubble map'
+      };
+    }
+
     return {
       project_name: cleanText || destination.pathname,
       project_category: 'project'

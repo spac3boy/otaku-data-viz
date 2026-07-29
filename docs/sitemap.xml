@@ -2,27 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://otakudataviz.com/</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://otakudataviz.com/projects.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://otakudataviz.com/projects/dragon-ball-sociogram.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://otakudataviz.com/projects/manga-anime-timeline.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://otakudataviz.com/projects/pokedex-type-treemap.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://otakudataviz.com/projects/nintendo-game-universe-map.html</loc>
+    <lastmod>2026-07-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
@@ -32,7 +37,7 @@
   </url>
   <url>
     <loc>https://otakudataviz.com/lab.html</loc>
-    <lastmod>2026-05-26</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <priority>0.6</priority>
   </url>
   <url>

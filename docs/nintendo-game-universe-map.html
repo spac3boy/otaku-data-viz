@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    if (new URLSearchParams(window.location.search).get("preview") === "1") {
+      document.documentElement.classList.add("preview-mode");
+    }
+  </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-653DY2M8K5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -1367,6 +1372,53 @@
       .site-footer h2 { font-size: 22px; }
       .site-footer-links { flex-direction: row; flex-wrap: wrap; }
       .site-footer-links a { flex: 1 1 180px; }
+    }
+
+    html.preview-mode,
+    html.preview-mode body {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      overflow: hidden;
+      background: #e60012;
+    }
+    html.preview-mode body { padding: 0; }
+    html.preview-mode .page-intro,
+    html.preview-mode .chart-legend,
+    html.preview-mode .site-footer {
+      display: none;
+    }
+    html.preview-mode .gameboy-shell {
+      width: min(calc(100% - 28px), 310px);
+      min-height: 510px;
+      margin: 12px auto 0;
+      border: 4px solid #4d4d47;
+      outline: 1px solid #252821;
+      border-radius: 18px 18px 48px 18px;
+      box-shadow: 0 6px 0 #282b23, 0 12px 24px rgba(11,18,9,.34);
+    }
+    html.preview-mode .gameboy-shell::before,
+    html.preview-mode .gameboy-shell::after {
+      display: none;
+    }
+    html.preview-mode main { padding: 8px 8px 20px; }
+    html.preview-mode .viz-wrap { min-height: 480px; }
+    html.preview-mode .map-frame {
+      height: 190px;
+      min-height: 190px;
+      border-radius: 12px 12px 30px 12px;
+    }
+    html.preview-mode .gameboy-wordmark {
+      display: block;
+      margin: 9px 0 0 12px;
+      font-size: 16px;
+    }
+    html.preview-mode .snes-dpad,
+    html.preview-mode .gameboy-actions,
+    html.preview-mode .gameboy-menu-buttons,
+    html.preview-mode .speaker-grille,
+    html.preview-mode .side-stack {
+      display: none;
     }
   </style>
 </head>

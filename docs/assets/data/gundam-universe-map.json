@@ -1,0 +1,1863 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "gundam-info-what-is-gundam-cn",
+      "name": "GUNDAM.INFO, What is Gundam? production chronology",
+      "url": "https://cn.gundam.info/what-is-gundam.html"
+    },
+    {
+      "id": "gundam-info-witch",
+      "name": "GUNDAM.INFO, Mobile Suit Gundam THE WITCH FROM MERCURY official site",
+      "url": "https://en.gundam.info/about-gundam/series-pages/witch/"
+    },
+    {
+      "id": "gundam-info-build-fighters",
+      "name": "GUNDAM.INFO, Gundam Build Fighters official series page",
+      "url": "https://en.gundam.info/series/buildfighters"
+    },
+    {
+      "id": "ann-gundam",
+      "name": "Anime News Network Encyclopedia, Gundam franchise entries",
+      "url": "https://www.animenewsnetwork.com/encyclopedia/"
+    },
+    {
+      "id": "gundam-wiki-timelines",
+      "name": "Gundam Wiki timeline summaries, used only for cross-checking fictional-era labels",
+      "url": "https://gundam.fandom.com/wiki/Gundam_Wiki:Timelines"
+    },
+    {
+      "id": "gundam-unofficial-uc",
+      "name": "Ultimate Mark / Gundam Unofficial Universal Century chronology notes",
+      "url": "https://www.gundamunofficial.com/timeline.php"
+    },
+    {
+      "id": "crunchyroll-timeline",
+      "name": "Crunchyroll News guide to Gundam timelines",
+      "url": "https://www.crunchyroll.com/news/guides/2025/10/11/gundam-timeline-explained"
+    },
+    {
+      "id": "anilist-cover-art",
+      "name": "AniList media pages and cover artwork",
+      "url": "https://anilist.co"
+    }
+  ],
+  "continuities": [
+    {
+      "id": "uc",
+      "name": "Universal Century",
+      "shortName": "U.C.",
+      "symbol": "UC",
+      "summary": "The original and densest Gundam continuity, centered on the Earth Federation, space colonies, Newtypes, and the long consequences of the One Year War.",
+      "watchNote": "Best for viewers who want the franchise foundation; side stories are optional once the core spine is understood.",
+      "color": "#2f5f8f",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines",
+        "gundam-unofficial-uc"
+      ]
+    },
+    {
+      "id": "future-century",
+      "name": "Future Century",
+      "shortName": "F.C.",
+      "symbol": "FC",
+      "summary": "A tournament-driven alternate universe built around national Gundam fighters and heightened martial-arts melodrama.",
+      "watchNote": "A full standalone entry; no prior Gundam viewing required.",
+      "color": "#b9493f",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "after-colony",
+      "name": "After Colony",
+      "shortName": "A.C.",
+      "symbol": "AC",
+      "summary": "The Gundam Wing universe: political colonies, aristocratic Earth power, Operation Meteor, and its direct sequel Endless Waltz.",
+      "watchNote": "Watch Wing before Endless Waltz; otherwise independent.",
+      "color": "#5a6d35",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "after-war",
+      "name": "After War",
+      "shortName": "A.W.",
+      "symbol": "AW",
+      "summary": "A post-apocalyptic alternate continuity that reworks Newtype ideas outside Universal Century history.",
+      "watchNote": "Standalone TV series.",
+      "color": "#8d5f31",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "correct-century",
+      "name": "Correct Century",
+      "shortName": "C.C.",
+      "symbol": "CC",
+      "summary": "Turn A Gundam's far-future setting, often read as a meditation on Gundam history rather than a simple sequel lane.",
+      "watchNote": "Can be watched alone, but rewards broad franchise familiarity.",
+      "color": "#7b668c",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "cosmic-era",
+      "name": "Cosmic Era",
+      "shortName": "C.E.",
+      "symbol": "CE",
+      "summary": "The Gundam SEED continuity, organized around Coordinators, Naturals, ZAFT, and recurring political/military conflicts.",
+      "watchNote": "Start with SEED; Stargazer is supplemental.",
+      "color": "#c08b28",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "anno-domini",
+      "name": "Anno Domini",
+      "shortName": "A.D.",
+      "symbol": "AD",
+      "summary": "Gundam 00's near-future continuity using the real-world calendar and a direct series-to-film narrative.",
+      "watchNote": "Begin with 00 Season 1; the film follows Season 2.",
+      "color": "#2d8074",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "advanced-generation",
+      "name": "Advanced Generation",
+      "shortName": "A.G.",
+      "symbol": "AG",
+      "summary": "Gundam AGE's multi-generation story spanning family lineage and long war.",
+      "watchNote": "Standalone, but Memory of Eden condenses/reframes part of the TV story.",
+      "color": "#4563a8",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "regild-century",
+      "name": "Regild Century",
+      "shortName": "R.C.",
+      "symbol": "RC",
+      "summary": "Reconguista in G's era, commonly described as a later age after Universal Century; exact meta-continuity is often discussed cautiously.",
+      "watchNote": "Mostly standalone; connection to earlier eras is background texture.",
+      "color": "#4d8770",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "post-disaster",
+      "name": "Post Disaster",
+      "shortName": "P.D.",
+      "symbol": "PD",
+      "summary": "Iron-Blooded Orphans' continuity, set centuries after the Calamity War and centered on child soldiers, Mars, and Gjallarhorn.",
+      "watchNote": "A strong modern standalone path.",
+      "color": "#7d5650",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "ad-stella",
+      "name": "Ad Stella",
+      "shortName": "A.S.",
+      "symbol": "AS",
+      "summary": "The Witch from Mercury continuity, a corporate space-age setting beginning with Prologue and continuing at Asticassia.",
+      "watchNote": "Modern standalone entry; Prologue improves context.",
+      "color": "#8b4f7b",
+      "sourceIds": [
+        "gundam-info-witch",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "build",
+      "name": "Build Settings",
+      "shortName": "Build",
+      "symbol": "BD",
+      "summary": "Gunpla battle stories where Gundam exists as media, models, and competitive play rather than one shared war chronology.",
+      "watchNote": "Begin almost anywhere; Fighters and Divers have internal sequels.",
+      "color": "#23809b",
+      "sourceIds": [
+        "gundam-info-build-fighters",
+        "gundam-wiki-timelines"
+      ]
+    },
+    {
+      "id": "standalone",
+      "name": "Standalone / Ambiguous",
+      "shortName": "Other",
+      "symbol": "OT",
+      "summary": "Animated works with SD, parody, or alternate premises that sit outside the major dramatic continuities in this MVP.",
+      "watchNote": "Treat as independent unless a future expanded dataset marks a closer relationship.",
+      "color": "#5c6268",
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ]
+    }
+  ],
+  "productions": [
+    {
+      "id": "msg-1979",
+      "title": "Mobile Suit Gundam",
+      "shortTitle": "First Gundam",
+      "continuityId": "uc",
+      "format": "tv",
+      "releaseStart": 1979,
+      "releaseEnd": 1980,
+      "storyOrder": 20,
+      "inUniverseDate": "U.C. 0079",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "The original One Year War story and the foundation for Universal Century politics, Newtypes, and Federation-Zeon conflict.",
+      "relationshipIds": [
+        {
+          "productionId": "zeta",
+          "type": "sequel",
+          "note": "Directly followed by Zeta Gundam.",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "msg-trilogy",
+          "type": "compilation",
+          "note": "The film trilogy condenses and revises the TV series.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/msg-1979.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/80",
+        "matchedTitle": "Mobile Suit Gundam"
+      }
+    },
+    {
+      "id": "msg-trilogy",
+      "title": "Mobile Suit Gundam Movie Trilogy",
+      "shortTitle": "Movie Trilogy",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 1981,
+      "releaseEnd": 1982,
+      "storyOrder": 21,
+      "inUniverseDate": "U.C. 0079",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "Three compilation films that are often used as a shorter route through the original story.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "compilation",
+          "note": "Compilation and revision of the 1979 TV series.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/msg-trilogy.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/1090",
+        "matchedTitle": "Mobile Suit Gundam I",
+        "representative": true,
+        "note": "Representative artwork from Mobile Suit Gundam I, the trilogy’s first film."
+      }
+    },
+    {
+      "id": "origin",
+      "title": "Mobile Suit Gundam: The Origin",
+      "shortTitle": "The Origin",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 2015,
+      "releaseEnd": 2018,
+      "storyOrder": 10,
+      "inUniverseDate": "Before / around U.C. 0079",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": false,
+      "classification": "supplemental",
+      "uncertainty": "Alternate retelling elements",
+      "description": "A modern prequel treatment of the original conflict's political roots, adapted from Yasuhiko's retelling.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "prequel",
+          "note": "Functions as prequel context, though it comes from a retelling continuity.",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/origin.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/10937",
+        "matchedTitle": "Mobile Suit Gundam: The Origin"
+      }
+    },
+    {
+      "id": "cucuruz-doan",
+      "title": "Mobile Suit Gundam: Cucuruz Doan's Island",
+      "shortTitle": "Doan's Island",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 2022,
+      "storyOrder": 22,
+      "inUniverseDate": "U.C. 0079",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "uncertainty": "Retelling of an original-series episode",
+      "description": "A theatrical expansion and retelling of a famous episode from the original series.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "retelling",
+          "note": "Retells one portion of the original-era story.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/cucuruz-doan.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/139273",
+        "matchedTitle": "Mobile Suit Gundam: Cucuruz Doan's Island"
+      }
+    },
+    {
+      "id": "ms-igloo",
+      "title": "Mobile Suit Gundam MS IGLOO",
+      "shortTitle": "MS IGLOO",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 2004,
+      "releaseEnd": 2009,
+      "storyOrder": 23,
+      "inUniverseDate": "U.C. 0079",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "description": "CG side stories from the One Year War, focused on experimental weapons and battlefield viewpoints.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "side-story",
+          "note": "Parallel One Year War material.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/ms-igloo.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/1916",
+        "matchedTitle": "Mobile Suit Gundam MS IGLOO: Apocalypse 0079",
+        "representative": true,
+        "note": "Representative artwork from MS IGLOO: Apocalypse 0079."
+      }
+    },
+    {
+      "id": "war-in-pocket",
+      "title": "Mobile Suit Gundam 0080: War in the Pocket",
+      "shortTitle": "0080",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 1989,
+      "storyOrder": 24,
+      "inUniverseDate": "U.C. 0079-0080",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "A compact One Year War side story seen through a civilian child's experience.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "side-story",
+          "note": "Occurs near the end of the One Year War.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/war-in-pocket.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/82",
+        "matchedTitle": "Mobile Suit Gundam 0080: War in the Pocket"
+      }
+    },
+    {
+      "id": "08th-ms-team",
+      "title": "Mobile Suit Gundam: The 08th MS Team",
+      "shortTitle": "08th MS Team",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 1996,
+      "releaseEnd": 1999,
+      "storyOrder": 25,
+      "inUniverseDate": "U.C. 0079",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "A grounded One Year War side story following a small Earth-based unit.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "side-story",
+          "note": "Parallel One Year War story.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/08th-ms-team.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/81",
+        "matchedTitle": "Mobile Suit Gundam: The 08th MS Team"
+      }
+    },
+    {
+      "id": "thunderbolt",
+      "title": "Mobile Suit Gundam Thunderbolt",
+      "shortTitle": "Thunderbolt",
+      "continuityId": "uc",
+      "format": "ona",
+      "releaseStart": 2015,
+      "releaseEnd": 2017,
+      "storyOrder": 26,
+      "inUniverseDate": "U.C. 0079-0080",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "uncertainty": "Often treated as alternate-UC-adjacent",
+      "description": "A stylized One Year War and postwar story set in the Thunderbolt Sector.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "side-story",
+          "note": "Shares the One Year War setting but uses its own tone and adaptation path.",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/thunderbolt.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/21458",
+        "matchedTitle": "Mobile Suit Gundam Thunderbolt"
+      }
+    },
+    {
+      "id": "stardust-memory",
+      "title": "Mobile Suit Gundam 0083: Stardust Memory",
+      "shortTitle": "0083",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 1991,
+      "releaseEnd": 1992,
+      "storyOrder": 30,
+      "inUniverseDate": "U.C. 0083",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "description": "A postwar bridge between the One Year War aftermath and the political conditions leading toward Zeta.",
+      "relationshipIds": [
+        {
+          "productionId": "zeta",
+          "type": "prequel",
+          "note": "Helps explain the rise of the Titans.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/stardust-memory.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/84",
+        "matchedTitle": "Mobile Suit Gundam 0083: Stardust Memory"
+      }
+    },
+    {
+      "id": "zeta",
+      "title": "Mobile Suit Zeta Gundam",
+      "shortTitle": "Zeta",
+      "continuityId": "uc",
+      "format": "tv",
+      "releaseStart": 1985,
+      "releaseEnd": 1986,
+      "storyOrder": 40,
+      "inUniverseDate": "U.C. 0087",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The direct sequel to the original conflict, escalating the UC political map around the Titans and AEUG.",
+      "relationshipIds": [
+        {
+          "productionId": "msg-1979",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "zz",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/zeta.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/85",
+        "matchedTitle": "Mobile Suit Zeta Gundam"
+      }
+    },
+    {
+      "id": "zz",
+      "title": "Mobile Suit Gundam ZZ",
+      "shortTitle": "ZZ",
+      "continuityId": "uc",
+      "format": "tv",
+      "releaseStart": 1986,
+      "releaseEnd": 1987,
+      "storyOrder": 50,
+      "inUniverseDate": "U.C. 0088",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A sequel to Zeta that continues the post-Titans conflict and Neo Zeon storyline.",
+      "relationshipIds": [
+        {
+          "productionId": "zeta",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "chars-counterattack",
+          "type": "related",
+          "note": "Part of the UC spine before Char's Counterattack.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/zz.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/86",
+        "matchedTitle": "Mobile Suit Gundam ZZ"
+      }
+    },
+    {
+      "id": "chars-counterattack",
+      "title": "Mobile Suit Gundam: Char's Counterattack",
+      "shortTitle": "Char's Counterattack",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 1988,
+      "storyOrder": 60,
+      "inUniverseDate": "U.C. 0093",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The feature-film culmination of the Amuro and Char rivalry in the main UC spine.",
+      "relationshipIds": [
+        {
+          "productionId": "unicorn",
+          "type": "related",
+          "note": "Precedes later UC 0096 events.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/chars-counterattack.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/87",
+        "matchedTitle": "Mobile Suit Gundam: Char's Counterattack"
+      }
+    },
+    {
+      "id": "unicorn",
+      "title": "Mobile Suit Gundam Unicorn",
+      "shortTitle": "Unicorn",
+      "continuityId": "uc",
+      "format": "ova",
+      "releaseStart": 2010,
+      "releaseEnd": 2014,
+      "storyOrder": 70,
+      "inUniverseDate": "U.C. 0096",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A later UC story centered on Laplace's Box and the legacy of the Federation's founding.",
+      "relationshipIds": [
+        {
+          "productionId": "chars-counterattack",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "narrative",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/unicorn.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/6336",
+        "matchedTitle": "Mobile Suit Gundam UC"
+      }
+    },
+    {
+      "id": "twilight-axis",
+      "title": "Mobile Suit Gundam: Twilight Axis",
+      "shortTitle": "Twilight Axis",
+      "continuityId": "uc",
+      "format": "ona",
+      "releaseStart": 2017,
+      "storyOrder": 71,
+      "inUniverseDate": "After U.C. 0096",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "description": "A short post-Unicorn web animation tied to Axis and Neo Zeon remnants.",
+      "relationshipIds": [
+        {
+          "productionId": "unicorn",
+          "type": "side-story",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/twilight-axis.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/98504",
+        "matchedTitle": "MOBILE SUIT GUNDAM: Twilight AXIS"
+      }
+    },
+    {
+      "id": "narrative",
+      "title": "Mobile Suit Gundam Narrative",
+      "shortTitle": "Narrative",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 2018,
+      "storyOrder": 75,
+      "inUniverseDate": "U.C. 0097",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A sequel-era film following Unicorn's Newtype and psycho-frame aftermath.",
+      "relationshipIds": [
+        {
+          "productionId": "unicorn",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/narrative.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/101554",
+        "matchedTitle": "Mobile Suit Gundam Narrative"
+      }
+    },
+    {
+      "id": "hathaway",
+      "title": "Mobile Suit Gundam Hathaway",
+      "shortTitle": "Hathaway",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 2021,
+      "storyOrder": 80,
+      "inUniverseDate": "U.C. 0105",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A later UC film following Hathaway Noa and anti-Federation rebellion after Char's Counterattack.",
+      "relationshipIds": [
+        {
+          "productionId": "chars-counterattack",
+          "type": "sequel",
+          "note": "Benefits from Char's Counterattack context.",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/hathaway.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/105595",
+        "matchedTitle": "Mobile Suit Gundam Hathaway"
+      }
+    },
+    {
+      "id": "f91",
+      "title": "Mobile Suit Gundam F91",
+      "shortTitle": "F91",
+      "continuityId": "uc",
+      "format": "film",
+      "releaseStart": 1991,
+      "storyOrder": 90,
+      "inUniverseDate": "U.C. 0123",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A late-UC film set decades after the original era, relatively separable from the Amuro-Char arc.",
+      "relationshipIds": [
+        {
+          "productionId": "victory",
+          "type": "related",
+          "note": "Both occupy late Universal Century, but not a direct sequel path.",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/f91.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/88",
+        "matchedTitle": "Mobile Suit Gundam F91"
+      }
+    },
+    {
+      "id": "victory",
+      "title": "Mobile Suit Victory Gundam",
+      "shortTitle": "Victory",
+      "continuityId": "uc",
+      "format": "tv",
+      "releaseStart": 1993,
+      "releaseEnd": 1994,
+      "storyOrder": 100,
+      "inUniverseDate": "U.C. 0153",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A much later UC television series with a new generation of conflict.",
+      "relationshipIds": [
+        {
+          "productionId": "f91",
+          "type": "related",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/victory.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/89",
+        "matchedTitle": "Mobile Suit Victory Gundam"
+      }
+    },
+    {
+      "id": "g-gundam",
+      "title": "Mobile Fighter G Gundam",
+      "shortTitle": "G Gundam",
+      "continuityId": "future-century",
+      "format": "tv",
+      "releaseStart": 1994,
+      "releaseEnd": 1995,
+      "storyOrder": 10,
+      "inUniverseDate": "F.C. 60",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A standalone tournament saga where Gundams represent nations in martial combat.",
+      "relationshipIds": [],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/g-gundam.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/96",
+        "matchedTitle": "Mobile Fighter G Gundam"
+      }
+    },
+    {
+      "id": "wing",
+      "title": "Mobile Suit Gundam Wing",
+      "shortTitle": "Wing",
+      "continuityId": "after-colony",
+      "format": "tv",
+      "releaseStart": 1995,
+      "releaseEnd": 1996,
+      "storyOrder": 10,
+      "inUniverseDate": "A.C. 195",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A five-pilot political action series and one of Gundam's major international gateways.",
+      "relationshipIds": [
+        {
+          "productionId": "endless-waltz",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/wing.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/90",
+        "matchedTitle": "Mobile Suit Gundam Wing"
+      }
+    },
+    {
+      "id": "endless-waltz",
+      "title": "Gundam Wing: Endless Waltz",
+      "shortTitle": "Endless Waltz",
+      "continuityId": "after-colony",
+      "format": "ova",
+      "releaseStart": 1997,
+      "releaseEnd": 1998,
+      "storyOrder": 20,
+      "inUniverseDate": "A.C. 196",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The direct sequel and epilogue to Gundam Wing, released as OVA and film versions.",
+      "relationshipIds": [
+        {
+          "productionId": "wing",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/endless-waltz.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/2273",
+        "matchedTitle": "Mobile Suit Gundam Wing: Endless Waltz",
+        "representative": true,
+        "note": "Representative artwork from the Endless Waltz film edition."
+      }
+    },
+    {
+      "id": "gundam-x",
+      "title": "After War Gundam X",
+      "shortTitle": "Gundam X",
+      "continuityId": "after-war",
+      "format": "tv",
+      "releaseStart": 1996,
+      "storyOrder": 10,
+      "inUniverseDate": "A.W. 0015",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A self-contained postwar Gundam series about survivors, Newtypes, and a ravaged Earth.",
+      "relationshipIds": [],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/gundam-x.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/92",
+        "matchedTitle": "After War Gundam X"
+      }
+    },
+    {
+      "id": "turn-a",
+      "title": "Turn A Gundam",
+      "shortTitle": "Turn A",
+      "continuityId": "correct-century",
+      "format": "tv",
+      "releaseStart": 1999,
+      "releaseEnd": 2000,
+      "storyOrder": 10,
+      "inUniverseDate": "C.C. 2345",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "uncertainty": "Meta-continuity links are interpretive",
+      "description": "A far-future pastoral war story that deliberately echoes and reframes Gundam's accumulated histories.",
+      "relationshipIds": [
+        {
+          "productionId": "reconguista",
+          "type": "related",
+          "note": "Later official/commentary discussions link these broad eras, but exact placement can be debated.",
+          "confidence": "disputed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/turn-a.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/95",
+        "matchedTitle": "Turn A Gundam"
+      }
+    },
+    {
+      "id": "turn-a-films",
+      "title": "Turn A Gundam Compilation Films",
+      "shortTitle": "Turn A Films",
+      "continuityId": "correct-century",
+      "format": "film",
+      "releaseStart": 2002,
+      "storyOrder": 11,
+      "inUniverseDate": "C.C. 2345",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "Earth Light and Moonlight Butterfly compile the Turn A television story.",
+      "relationshipIds": [
+        {
+          "productionId": "turn-a",
+          "type": "compilation",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/turn-a-films.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/3963",
+        "matchedTitle": "∀ Gundam I: Earth Light",
+        "representative": true,
+        "note": "Representative artwork from Turn A Gundam I: Earth Light."
+      }
+    },
+    {
+      "id": "seed",
+      "title": "Mobile Suit Gundam SEED",
+      "shortTitle": "SEED",
+      "continuityId": "cosmic-era",
+      "format": "tv",
+      "releaseStart": 2002,
+      "releaseEnd": 2003,
+      "storyOrder": 10,
+      "inUniverseDate": "C.E. 71",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "The first Cosmic Era series, introducing the Coordinator/Natural conflict and the Archangel cast.",
+      "relationshipIds": [
+        {
+          "productionId": "seed-destiny",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "seed-freedom",
+          "type": "related",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/seed.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/93",
+        "matchedTitle": "Mobile Suit Gundam Seed"
+      }
+    },
+    {
+      "id": "seed-destiny",
+      "title": "Mobile Suit Gundam SEED Destiny",
+      "shortTitle": "SEED Destiny",
+      "continuityId": "cosmic-era",
+      "format": "tv",
+      "releaseStart": 2004,
+      "releaseEnd": 2005,
+      "storyOrder": 20,
+      "inUniverseDate": "C.E. 73-74",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The direct TV sequel to SEED, continuing Cosmic Era politics with new and returning leads.",
+      "relationshipIds": [
+        {
+          "productionId": "seed",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "stargazer",
+          "type": "side-story",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "seed-freedom",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/seed-destiny.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/94",
+        "matchedTitle": "Mobile Suit Gundam Seed Destiny"
+      }
+    },
+    {
+      "id": "stargazer",
+      "title": "Mobile Suit Gundam SEED C.E. 73: Stargazer",
+      "shortTitle": "Stargazer",
+      "continuityId": "cosmic-era",
+      "format": "ona",
+      "releaseStart": 2006,
+      "storyOrder": 21,
+      "inUniverseDate": "C.E. 73",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "description": "A compact side story taking place during the Destiny-era conflict.",
+      "relationshipIds": [
+        {
+          "productionId": "seed-destiny",
+          "type": "side-story",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/stargazer.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/1215",
+        "matchedTitle": "Mobile Suit Gundam Seed C.E.73: Stargazer"
+      }
+    },
+    {
+      "id": "seed-freedom",
+      "title": "Mobile Suit Gundam SEED Freedom",
+      "shortTitle": "SEED Freedom",
+      "continuityId": "cosmic-era",
+      "format": "film",
+      "releaseStart": 2024,
+      "storyOrder": 30,
+      "inUniverseDate": "C.E. 75",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A feature-film continuation of the Cosmic Era storyline after SEED Destiny.",
+      "relationshipIds": [
+        {
+          "productionId": "seed-destiny",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/seed-freedom.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/134761",
+        "matchedTitle": "Mobile Suit Gundam SEED FREEDOM"
+      }
+    },
+    {
+      "id": "gundam-00-s1",
+      "title": "Mobile Suit Gundam 00 Season 1",
+      "shortTitle": "00 S1",
+      "continuityId": "anno-domini",
+      "format": "tv",
+      "releaseStart": 2007,
+      "releaseEnd": 2008,
+      "storyOrder": 10,
+      "inUniverseDate": "A.D. 2307-2308",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "The first half of the 00 story, introducing Celestial Being's armed interventions.",
+      "relationshipIds": [
+        {
+          "productionId": "gundam-00-s2",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/gundam-00-s1.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/2581",
+        "matchedTitle": "Mobile Suit Gundam 00"
+      }
+    },
+    {
+      "id": "gundam-00-s2",
+      "title": "Mobile Suit Gundam 00 Season 2",
+      "shortTitle": "00 S2",
+      "continuityId": "anno-domini",
+      "format": "tv",
+      "releaseStart": 2008,
+      "releaseEnd": 2009,
+      "storyOrder": 20,
+      "inUniverseDate": "A.D. 2312",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The continuation of Celestial Being's conflict after the first season's time jump.",
+      "relationshipIds": [
+        {
+          "productionId": "gundam-00-s1",
+          "type": "sequel",
+          "confidence": "confirmed"
+        },
+        {
+          "productionId": "trailblazer",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/gundam-00-s2.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/3927",
+        "matchedTitle": "Mobile Suit Gundam 00 Second Season"
+      }
+    },
+    {
+      "id": "trailblazer",
+      "title": "Mobile Suit Gundam 00 the Movie: A Wakening of the Trailblazer",
+      "shortTitle": "Trailblazer",
+      "continuityId": "anno-domini",
+      "format": "film",
+      "releaseStart": 2010,
+      "storyOrder": 30,
+      "inUniverseDate": "A.D. 2314",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The film sequel to Gundam 00, resolving the series' larger evolutionary and first-contact themes.",
+      "relationshipIds": [
+        {
+          "productionId": "gundam-00-s2",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/trailblazer.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/6288",
+        "matchedTitle": "Mobile Suit Gundam 00 the Movie: A Wakening of the Trailblazer"
+      }
+    },
+    {
+      "id": "gundam-age",
+      "title": "Mobile Suit Gundam AGE",
+      "shortTitle": "AGE",
+      "continuityId": "advanced-generation",
+      "format": "tv",
+      "releaseStart": 2011,
+      "releaseEnd": 2012,
+      "storyOrder": 10,
+      "inUniverseDate": "A.G. 115-164",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A multi-generation standalone series following one family through decades of war.",
+      "relationshipIds": [
+        {
+          "productionId": "memory-of-eden",
+          "type": "retelling",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/gundam-age.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/10808",
+        "matchedTitle": "Mobile Suit Gundam AGE"
+      }
+    },
+    {
+      "id": "memory-of-eden",
+      "title": "Mobile Suit Gundam AGE: Memory of Eden",
+      "shortTitle": "Memory of Eden",
+      "continuityId": "advanced-generation",
+      "format": "ova",
+      "releaseStart": 2013,
+      "storyOrder": 11,
+      "inUniverseDate": "A.G. 141-164",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "description": "An OVA retelling/reframing of a major AGE arc.",
+      "relationshipIds": [
+        {
+          "productionId": "gundam-age",
+          "type": "retelling",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/memory-of-eden.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/17655",
+        "matchedTitle": "Mobile Suit Gundam AGE: Memory of Eden"
+      }
+    },
+    {
+      "id": "reconguista",
+      "title": "Gundam Reconguista in G",
+      "shortTitle": "Reconguista",
+      "continuityId": "regild-century",
+      "format": "tv",
+      "releaseStart": 2014,
+      "releaseEnd": 2015,
+      "storyOrder": 10,
+      "inUniverseDate": "R.C. 1014",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "uncertainty": "Broad era relationship to UC/Correct Century is often discussed cautiously",
+      "description": "A later-age space elevator and energy-distribution story in the Regild Century.",
+      "relationshipIds": [
+        {
+          "productionId": "turn-a",
+          "type": "related",
+          "note": "Broad meta-continuity relationship is not presented here as a strict viewing dependency.",
+          "confidence": "disputed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/reconguista.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/20658",
+        "matchedTitle": "Gundam: Reconguista in G"
+      }
+    },
+    {
+      "id": "g-reco-films",
+      "title": "Gundam Reconguista in G Movie Series",
+      "shortTitle": "G-Reco Films",
+      "continuityId": "regild-century",
+      "format": "film",
+      "releaseStart": 2019,
+      "releaseEnd": 2022,
+      "storyOrder": 11,
+      "inUniverseDate": "R.C. 1014",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "A five-film theatrical reconstruction of the Reconguista in G television story.",
+      "relationshipIds": [
+        {
+          "productionId": "reconguista",
+          "type": "compilation",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/g-reco-films.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/105596",
+        "matchedTitle": "Reconguista in G the Movie I Go! Core Fighter",
+        "representative": true,
+        "note": "Representative artwork from Reconguista in G the Movie I."
+      }
+    },
+    {
+      "id": "ibo-s1",
+      "title": "Mobile Suit Gundam: Iron-Blooded Orphans Season 1",
+      "shortTitle": "IBO S1",
+      "continuityId": "post-disaster",
+      "format": "tv",
+      "releaseStart": 2015,
+      "releaseEnd": 2016,
+      "storyOrder": 10,
+      "inUniverseDate": "P.D. 323",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A modern standalone series about Tekkadan, Mars, and a brutal postwar political order.",
+      "relationshipIds": [
+        {
+          "productionId": "ibo-s2",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/ibo-s1.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/21268",
+        "matchedTitle": "Mobile Suit GUNDAM Iron Blooded Orphans"
+      }
+    },
+    {
+      "id": "ibo-s2",
+      "title": "Mobile Suit Gundam: Iron-Blooded Orphans Season 2",
+      "shortTitle": "IBO S2",
+      "continuityId": "post-disaster",
+      "format": "tv",
+      "releaseStart": 2016,
+      "releaseEnd": 2017,
+      "storyOrder": 20,
+      "inUniverseDate": "P.D. 325",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "The second half of Tekkadan's story and the conclusion of Iron-Blooded Orphans.",
+      "relationshipIds": [
+        {
+          "productionId": "ibo-s1",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/ibo-s2.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/21749",
+        "matchedTitle": "Mobile Suit GUNDAM Iron Blooded Orphans 2"
+      }
+    },
+    {
+      "id": "urdr-hunt",
+      "title": "Iron-Blooded Orphans: Urdr-Hunt",
+      "shortTitle": "Urdr-Hunt",
+      "continuityId": "post-disaster",
+      "format": "ona",
+      "releaseStart": 2022,
+      "storyOrder": 15,
+      "inUniverseDate": "P.D. 323",
+      "mainline": false,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "supplemental",
+      "uncertainty": "Game-origin animation; visible here because animated material exists",
+      "description": "Supplemental Post Disaster material originating in a mobile-game project with animated sequences.",
+      "relationshipIds": [
+        {
+          "productionId": "ibo-s1",
+          "type": "side-story",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "ann-gundam",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/urdr-hunt.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/114842",
+        "matchedTitle": "Mobile Suit Gundam: Iron-Blooded Orphans-Urdr Hunt"
+      }
+    },
+    {
+      "id": "wfm-prologue",
+      "title": "Mobile Suit Gundam: The Witch from Mercury Prologue",
+      "shortTitle": "WfM Prologue",
+      "continuityId": "ad-stella",
+      "format": "ona",
+      "releaseStart": 2022,
+      "storyOrder": 10,
+      "inUniverseDate": "A.S. 101",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A short prequel that establishes the GUND Format, Vanadis, and the tragedy behind the TV story.",
+      "relationshipIds": [
+        {
+          "productionId": "witch-from-mercury",
+          "type": "prequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-witch",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/wfm-prologue.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/146922",
+        "matchedTitle": "Mobile Suit Gundam: The Witch from Mercury - PROLOGUE"
+      }
+    },
+    {
+      "id": "witch-from-mercury",
+      "title": "Mobile Suit Gundam: The Witch from Mercury",
+      "shortTitle": "Witch from Mercury",
+      "continuityId": "ad-stella",
+      "format": "tv",
+      "releaseStart": 2022,
+      "releaseEnd": 2023,
+      "storyOrder": 20,
+      "inUniverseDate": "A.S. 122",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A corporate-school and space-industry Gundam story built as a modern independent entry point.",
+      "relationshipIds": [
+        {
+          "productionId": "wfm-prologue",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-witch",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/witch-from-mercury.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/139274",
+        "matchedTitle": "Mobile Suit Gundam: The Witch from Mercury"
+      }
+    },
+    {
+      "id": "build-fighters",
+      "title": "Gundam Build Fighters",
+      "shortTitle": "Build Fighters",
+      "continuityId": "build",
+      "format": "tv",
+      "releaseStart": 2013,
+      "releaseEnd": 2014,
+      "storyOrder": 10,
+      "inUniverseDate": "Near future",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A Gunpla battle series where Gundam works are cultural objects inside the story world.",
+      "relationshipIds": [
+        {
+          "productionId": "build-fighters-try",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-build-fighters",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/build-fighters.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/19319",
+        "matchedTitle": "Gundam Build Fighters"
+      }
+    },
+    {
+      "id": "build-fighters-try",
+      "title": "Gundam Build Fighters Try",
+      "shortTitle": "Build Try",
+      "continuityId": "build",
+      "format": "tv",
+      "releaseStart": 2014,
+      "releaseEnd": 2015,
+      "storyOrder": 20,
+      "inUniverseDate": "Seven years later",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A team-battle sequel set years after Build Fighters.",
+      "relationshipIds": [
+        {
+          "productionId": "build-fighters",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "gundam-info-build-fighters",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/build-fighters-try.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/20739",
+        "matchedTitle": "Gundam Build Fighters Try"
+      }
+    },
+    {
+      "id": "build-divers",
+      "title": "Gundam Build Divers",
+      "shortTitle": "Build Divers",
+      "continuityId": "build",
+      "format": "tv",
+      "releaseStart": 2018,
+      "storyOrder": 30,
+      "inUniverseDate": "Gunpla Battle Nexus Online era",
+      "mainline": true,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "mainline",
+      "description": "A separate Build-era focus on online Gunpla battles.",
+      "relationshipIds": [
+        {
+          "productionId": "build-divers-rerise",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "ann-gundam",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/build-divers.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/101036",
+        "matchedTitle": "Gundam Build Divers"
+      }
+    },
+    {
+      "id": "build-divers-rerise",
+      "title": "Gundam Build Divers Re:RISE",
+      "shortTitle": "Re:RISE",
+      "continuityId": "build",
+      "format": "ona",
+      "releaseStart": 2019,
+      "releaseEnd": 2020,
+      "storyOrder": 40,
+      "inUniverseDate": "After Build Divers",
+      "mainline": true,
+      "beginnerFriendly": false,
+      "standalone": false,
+      "classification": "mainline",
+      "description": "A sequel to Build Divers with a stronger adventure structure and returning setting logic.",
+      "relationshipIds": [
+        {
+          "productionId": "build-divers",
+          "type": "sequel",
+          "confidence": "confirmed"
+        }
+      ],
+      "sourceIds": [
+        "ann-gundam",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/build-divers-rerise.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/110786",
+        "matchedTitle": "Gundam Build Divers Re:RISE"
+      }
+    },
+    {
+      "id": "build-metaverse",
+      "title": "Gundam Build Metaverse",
+      "shortTitle": "Metaverse",
+      "continuityId": "build",
+      "format": "ona",
+      "releaseStart": 2023,
+      "storyOrder": 50,
+      "inUniverseDate": "Build metaverse setting",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "A short anniversary-style Build project centered on Gunpla in a virtual space.",
+      "relationshipIds": [
+        {
+          "productionId": "build-fighters",
+          "type": "related",
+          "confidence": "approximate"
+        },
+        {
+          "productionId": "build-divers",
+          "type": "related",
+          "confidence": "approximate"
+        }
+      ],
+      "sourceIds": [
+        "ann-gundam",
+        "gundam-wiki-timelines"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/build-metaverse.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/163204",
+        "matchedTitle": "GUNDAM BUILD METAVERSE"
+      }
+    },
+    {
+      "id": "sd-gundam-force",
+      "title": "SD Gundam Force",
+      "shortTitle": "SD Force",
+      "continuityId": "standalone",
+      "format": "tv",
+      "releaseStart": 2004,
+      "storyOrder": 10,
+      "inUniverseDate": "Standalone SD setting",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "A CG SD Gundam series outside the primary war continuities.",
+      "relationshipIds": [],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/sd-gundam-force.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/2391",
+        "matchedTitle": "SD Gundam Force"
+      }
+    },
+    {
+      "id": "sangokuden",
+      "title": "SD Gundam Sangokuden Brave Battle Warriors",
+      "shortTitle": "Sangokuden",
+      "continuityId": "standalone",
+      "format": "tv",
+      "releaseStart": 2010,
+      "storyOrder": 20,
+      "inUniverseDate": "Standalone Three Kingdoms-inspired setting",
+      "mainline": false,
+      "beginnerFriendly": true,
+      "standalone": true,
+      "classification": "supplemental",
+      "description": "An SD Gundam retelling inspired by Romance of the Three Kingdoms rather than a main dramatic continuity.",
+      "relationshipIds": [],
+      "sourceIds": [
+        "gundam-info-what-is-gundam-cn",
+        "ann-gundam"
+      ],
+      "coverImage": {
+        "path": "assets/images/gundam-covers/sangokuden.jpg",
+        "sourceName": "AniList",
+        "sourceUrl": "https://anilist.co/anime/8287",
+        "matchedTitle": "SD Gundam Sangokuden Brave Battle Warriors"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "foundation",
+      "label": "Original foundation",
+      "description": "For viewers who want the historical spine that made Gundam Gundam.",
+      "productionIds": [
+        "msg-trilogy",
+        "zeta",
+        "zz",
+        "chars-counterattack"
+      ]
+    },
+    {
+      "id": "modern-standalone",
+      "label": "Modern standalone entry",
+      "description": "Newer entries that explain themselves and do not require Universal Century homework.",
+      "productionIds": [
+        "wfm-prologue",
+        "witch-from-mercury",
+        "ibo-s1",
+        "ibo-s2",
+        "gundam-00-s1",
+        "gundam-00-s2"
+      ]
+    },
+    {
+      "id": "uc-essentials",
+      "label": "Universal Century essentials",
+      "description": "A reduced route through the central UC narrative without every side story.",
+      "productionIds": [
+        "msg-trilogy",
+        "zeta",
+        "zz",
+        "chars-counterattack",
+        "unicorn",
+        "narrative",
+        "hathaway"
+      ]
+    },
+    {
+      "id": "short-commitment",
+      "label": "Short commitment",
+      "description": "Lower-episode or film routes that provide a focused taste of different Gundam modes.",
+      "productionIds": [
+        "war-in-pocket",
+        "08th-ms-team",
+        "chars-counterattack",
+        "f91",
+        "wfm-prologue",
+        "stargazer"
+      ]
+    }
+  ],
+  "methodologyNotes": [
+    "Visible entries focus on animated productions. The schema keeps source IDs, relationships, and uncertainty flags so manga, novels, games, and live-action works can be added later.",
+    "Story order uses in-universe era labels when available. Compilation films share story positions with the works they summarize, but are kept as separate productions because they are distinct watch choices.",
+    "Turn A, Reconguista in G, and Thunderbolt are intentionally marked with uncertainty where franchise discussion goes beyond a simple, universally accepted viewing dependency.",
+    "Build entries are grouped by premise rather than treated as part of the war-history continuities."
+  ]
+}

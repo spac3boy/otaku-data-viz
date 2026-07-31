@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-653DY2M8K5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-653DY2M8K5');
+  </script>
+  <script src="/assets/js/analytics-events.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gundam Watch Order &amp; Timeline Map | Otaku Data Viz</title>
+  <meta name="description" content="Explore the Gundam watch order by continuity, compare story chronology with release order, and find beginner-friendly standalone series and viewing paths." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#081421" />
+  <link rel="canonical" href="https://otakudataviz.com/projects/gundam-universe-map.html" />
+  <link rel="icon" href="../favicon.ico" sizes="any" />
+  <link rel="icon" href="../favicon-32x32.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Otaku Data Viz" />
+  <meta property="og:title" content="Gundam Watch Order &amp; Timeline Map | Otaku Data Viz" />
+  <meta property="og:description" content="Compare Gundam timelines, continuity connections, story and release order, standalone series, and beginner viewing paths." />
+  <meta property="og:url" content="https://otakudataviz.com/projects/gundam-universe-map.html" />
+  <meta property="og:image" content="https://otakudataviz.com/assets/images/gundam-universe-map-og.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Gundam Watch Order and Timeline Map by Otaku Data Viz." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Gundam Watch Order &amp; Timeline Map | Otaku Data Viz" />
+  <meta name="twitter:description" content="Compare Gundam timelines, continuity connections, story and release order, standalone series, and beginner viewing paths." />
+  <meta name="twitter:image" content="https://otakudataviz.com/assets/images/gundam-universe-map-og.png" />
+  <meta name="twitter:image:alt" content="Gundam Watch Order and Timeline Map by Otaku Data Viz." />
+  <link rel="stylesheet" href="../assets/css/site-pages.css" />
+  <style>
+    .project-hero {
+      display: grid;
+      grid-template-columns: minmax(320px, .86fr) minmax(320px, 1.14fr);
+      gap: clamp(24px, 5vw, 58px);
+      align-items: center;
+      padding-block: 34px;
+    }
+    .project-hero h1 {
+      max-width: 9.4ch;
+      font-size: 4.45rem;
+      overflow-wrap: normal;
+    }
+    .hero-actions,
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      background: var(--paper-deep);
+    }
+    .hero-preview {
+      min-height: clamp(330px, 39vw, 500px);
+      border: 1.5px solid var(--ink);
+      background: var(--ink);
+      overflow: hidden;
+      box-shadow: 8px 8px 0 rgba(9, 11, 9, .16);
+    }
+    .hero-preview iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: clamp(330px, 39vw, 500px);
+      border: 0;
+      pointer-events: none;
+      transform: scale(1.02);
+      transform-origin: center;
+    }
+    .toc {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 18px;
+      align-items: center;
+      padding-block: 18px;
+    }
+    .toc strong,
+    .mini-label {
+      font-family: var(--mono);
+      font-size: .75rem;
+      font-weight: 950;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .toc nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .toc a,
+    .related-card {
+      border: 1.5px solid var(--ink);
+      background: rgba(251, 245, 232, .72);
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .toc a {
+      padding: 10px 12px;
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .toc a:hover,
+    .toc a:focus-visible,
+    .related-card:hover,
+    .related-card:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+      outline: none;
+    }
+    .article-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, .38fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .content-stack,
+    .sticky-aside {
+      display: grid;
+      gap: 20px;
+    }
+    .sticky-aside {
+      position: sticky;
+      top: 18px;
+    }
+    .article-panel,
+    .aside-panel,
+    .cta-panel {
+      border: 1.5px solid var(--ink);
+      background: rgba(251, 245, 232, .72);
+      padding: clamp(22px, 4vw, 36px);
+    }
+    .article-panel h2,
+    .aside-panel h2,
+    .cta-panel h2 {
+      margin-bottom: 18px;
+      font-size: clamp(1.8rem, 3.4vw, 3rem);
+      line-height: .92;
+    }
+    .article-panel p,
+    .article-panel li,
+    .aside-panel p,
+    .cta-panel p {
+      font-family: var(--mono);
+      line-height: 1.62;
+    }
+    .check-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .check-list li {
+      position: relative;
+      padding-left: 24px;
+    }
+    .check-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .64em;
+      width: 10px;
+      height: 10px;
+      background: var(--ink);
+    }
+    .faq-list {
+      display: grid;
+      gap: 0;
+    }
+    .faq-list section {
+      padding-block: 18px;
+      border-top: 1.5px solid var(--ink);
+    }
+    .faq-list section:last-child { padding-bottom: 0; }
+    .faq-list h3 {
+      margin-bottom: 8px;
+      font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+      line-height: 1;
+    }
+    .faq-list p { margin: 0; }
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1.5px solid var(--ink);
+      margin-top: 22px;
+    }
+    .stat-strip div {
+      padding: 14px;
+      border-right: 1.5px solid var(--ink);
+    }
+    .stat-strip div:last-child { border-right: 0; }
+    .stat-strip strong {
+      display: block;
+      font-family: var(--display);
+      font-size: 1.9rem;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+    .stat-strip span {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .related-card {
+      padding: 18px;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+    .related-card:hover,
+    .related-card:focus-visible {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 rgba(9, 11, 9, .2);
+    }
+    .related-card h3 {
+      font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+      margin-bottom: 12px;
+    }
+    .related-card p {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+    .disclaimer-box {
+      border: 1.5px solid var(--ink);
+      padding: 18px;
+      background: var(--paper-deep);
+      font-size: .86rem;
+    }
+    @media (max-width: 980px) {
+      .project-hero,
+      .article-grid {
+        grid-template-columns: 1fr;
+      }
+      .sticky-aside { position: static; }
+      .related-grid,
+      .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat-strip div:nth-child(2) { border-right: 0; }
+      .stat-strip div:nth-child(-n+2) { border-bottom: 1.5px solid var(--ink); }
+    }
+    @media (max-width: 760px) {
+      .project-hero h1 { font-size: 3.35rem; }
+      .toc { grid-template-columns: 1fr; }
+      .hero-actions .button,
+      .cta-actions .button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+      .related-grid,
+      .stat-strip { grid-template-columns: 1fr; }
+      .stat-strip div,
+      .stat-strip div:nth-child(2) {
+        border-right: 0;
+        border-bottom: 1.5px solid var(--ink);
+      }
+      .stat-strip div:last-child { border-bottom: 0; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": { "@id": "https://otakudataviz.com/#organization" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://otakudataviz.com/#organization",
+        "name": "Otaku Data Viz",
+        "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#webpage",
+        "url": "https://otakudataviz.com/projects/gundam-universe-map.html",
+        "name": "Gundam Watch Order & Timeline Map | Otaku Data Viz",
+        "description": "Explore the Gundam watch order by continuity, compare story chronology with release order, and find beginner-friendly standalone series and viewing paths.",
+        "inLanguage": "en",
+        "isPartOf": { "@id": "https://otakudataviz.com/#website" },
+        "mainEntity": { "@id": "https://otakudataviz.com/gundam-universe-map.html#application" },
+        "breadcrumb": { "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#breadcrumb" },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
+          "width": 1200,
+          "height": 630
+        }
+      },
+      {
+        "@type": ["WebApplication", "SoftwareApplication"],
+        "@id": "https://otakudataviz.com/gundam-universe-map.html#application",
+        "name": "Gundam Universe Map",
+        "url": "https://otakudataviz.com/gundam-universe-map.html",
+        "description": "An interactive fan-made Gundam watch order and timeline map comparing continuities, story chronology, release order, and newcomer viewing routes.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "image": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
+        "author": { "@id": "https://otakudataviz.com/#organization" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://otakudataviz.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://otakudataviz.com/projects.html" },
+          { "@type": "ListItem", "position": 3, "name": "Gundam Watch Order & Timeline Map", "item": "https://otakudataviz.com/projects/gundam-universe-map.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Are all Gundam series in the same timeline?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Gundam includes multiple separate continuities. Productions within one continuity share fictional history, while series in different continuities can usually be watched independently." }
+          },
+          {
+            "@type": "Question",
+            "name": "What order should I watch Gundam in?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Choose a continuity first, then use either story order or release order within that setting. Release order preserves how audiences originally encountered the franchise, while story order follows fictional chronology." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to watch Universal Century before another Gundam series?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Alternate-universe series such as The Witch from Mercury, Iron-Blooded Orphans, Gundam 00, and Gundam Wing use separate settings and do not require Universal Century viewing." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where should a Gundam beginner start?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Beginners can start with the original Mobile Suit Gundam for the franchise foundation or choose a modern standalone continuity. The map labels beginner-friendly productions and includes curated entry routes." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="page">
+    <header class="inner rule-bottom">
+      <a class="brand" href="../index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="../assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
+      <nav aria-label="Primary navigation">
+        <details class="nav-toggle" open>
+          <summary class="nav-button" aria-label="Open navigation menu"><span></span></summary>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../projects.html" aria-current="page">Projects</a></li>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../lab.html">Lab</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+          </ul>
+        </details>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="project-hero inner rule-bottom">
+        <div>
+          <p class="eyebrow">Anime Continuity Atlas</p>
+          <h1>Gundam Universe Map</h1>
+          <p class="intro">Explore the Gundam watch order and timeline by continuity, compare story chronology with release order, and find standalone series or a beginner-friendly place to start.</p>
+          <div class="hero-actions">
+            <a class="button" href="../gundam-universe-map.html" data-event="open_interactive_visualization">Open Interactive Visualization <span aria-hidden="true">--&gt;</span></a>
+            <a class="button secondary" href="../projects.html" data-event="click_related_project">Explore More Otaku Data Viz Projects <span aria-hidden="true">--&gt;</span></a>
+          </div>
+        </div>
+        <div class="hero-preview" aria-label="Preview of the Gundam Universe Map interactive visualization">
+          <iframe src="../gundam-universe-map.html?preview=1" title="Animated preview of the Gundam Universe Map" loading="eager"></iframe>
+        </div>
+      </section>
+
+      <section class="toc inner rule-bottom" aria-label="On this page">
+        <strong>On this page</strong>
+        <nav>
+          <a href="#what-this-shows">What this shows</a>
+          <a href="#why-it-matters">Why it matters</a>
+          <a href="#how-to-use">How to use it</a>
+          <a href="#gundam-watch-order-faq">Watch order FAQ</a>
+          <a href="#methodology">Methodology</a>
+          <a href="#related-projects">Related projects</a>
+        </nav>
+      </section>
+
+      <section class="section inner rule-bottom">
+        <div class="article-grid">
+          <div class="content-stack">
+            <article class="article-panel" id="what-this-shows">
+              <h2>What This Shows</h2>
+              <ul class="check-list">
+                <li><strong>Continuities:</strong> Universal Century, Cosmic Era, Ad Stella, Post Disaster, After Colony, Build settings, and other major animated Gundam worlds.</li>
+                <li><strong>Two timelines:</strong> story chronology within a fictional universe and real-world release order across the franchise.</li>
+                <li><strong>Relationships:</strong> sequels, prequels, side stories, compilation films, alternate retellings, and related productions.</li>
+                <li><strong>Entry guidance:</strong> beginner-friendly works, standalone continuities, and curated viewing routes.</li>
+              </ul>
+              <div class="stat-strip" aria-label="Project summary">
+                <div><strong>47</strong><span>Animated entries</span></div>
+                <div><strong>13</strong><span>Continuities</span></div>
+                <div><strong>2</strong><span>Ordering modes</span></div>
+                <div><strong>4</strong><span>Viewing routes</span></div>
+              </div>
+            </article>
+
+            <article class="article-panel" id="why-it-matters">
+              <h2>How Gundam Timelines And Watch Order Work</h2>
+              <p>Gundam is not one single straight timeline. Some productions share a fictional history, while many famous entries are separate universes that can be watched without prior Universal Century knowledge.</p>
+              <p>The map makes that structure visible. A newcomer can see why Mobile Suit Gundam, Zeta, and Char's Counterattack belong to one spine, while The Witch from Mercury, Iron-Blooded Orphans, Gundam Wing, Gundam 00, and G Gundam can function as independent doors into the franchise.</p>
+            </article>
+
+            <article class="article-panel" id="how-to-use">
+              <h2>How To Use The Visualization</h2>
+              <ul class="check-list">
+                <li><strong>Switch modes:</strong> compare story order against real-world release order.</li>
+                <li><strong>Filter the map:</strong> narrow by continuity, format, decade, mainline status, or beginner accessibility.</li>
+                <li><strong>Select a production:</strong> open its briefing panel for era, release date, format, relationship notes, and watch-dependency guidance.</li>
+                <li><strong>Choose a viewing route:</strong> highlight editorial paths such as Original foundation or Modern standalone entry.</li>
+                <li><strong>Use keyboard navigation:</strong> focus a production marker, then use arrow keys to move through nearby entries.</li>
+              </ul>
+            </article>
+
+            <article class="article-panel" id="gundam-watch-order-faq">
+              <h2>Gundam Watch Order FAQ</h2>
+              <div class="faq-list">
+                <section>
+                  <h3>Are all Gundam series in the same timeline?</h3>
+                  <p>No. Gundam includes multiple separate continuities. Productions within one continuity share fictional history, while series in different continuities can usually be watched independently.</p>
+                </section>
+                <section>
+                  <h3>What order should I watch Gundam in?</h3>
+                  <p>Choose a continuity first, then use either story order or release order within that setting. Release order preserves how audiences originally encountered the franchise, while story order follows fictional chronology.</p>
+                </section>
+                <section>
+                  <h3>Do I need to watch Universal Century first?</h3>
+                  <p>No. Alternate-universe series such as The Witch from Mercury, Iron-Blooded Orphans, Gundam 00, and Gundam Wing use separate settings and do not require Universal Century viewing.</p>
+                </section>
+                <section>
+                  <h3>Where should a Gundam beginner start?</h3>
+                  <p>Start with the original Mobile Suit Gundam for the franchise foundation or choose a modern standalone continuity. The map labels beginner-friendly productions and includes curated entry routes.</p>
+                </section>
+              </div>
+            </article>
+
+            <article class="article-panel" id="methodology">
+              <h2>Methodology And Data Note</h2>
+              <p>The MVP dataset focuses on major animated Gundam productions. It is structured so manga, novels, games, live-action works, shorts, and deeper side-story material can be added later without changing the presentation model.</p>
+              <p>Story order uses in-universe labels when they are useful and avoids fabricating exact chronology where placement is debated. Compilation films and alternate retellings are kept as separate watch choices because they matter to newcomers even when they overlap story material.</p>
+              <p class="disclaimer-box">This is an unofficial fan-made educational visualization. Otaku Data Viz is not affiliated with or endorsed by Bandai Namco Filmworks, Sunrise, Sotsu, or any Gundam rights holder. Gundam titles and related intellectual property belong to their respective owners.</p>
+            </article>
+          </div>
+
+          <aside class="sticky-aside" aria-label="Project details">
+            <section class="aside-panel">
+              <p class="mini-label">Best for</p>
+              <h2>New Viewers And Returning Fans</h2>
+              <p>Use the visualization to decide whether you want the historical Universal Century spine, a modern standalone series, a short commitment, or a specific alternate universe.</p>
+              <div class="cta-actions">
+                <a class="button" href="../gundam-universe-map.html" data-event="open_interactive_visualization">Open The Map <span aria-hidden="true">--&gt;</span></a>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section inner rule-bottom" id="related-projects">
+        <div class="section-bar"><h2>Explore More Visualizations</h2></div>
+        <div class="related-grid">
+          <a class="related-card" href="dragon-ball-sociogram.html" data-event="click_related_project">
+            <h3>Dragon Ball Character Relationship Chart</h3>
+            <p>Map character relationships, rivalries, families, mentors, and alliances.</p>
+          </a>
+          <a class="related-card" href="manga-anime-timeline.html" data-event="click_related_project">
+            <h3>Anime &amp; Manga History Timeline</h3>
+            <p>Trace manga serialization history, anime releases, adaptations, and breakout moments.</p>
+          </a>
+          <a class="related-card" href="nintendo-game-universe-map.html" data-event="click_related_project">
+            <h3>Nintendo Game Universe Map</h3>
+            <p>Explore Nintendo releases across years, hardware eras, franchises, genres, and sales.</p>
+          </a>
+          <a class="related-card" href="../index.html" data-event="click_related_project">
+            <h3>Homepage</h3>
+            <p>Return to the main Otaku Data Viz project hub.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section inner">
+        <div class="cta-panel">
+          <p class="mini-label">Launch the atlas</p>
+          <h2>Compare Gundam Universes, Watch Routes, And Release History</h2>
+          <p>Open the interactive map and switch between fictional chronology and release order.</p>
+          <div class="cta-actions">
+            <a class="button" href="../gundam-universe-map.html" data-event="open_interactive_visualization">Open Interactive Visualization <span aria-hidden="true">--&gt;</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="inner">
+      <div class="disclaimer">
+        <div class="warn" aria-hidden="true">!</div>
+        <div>
+          <strong>Disclaimer</strong>
+          <p>This project is for educational and entertainment purposes only. Otaku Data Viz is not affiliated with or endorsed by any anime, manga, game, publisher, studio, or media franchise. All trademarks are property of their respective owners.</p>
+        </div>
+      </div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => { navToggle.open = desktopQuery.matches; };
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+  </script>
+</body>
+</html>

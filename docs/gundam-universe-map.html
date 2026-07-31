@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gundam Watch Order &amp; Timeline Map | Otaku Data Viz</title>
+  <meta name="description" content="Explore the Gundam watch order by continuity, compare story chronology with release order, and find beginner-friendly standalone series and viewing paths." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#081421" />
+  <link rel="canonical" href="https://otakudataviz.com/projects/gundam-universe-map.html" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon-32x32.png" type="image/png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="Otaku Data Viz" />
+  <meta property="og:title" content="Gundam Watch Order &amp; Timeline Map | Otaku Data Viz" />
+  <meta property="og:description" content="Compare Gundam timelines, continuity connections, story and release order, standalone series, and beginner viewing paths." />
+  <meta property="og:url" content="https://otakudataviz.com/projects/gundam-universe-map.html" />
+  <meta property="og:image" content="https://otakudataviz.com/assets/images/gundam-universe-map-og.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Gundam Watch Order and Timeline Map by Otaku Data Viz." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Gundam Watch Order &amp; Timeline Map | Otaku Data Viz" />
+  <meta name="twitter:description" content="Compare Gundam timelines, continuity connections, story and release order, standalone series, and beginner viewing paths." />
+  <meta name="twitter:image" content="https://otakudataviz.com/assets/images/gundam-universe-map-og.png" />
+  <meta name="twitter:image:alt" content="Gundam Watch Order and Timeline Map by Otaku Data Viz." />
+  <link rel="preload" href="assets/fonts/Teko-Variable.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="preload" href="assets/images/gundam-orbital-hangar-hero.jpg" as="image" fetchpriority="high" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["WebApplication", "SoftwareApplication"],
+    "@id": "https://otakudataviz.com/gundam-universe-map.html#application",
+    "name": "Gundam Universe Map",
+    "url": "https://otakudataviz.com/gundam-universe-map.html",
+    "mainEntityOfPage": "https://otakudataviz.com/projects/gundam-universe-map.html",
+    "description": "An interactive fan-made Gundam watch order and timeline map comparing continuities, story chronology, release order, and newcomer viewing routes.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "isAccessibleForFree": true,
+    "image": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
+    "author": {
+      "@type": "Organization",
+      "name": "Otaku Data Viz",
+      "url": "https://otakudataviz.com/"
+    }
+  }
+  </script>
+  <style>
+    :root {
+      --ink: #11130f;
+      --paper: #f3eddf;
+      --paper-soft: #fbf6e9;
+      --paper-deep: #dfd6c5;
+      --grid: rgba(17, 19, 15, .1);
+      --line: rgba(17, 19, 15, .72);
+      --muted: rgba(17, 19, 15, .68);
+      --accent: #b83e35;
+      --blueprint: #273f4a;
+      --field: #eef0e7;
+      --focus: #ffcf47;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --display: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        linear-gradient(90deg, rgba(17,19,15,.03) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(0deg, rgba(17,19,15,.028) 1px, transparent 1px) 0 0 / 42px 42px,
+        radial-gradient(circle at 20% 12%, rgba(184,62,53,.12), transparent 25%),
+        radial-gradient(circle at 78% 20%, rgba(39,63,74,.12), transparent 27%),
+        var(--paper);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .18;
+      background:
+        repeating-linear-gradient(115deg, transparent 0 17px, rgba(17,19,15,.08) 17px 18px),
+        radial-gradient(circle, rgba(17,19,15,.18) 0 .7px, transparent .8px) 0 0 / 13px 13px;
+      mix-blend-mode: multiply;
+    }
+    a { color: inherit; }
+    button,
+    select {
+      font: inherit;
+    }
+    .skip-link {
+      position: absolute;
+      left: 20px;
+      top: -70px;
+      z-index: 50;
+      background: var(--ink);
+      color: var(--paper-soft);
+      padding: 10px 14px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+    }
+    .skip-link:focus { top: 20px; }
+    .page {
+      width: min(1280px, calc(100% - clamp(18px, 5vw, 58px)));
+      margin: 32px auto;
+      border: 2px solid var(--ink);
+      background:
+        linear-gradient(90deg, rgba(17,19,15,.04) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(0deg, rgba(17,19,15,.035) 1px, transparent 1px) 0 0 / 48px 48px,
+        var(--paper-soft);
+      box-shadow: 0 0 0 1px rgba(17,19,15,.2);
+    }
+    .inner { padding-inline: clamp(18px, 3.6vw, 40px); }
+    .rule-bottom { border-bottom: 2px solid var(--ink); }
+    header {
+      min-height: 116px;
+      display: grid;
+      grid-template-columns: minmax(250px, 1fr) auto;
+      align-items: center;
+      gap: 30px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 1000;
+      font-size: clamp(1.35rem, 2.2vw, 1.92rem);
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+    }
+    .brand-mark { width: 68px; height: auto; }
+    nav ul {
+      display: flex;
+      align-items: center;
+      gap: clamp(20px, 4vw, 54px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    nav a {
+      position: relative;
+      display: inline-flex;
+      padding-block: 8px;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: .9rem;
+      font-weight: 900;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    nav a[aria-current="page"]::after,
+    nav a:hover::after,
+    nav a:focus-visible::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 3px;
+      background: var(--ink);
+    }
+    .nav-toggle { display: contents; }
+    .nav-button { display: none; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(320px, .85fr) minmax(320px, 1.15fr);
+      gap: clamp(24px, 5vw, 64px);
+      align-items: end;
+      padding-block: clamp(36px, 7vw, 82px);
+    }
+    .eyebrow,
+    .mini-label,
+    label,
+    .tag,
+    .mode-tabs button,
+    .path-button,
+    .reset-button,
+    .source-list a {
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 950;
+      letter-spacing: .055em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 18px;
+      border-bottom: 4px solid var(--ink);
+      padding-bottom: 8px;
+    }
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--display);
+      line-height: .9;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 9ch; font-size: clamp(4rem, 8.6vw, 8.2rem); }
+    h2 { font-size: clamp(2rem, 4vw, 3.8rem); }
+    h3 { font-size: clamp(1.55rem, 2.7vw, 2.3rem); }
+    .intro {
+      max-width: 620px;
+      margin: 24px 0 0;
+      padding-top: 18px;
+      border-top: 4px solid var(--ink);
+      font-family: var(--mono);
+      line-height: 1.6;
+    }
+    .briefing {
+      border: 1.5px solid var(--ink);
+      min-height: 360px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.17) 1px, transparent 1px) 0 0 / 36px 36px,
+        linear-gradient(0deg, rgba(255,255,255,.14) 1px, transparent 1px) 0 0 / 36px 36px,
+        radial-gradient(circle at 64% 42%, rgba(251,246,233,.9) 0 3px, transparent 3.5px),
+        radial-gradient(circle at 34% 65%, rgba(251,246,233,.9) 0 3px, transparent 3.5px),
+        radial-gradient(circle at 76% 72%, rgba(251,246,233,.9) 0 3px, transparent 3.5px),
+        var(--blueprint);
+      color: var(--paper-soft);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 8px 8px 0 rgba(17,19,15,.16);
+    }
+    .briefing::before {
+      content: "";
+      position: absolute;
+      inset: 32px;
+      border: 1px solid rgba(251,246,233,.45);
+      clip-path: polygon(0 0, 86% 0, 86% 18%, 100% 18%, 100% 100%, 14% 100%, 14% 82%, 0 82%);
+    }
+    .briefing svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .briefing-copy {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      right: 24px;
+      display: grid;
+      gap: 8px;
+      font-family: var(--mono);
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .briefing-copy strong { font-size: clamp(1.4rem, 3vw, 2.4rem); }
+    .section { padding-block: clamp(28px, 5vw, 58px); }
+    .section-bar {
+      display: grid;
+      grid-template-columns: auto minmax(80px, 1fr);
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .section-bar::after { content: ""; height: 2px; background: var(--ink); }
+    .control-deck {
+      display: grid;
+      grid-template-columns: minmax(250px, .7fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .control-panel,
+    .detail-panel,
+    .reader-panel,
+    .path-panel,
+    .method-panel {
+      border: 1.5px solid var(--ink);
+      background: rgba(251,246,233,.78);
+    }
+    .control-panel { padding: 16px; }
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 4px;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-deep);
+    }
+    .mode-tabs button,
+    .path-button,
+    .reset-button {
+      min-height: 42px;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-soft);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .mode-tabs button[aria-pressed="true"],
+    .path-button.is-active,
+    .reset-button:hover,
+    .reset-button:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+    }
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .filter-field {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+    select {
+      width: 100%;
+      min-height: 40px;
+      border: 1.5px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper-soft);
+      color: var(--ink);
+      padding: 0 10px;
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 800;
+    }
+    .checkbox-line {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 800;
+    }
+    .checkbox-line input { width: 18px; height: 18px; accent-color: var(--ink); }
+    .reset-button { width: 100%; margin-top: 12px; }
+    .status-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border: 1.5px solid var(--ink);
+      background: var(--field);
+    }
+    .stat {
+      padding: 14px;
+      border-right: 1.5px solid var(--ink);
+    }
+    .stat:last-child { border-right: 0; }
+    .stat strong {
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: .86;
+    }
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .map-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(290px, .32fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .map-shell {
+      position: relative;
+      border: 1.5px solid var(--ink);
+      background:
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 52px 52px,
+        linear-gradient(0deg, var(--grid) 1px, transparent 1px) 0 0 / 52px 52px,
+        #f5f1e6;
+      min-height: 720px;
+      overflow: hidden;
+    }
+    .axis {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      border-bottom: 1.5px solid var(--ink);
+      background: rgba(251,246,233,.92);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .axis-title {
+      border-right: 1.5px solid var(--ink);
+      padding: 10px;
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .ticks {
+      position: relative;
+      min-height: 44px;
+    }
+    .tick {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      transform: translateX(-50%);
+      border-left: 1px solid rgba(17,19,15,.35);
+      padding-left: 6px;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 900;
+      line-height: 44px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .lanes {
+      position: relative;
+      display: grid;
+    }
+    .lane {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      min-height: 108px;
+      border-bottom: 1px solid rgba(17,19,15,.35);
+    }
+    .lane.is-hidden { display: none; }
+    .lane-label {
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      border-right: 1.5px solid var(--ink);
+      padding: 10px;
+      background: rgba(251,246,233,.78);
+    }
+    .lane-label button {
+      width: fit-content;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-soft);
+      padding: 7px 8px;
+      font-family: var(--mono);
+      font-size: .75rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .lane-label button:hover,
+    .lane-label button:focus-visible,
+    .lane.is-selected .lane-label button {
+      background: var(--ink);
+      color: var(--paper-soft);
+    }
+    .lane-summary {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: .66rem;
+      line-height: 1.32;
+      color: var(--muted);
+    }
+    .track {
+      position: relative;
+      min-height: 108px;
+    }
+    .track::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      border-top: 2px solid color-mix(in srgb, var(--lane-color) 45%, transparent);
+    }
+    .connector-layer {
+      position: absolute;
+      left: 130px;
+      right: 0;
+      top: 45px;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .production {
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 21px minmax(74px, 132px);
+      gap: 7px;
+      align-items: center;
+      min-height: 42px;
+      transform: translate(-50%, -50%);
+      border: 1.5px solid var(--ink);
+      padding: 5px 7px;
+      background: var(--paper-soft);
+      color: var(--ink);
+      box-shadow: 3px 3px 0 rgba(17,19,15,.14);
+      cursor: pointer;
+      transition: left .34s ease, top .34s ease, opacity .18s ease, transform .18s ease;
+    }
+    .production::before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: var(--lane-color);
+      -webkit-mask: url("assets/images/gundam-production-icon.svg") center / contain no-repeat;
+      mask: url("assets/images/gundam-production-icon.svg") center / contain no-repeat;
+    }
+    .production span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: var(--mono);
+      font-size: .68rem;
+      font-weight: 950;
+      text-align: left;
+    }
+    .production small {
+      display: block;
+      color: var(--muted);
+      font-size: .58rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .production:hover,
+    .production:focus-visible,
+    .production.is-selected {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+      transform: translate(-50%, -50%) translateY(-2px);
+      z-index: 6;
+    }
+    .production.is-muted { opacity: .22; }
+    .production.is-path { background: #fff3bc; }
+    .production.is-related { outline: 2px dashed var(--ink); outline-offset: 3px; }
+    .production.is-supplemental { border-style: dashed; }
+    .empty-state {
+      padding: 24px;
+      font-family: var(--mono);
+      font-weight: 850;
+      line-height: 1.5;
+    }
+    .detail-panel {
+      position: sticky;
+      top: 16px;
+      padding: 18px;
+      min-height: 320px;
+    }
+    .detail-panel h2 { font-size: clamp(1.8rem, 3.2vw, 2.6rem); }
+    .detail-meta,
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+    .tag {
+      border: 1.5px solid var(--ink);
+      padding: 6px 8px;
+      background: rgba(255,255,255,.42);
+    }
+    .detail-panel p,
+    .reader-panel p,
+    .reader-panel li,
+    .method-panel p,
+    .method-panel li,
+    .source-list {
+      font-family: var(--mono);
+      line-height: 1.58;
+    }
+    .detail-panel p { margin: 16px 0 0; }
+    .relation-list {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+      font-family: var(--mono);
+      font-size: .78rem;
+      line-height: 1.4;
+    }
+    .relation-list button {
+      width: 100%;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-soft);
+      padding: 9px;
+      text-align: left;
+      cursor: pointer;
+    }
+    .relation-list button:hover,
+    .relation-list button:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+    }
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .path-button {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      min-height: 166px;
+      padding: 14px;
+      text-align: left;
+    }
+    .path-button strong {
+      font-family: var(--display);
+      font-size: 1.7rem;
+      line-height: .9;
+      text-transform: uppercase;
+    }
+    .path-button span {
+      font-family: var(--mono);
+      font-size: .74rem;
+      line-height: 1.42;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .reader-grid,
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .reader-panel,
+    .method-panel {
+      padding: clamp(20px, 3vw, 32px);
+    }
+    .reader-panel ul,
+    .method-panel ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+    }
+    .source-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: .82rem;
+    }
+    .source-list a:hover,
+    .source-list a:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+      outline: none;
+    }
+    .source-list a {
+      display: block;
+      border: 1.5px solid var(--ink);
+      padding: 10px 12px;
+      text-decoration: none;
+      background: rgba(251,246,233,.7);
+    }
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 28px;
+      border-top: 2px solid var(--ink);
+      padding-block: 16px;
+    }
+    .disclaimer {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .warn {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      aspect-ratio: 1;
+      border: 1.5px solid var(--ink);
+      font-family: var(--display);
+      font-size: 2rem;
+    }
+    .disclaimer strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--mono);
+      font-size: .78rem;
+      text-transform: uppercase;
+    }
+    .disclaimer p {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: .66rem;
+      line-height: 1.35;
+    }
+    .barcode {
+      width: 158px;
+      height: 42px;
+      background: repeating-linear-gradient(90deg, var(--ink) 0 3px, transparent 3px 5px, var(--ink) 5px 6px, transparent 6px 12px);
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    @media (max-width: 1080px) {
+      .control-deck,
+      .map-grid,
+      .reader-grid,
+      .method-grid { grid-template-columns: 1fr; }
+      .detail-panel { position: static; }
+      .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 900px) {
+      .page { margin-block: 20px; }
+      .hero { grid-template-columns: 1fr; }
+      header { grid-template-columns: 1fr auto; padding-block: 18px; }
+      nav { justify-self: end; }
+      .nav-toggle {
+        display: block;
+        position: relative;
+      }
+      .nav-button {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        list-style: none;
+      }
+      .nav-button::-webkit-details-marker { display: none; }
+      .nav-button span,
+      .nav-button::before,
+      .nav-button::after {
+        content: "";
+        grid-area: 1 / 1;
+        width: 24px;
+        height: 3px;
+        background: var(--ink);
+      }
+      .nav-button::before { transform: translateY(-7px); }
+      .nav-button::after { transform: translateY(7px); }
+      .nav-toggle[open] .nav-button span { opacity: 0; }
+      .nav-toggle[open] .nav-button::before { transform: rotate(45deg); }
+      .nav-toggle[open] .nav-button::after { transform: rotate(-45deg); }
+      nav ul {
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        z-index: 20;
+        display: none;
+        width: min(300px, calc(100vw - 36px));
+        border: 2px solid var(--ink);
+        padding: 8px;
+        background: rgba(251,246,233,.96);
+      }
+      .nav-toggle[open] ul { display: grid; }
+      nav a { width: 100%; padding: 13px 14px; }
+      nav a[aria-current="page"],
+      nav a:hover,
+      nav a:focus-visible {
+        background: var(--ink);
+        color: var(--paper-soft);
+      }
+      nav a[aria-current="page"]::after,
+      nav a:hover::after,
+      nav a:focus-visible::after { display: none; }
+    }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 18px, 1280px); margin-block: 9px; }
+      .inner { padding-inline: 16px; }
+      .brand { gap: 9px; font-size: 1.25rem; }
+      .brand-mark { width: 52px; }
+      h1 { font-size: clamp(3.3rem, 16vw, 5.2rem); }
+      .filters,
+      .status-panel,
+      .path-grid { grid-template-columns: 1fr; }
+      .stat { border-right: 0; border-bottom: 1.5px solid var(--ink); }
+      .stat:last-child { border-bottom: 0; }
+      .map-shell { min-height: auto; overflow: visible; }
+      .axis { display: none; }
+      .lane {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .lane-label {
+        border-right: 0;
+        border-bottom: 1px solid rgba(17,19,15,.35);
+      }
+      .track {
+        display: grid;
+        gap: 8px;
+        min-height: auto;
+        padding: 12px;
+      }
+      .track::before,
+      .connector-layer { display: none; }
+      .production {
+        position: static;
+        transform: none;
+        grid-template-columns: 18px 1fr;
+        width: 100%;
+        min-height: 48px;
+      }
+      .production:hover,
+      .production:focus-visible,
+      .production.is-selected {
+        transform: none;
+      }
+      .production span { white-space: normal; }
+      footer,
+      .disclaimer { grid-template-columns: 1fr; }
+      .barcode { width: 100%; }
+    }
+    /* Gundam-inspired operations display overrides for the interactive viz page. */
+    body {
+      color: #ecf2f8;
+      background:
+        linear-gradient(90deg, rgba(72, 130, 176, .12) 1px, transparent 1px) 0 0 / 34px 34px,
+        linear-gradient(0deg, rgba(72, 130, 176, .1) 1px, transparent 1px) 0 0 / 34px 34px,
+        radial-gradient(circle at 18% 18%, rgba(227, 39, 43, .28), transparent 22%),
+        radial-gradient(circle at 78% 10%, rgba(255, 205, 46, .18), transparent 20%),
+        linear-gradient(135deg, #07111f 0%, #102335 50%, #05080d 100%);
+    }
+    body::before {
+      opacity: .3;
+      mix-blend-mode: screen;
+      background:
+        linear-gradient(120deg, transparent 0 24%, rgba(238, 246, 255, .08) 24% 25%, transparent 25% 100%),
+        repeating-linear-gradient(0deg, rgba(236,242,248,.04) 0 1px, transparent 1px 5px);
+    }
+    .page {
+      width: min(1480px, calc(100% - clamp(14px, 3vw, 42px)));
+      border: 1px solid rgba(174, 207, 235, .42);
+      background:
+        linear-gradient(90deg, rgba(174,207,235,.08) 1px, transparent 1px) 0 0 / 44px 44px,
+        linear-gradient(0deg, rgba(174,207,235,.07) 1px, transparent 1px) 0 0 / 44px 44px,
+        rgba(7, 17, 31, .92);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 22px 70px rgba(0,0,0,.42);
+    }
+    .rule-bottom { border-bottom-color: rgba(174, 207, 235, .42); }
+    .ops-header {
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      background:
+        linear-gradient(90deg, rgba(227,39,43,.2), transparent 36%),
+        linear-gradient(180deg, rgba(236,242,248,.08), transparent);
+    }
+    .ops-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .ops-emblem {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      aspect-ratio: 1;
+      border: 2px solid #ecf2f8;
+      color: #07111f;
+      background:
+        linear-gradient(135deg, #ecf2f8 0 44%, #ffcd2e 44% 56%, #e3272b 56% 100%);
+      clip-path: polygon(50% 0, 92% 22%, 92% 78%, 50% 100%, 8% 78%, 8% 22%);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 1000;
+    }
+    .ops-title {
+      display: grid;
+      gap: 4px;
+    }
+    .ops-title strong {
+      font-family: var(--mono);
+      font-size: clamp(.92rem, 1.6vw, 1.18rem);
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .ops-title span {
+      color: rgba(236,242,248,.7);
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+    .ops-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: end;
+    }
+    .ops-link {
+      border: 1px solid rgba(174,207,235,.62);
+      padding: 9px 11px;
+      color: #ecf2f8;
+      background: rgba(236,242,248,.06);
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .ops-link:hover,
+    .ops-link:focus-visible {
+      background: #ecf2f8;
+      color: #07111f;
+    }
+    .hero {
+      align-items: center;
+      min-height: 520px;
+      background:
+        linear-gradient(120deg, rgba(20,52,83,.62), transparent 58%),
+        linear-gradient(90deg, rgba(227,39,43,.16) 0 10px, transparent 10px 100%);
+    }
+    .eyebrow {
+      border-bottom-color: #ffcd2e;
+      color: #ffcd2e;
+    }
+    h1 {
+      color: #ecf2f8;
+      font-family: Arial Black, Impact, var(--display);
+      text-shadow: 4px 4px 0 rgba(227, 39, 43, .8), 8px 8px 0 rgba(32, 90, 148, .65);
+    }
+    h2,
+    h3 { color: #ecf2f8; }
+    .intro {
+      max-width: 680px;
+      border-top-color: rgba(255,205,46,.85);
+      color: rgba(236,242,248,.82);
+      background: rgba(7,17,31,.5);
+      padding: 18px;
+    }
+    .briefing {
+      border: 2px solid rgba(174,207,235,.68);
+      background:
+        linear-gradient(90deg, rgba(174,207,235,.16) 1px, transparent 1px) 0 0 / 30px 30px,
+        linear-gradient(0deg, rgba(174,207,235,.14) 1px, transparent 1px) 0 0 / 30px 30px,
+        radial-gradient(circle at 60% 46%, rgba(255,205,46,.82) 0 3px, transparent 3.5px),
+        radial-gradient(circle at 34% 63%, rgba(236,242,248,.9) 0 3px, transparent 3.5px),
+        radial-gradient(circle at 76% 72%, rgba(227,39,43,.9) 0 3px, transparent 3.5px),
+        #102335;
+      box-shadow: 8px 8px 0 rgba(227,39,43,.32), inset 0 0 0 8px rgba(236,242,248,.04);
+      clip-path: polygon(0 0, calc(100% - 42px) 0, 100% 42px, 100% 100%, 42px 100%, 0 calc(100% - 42px));
+    }
+    .section-bar::after,
+    .intro::before,
+    .panel-title::before { background: rgba(174,207,235,.64); }
+    .control-panel,
+    .detail-panel,
+    .reader-panel,
+    .path-panel,
+    .method-panel,
+    .status-panel,
+    .map-shell {
+      border-color: rgba(174,207,235,.58);
+      background: rgba(10, 27, 47, .88);
+      color: #ecf2f8;
+    }
+    .mode-tabs {
+      border-color: rgba(174,207,235,.58);
+      background: rgba(236,242,248,.08);
+    }
+    .mode-tabs button,
+    .path-button,
+    .reset-button,
+    select,
+    .lane-label button,
+    .relation-list button {
+      border-color: rgba(174,207,235,.72);
+      background: rgba(236,242,248,.08);
+      color: #ecf2f8;
+    }
+    .mode-tabs button[aria-pressed="true"],
+    .path-button.is-active,
+    .reset-button:hover,
+    .reset-button:focus-visible,
+    .lane-label button:hover,
+    .lane-label button:focus-visible,
+    .lane.is-selected .lane-label button,
+    .relation-list button:hover,
+    .relation-list button:focus-visible {
+      background: #ecf2f8;
+      color: #07111f;
+    }
+    label,
+    .mini-label,
+    .lane-summary,
+    .detail-panel p,
+    .reader-panel p,
+    .reader-panel li,
+    .method-panel p,
+    .method-panel li {
+      color: rgba(236,242,248,.78);
+    }
+    .status-panel {
+      background:
+        linear-gradient(90deg, rgba(227,39,43,.14), transparent),
+        rgba(10, 27, 47, .88);
+    }
+    .stat {
+      border-right-color: rgba(174,207,235,.58);
+    }
+    .stat strong {
+      color: #ffcd2e;
+      text-shadow: 2px 2px 0 rgba(227,39,43,.55);
+    }
+    .map-shell {
+      background:
+        linear-gradient(90deg, rgba(174,207,235,.1) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(0deg, rgba(174,207,235,.08) 1px, transparent 1px) 0 0 / 48px 48px,
+        radial-gradient(circle at 50% 50%, rgba(32,90,148,.18), transparent 40%),
+        #081827;
+    }
+    .axis,
+    .lane-label {
+      border-color: rgba(174,207,235,.58);
+      background: rgba(5, 12, 22, .88);
+    }
+    .axis-title,
+    .tick {
+      color: rgba(236,242,248,.76);
+    }
+    .lane { border-bottom-color: rgba(174,207,235,.3); }
+    .production {
+      border-color: rgba(236,242,248,.9);
+      background: #ecf2f8;
+      color: #07111f;
+      box-shadow: 4px 4px 0 rgba(227,39,43,.35);
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+    .production.is-path { background: #ffef9a; }
+    .production small { color: rgba(7,17,31,.68); }
+    .tag {
+      border-color: rgba(174,207,235,.68);
+      background: rgba(236,242,248,.08);
+      color: #ecf2f8;
+    }
+    .source-list a {
+      border-color: rgba(174,207,235,.58);
+      background: rgba(236,242,248,.06);
+      color: #ecf2f8;
+    }
+    .source-list a:hover,
+    .source-list a:focus-visible {
+      background: #ecf2f8;
+      color: #07111f;
+    }
+    footer {
+      border-top-color: rgba(174,207,235,.42);
+      color: rgba(236,242,248,.76);
+    }
+    .warn {
+      border-color: rgba(174,207,235,.58);
+      color: #ffcd2e;
+    }
+    .barcode {
+      background: repeating-linear-gradient(90deg, #ecf2f8 0 3px, transparent 3px 5px, #e3272b 5px 6px, transparent 6px 12px);
+    }
+    @media (max-width: 900px) {
+      .ops-header { grid-template-columns: 1fr; }
+      .ops-links { justify-content: start; }
+    }
+    @media (max-width: 720px) {
+      .hero { min-height: auto; }
+      .briefing { min-height: 260px; }
+      .stat { border-right: 0; border-bottom-color: rgba(174,207,235,.58); }
+      .production { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/gundam-universe-map.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to visualization</a>
+  <div class="page">
+    <header class="ops-header inner rule-bottom">
+      <div class="ops-brand">
+        <img class="ops-emblem" src="assets/images/ODV_Homepage_icon.svg" alt="" width="64" height="55" aria-hidden="true" />
+        <div class="ops-title">
+          <span class="ops-kicker">Otaku Data Viz / Archive 0079</span>
+          <strong>Gundam Universe Map</strong>
+          <span>Continuity Navigation System</span>
+        </div>
+      </div>
+      <nav class="ops-links" aria-label="Visualization navigation">
+        <a class="ops-link" href="projects/gundam-universe-map.html">Project Brief</a>
+        <a class="ops-link" href="projects.html">All Projects</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero inner rule-bottom">
+        <img class="hero-art" src="assets/images/gundam-orbital-hangar-hero.jpg" alt="" width="1915" height="821" fetchpriority="high" />
+        <div class="hero-copy">
+          <p class="eyebrow">Strategic archive / Continuity atlas</p>
+          <h1><span>Gundam</span><span>Universe</span><span>Map</span></h1>
+          <p class="intro">Titles inside the same continuity share a fictional history. Titles in different continuities are generally separate stories and can often be watched independently.</p>
+          <a class="hero-command" href="#map-title">Initialize map <span aria-hidden="true">&#8595;</span></a>
+        </div>
+        <div class="hero-telemetry" aria-hidden="true">
+          <span>SYS / GM-UC-13</span>
+          <span>47 animated records</span>
+          <span>13 continuity sectors</span>
+          <span>Coordinates normalized</span>
+        </div>
+      </section>
+
+      <section class="section inner rule-bottom" aria-labelledby="map-title">
+        <div class="section-bar"><h2 id="map-title">Continuity Operations Map</h2></div>
+        <div class="control-deck" aria-label="Visualization controls">
+          <section class="control-panel" aria-labelledby="controls-title">
+            <h3 id="controls-title" class="visually-hidden">Controls</h3>
+            <div class="mode-tabs" role="group" aria-label="Ordering mode">
+              <button type="button" data-mode="story" aria-pressed="true">Story Order</button>
+              <button type="button" data-mode="release" aria-pressed="false">Release Order</button>
+            </div>
+            <div class="filters">
+              <div class="filter-field">
+                <label for="continuityFilter">Continuity</label>
+                <select id="continuityFilter"></select>
+              </div>
+              <div class="filter-field">
+                <label for="formatFilter">Format</label>
+                <select id="formatFilter">
+                  <option value="all">All formats</option>
+                  <option value="tv">TV series</option>
+                  <option value="film">Film</option>
+                  <option value="ova">OVA</option>
+                  <option value="ona">ONA / web</option>
+                </select>
+              </div>
+              <div class="filter-field">
+                <label for="decadeFilter">Release decade</label>
+                <select id="decadeFilter"></select>
+              </div>
+              <div class="filter-field">
+                <label for="classificationFilter">Classification</label>
+                <select id="classificationFilter">
+                  <option value="all">All classifications</option>
+                  <option value="mainline">Mainline only</option>
+                  <option value="supplemental">Supplemental only</option>
+                </select>
+              </div>
+              <div class="filter-field">
+                <label for="beginnerFilter">Beginner access</label>
+                <select id="beginnerFilter">
+                  <option value="all">All accessibility</option>
+                  <option value="friendly">Beginner-friendly</option>
+                  <option value="context">Prior context helpful</option>
+                </select>
+              </div>
+              <div class="filter-field">
+                <label for="animatedFilter">Scope</label>
+                <select id="animatedFilter">
+                  <option value="animated">Animation only</option>
+                </select>
+              </div>
+            </div>
+            <label class="checkbox-line"><input id="mainlineToggle" type="checkbox" /> Emphasize mainline routes</label>
+            <button class="reset-button" type="button" id="resetButton">Reset View</button>
+          </section>
+          <section class="status-panel" aria-live="polite" aria-label="Current map summary">
+            <div class="stat"><strong id="statVisible">0</strong><span>Visible productions</span></div>
+            <div class="stat"><strong id="statContinuities">0</strong><span>Continuities in view</span></div>
+            <div class="stat"><strong id="statMode">Story</strong><span>Active ordering</span></div>
+          </section>
+        </div>
+        <div class="map-grid">
+          <section class="map-shell" aria-label="Interactive Gundam continuity map">
+            <div class="axis" aria-hidden="true">
+              <div class="axis-title" id="axisTitle">Story position</div>
+              <div class="ticks" id="ticks"></div>
+            </div>
+            <svg class="connector-layer" id="connectorLayer" aria-hidden="true"></svg>
+            <div class="lanes" id="lanes" role="list" aria-label="Continuity lanes"></div>
+          </section>
+          <aside class="detail-panel" id="detailPanel" aria-live="polite" aria-labelledby="detailTitle" aria-hidden="true" inert>
+            <button class="detail-close" id="detailClose" type="button" aria-label="Close selected production details">X</button>
+            <div class="detail-content" id="detailContent">
+              <p class="mini-label">Selected Production</p>
+              <h2 id="detailTitle">Production details</h2>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section inner rule-bottom" aria-labelledby="paths-title">
+        <div class="section-bar"><h2 id="paths-title">Curated Entry Routes</h2></div>
+        <div class="path-grid" id="pathGrid"></div>
+      </section>
+
+      <section class="section inner rule-bottom" aria-labelledby="read-title">
+        <div class="section-bar"><h2 id="read-title">How To Read It</h2></div>
+        <div class="reader-grid">
+          <article class="reader-panel">
+            <h3>Map Rules</h3>
+            <ul>
+              <li>Each lane is a fictional continuity. Shared lane means shared history; separate lane usually means independent story world.</li>
+              <li>Solid markers are mainline routes. Dashed markers are supplemental, compilations, side stories, or alternate retellings.</li>
+              <li>The Gundam silhouette marks every animated production; card borders and detail labels identify supplemental works, compilations, and retellings.</li>
+              <li>Color separates continuities, but every production also carries text labels and metadata.</li>
+            </ul>
+          </article>
+          <article class="reader-panel">
+            <h3>Mode Rules</h3>
+            <ul>
+              <li>Story order places works by fictional chronology within their continuity when a useful era label exists.</li>
+              <li>Release order places the same works by first real-world release year, revealing how the franchise actually unfolded.</li>
+              <li>Some placements are approximate, disputed, or alternate-continuity-adjacent. Those are labeled in the detail panel.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section inner rule-bottom" aria-labelledby="method-title">
+        <div class="section-bar"><h2 id="method-title">Methodology And Scope</h2></div>
+        <div class="method-grid">
+          <article class="method-panel">
+            <h3>Scope</h3>
+            <p>This MVP focuses on major animated Gundam productions and major fictional continuities. It intentionally leaves room for manga, novels, games, live-action, short promotional animation, and deeper episode-level arcs later.</p>
+            <ul id="methodNotes"></ul>
+          </article>
+          <article class="method-panel">
+            <h3>Uncertain Decisions</h3>
+            <p>Turn A, Reconguista in G, Thunderbolt, The Origin, and Cucuruz Doan's Island are represented with caution where chronology, adaptation status, or meta-continuity relationships can be argued differently.</p>
+            <p>The map is a recommendation and orientation tool, not an official canon declaration.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section inner" aria-labelledby="sources-title">
+        <div class="section-bar"><h2 id="sources-title">Sources</h2></div>
+        <ul class="source-list" id="sourceList"></ul>
+      </section>
+    </main>
+    <footer class="inner">
+      <div class="disclaimer"><div class="warn" aria-hidden="true">!</div><div><strong>Copyright and fan-project disclaimer</strong><p>Otaku Data Viz is an unofficial fan-made educational project. Gundam titles, cover artwork, and related intellectual property belong to their respective rights holders. Cover images appear in selected-production details for identification and link to their listing source.</p></div></div>
+      <div class="barcode" aria-hidden="true"></div>
+    </footer>
+  </div>
+
+  <script>
+    if (new URLSearchParams(window.location.search).get('preview') === '1') {
+      document.body.classList.add('is-preview');
+    }
+
+    (() => {
+      const navToggle = document.querySelector('.nav-toggle');
+      if (!navToggle) return;
+      const desktopQuery = window.matchMedia('(min-width: 901px)');
+      const syncNavMode = () => { navToggle.open = desktopQuery.matches; };
+      syncNavMode();
+      desktopQuery.addEventListener('change', syncNavMode);
+    })();
+
+    const app = {
+      data: null,
+      mode: 'story',
+      selectedProductionId: null,
+      selectedContinuityId: 'all',
+      activePathId: null,
+      hasRevealedMap: false,
+      transitionToken: 0,
+      detailSwapToken: 0,
+      filters: {
+        continuity: 'all',
+        format: 'all',
+        decade: 'all',
+        classification: 'all',
+        beginner: 'all',
+        mainlineOnly: false
+      }
+    };
+
+    const els = {
+      lanes: document.getElementById('lanes'),
+      ticks: document.getElementById('ticks'),
+      axisTitle: document.getElementById('axisTitle'),
+      detail: document.getElementById('detailPanel'),
+      detailContent: document.getElementById('detailContent'),
+      detailClose: document.getElementById('detailClose'),
+      continuityFilter: document.getElementById('continuityFilter'),
+      formatFilter: document.getElementById('formatFilter'),
+      decadeFilter: document.getElementById('decadeFilter'),
+      classificationFilter: document.getElementById('classificationFilter'),
+      beginnerFilter: document.getElementById('beginnerFilter'),
+      mainlineToggle: document.getElementById('mainlineToggle'),
+      resetButton: document.getElementById('resetButton'),
+      statVisible: document.getElementById('statVisible'),
+      statContinuities: document.getElementById('statContinuities'),
+      statMode: document.getElementById('statMode'),
+      connectorLayer: document.getElementById('connectorLayer'),
+      mapShell: document.querySelector('.map-shell'),
+      axis: document.querySelector('.axis'),
+      pathGrid: document.getElementById('pathGrid'),
+      methodNotes: document.getElementById('methodNotes'),
+      sourceList: document.getElementById('sourceList')
+    };
+
+    const formatLabel = { tv: 'TV series', film: 'Film', ova: 'OVA', ona: 'ONA / web' };
+    const relationLabel = {
+      sequel: 'Sequel',
+      prequel: 'Prequel',
+      'side-story': 'Side story',
+      compilation: 'Compilation',
+      retelling: 'Alternate retelling',
+      related: 'Related'
+    };
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function motionAllowed() {
+      return !reducedMotionQuery.matches;
+    }
+
+    function captureProductionRects() {
+      return new Map([...document.querySelectorAll('.production')].map((element) => [
+        element.dataset.productionId,
+        element.getBoundingClientRect()
+      ]));
+    }
+
+    function animateProductionReorder(previousRects) {
+      if (!motionAllowed() || !previousRects?.size) return;
+      document.querySelectorAll('.production').forEach((element) => {
+        const previous = previousRects.get(element.dataset.productionId);
+        if (!previous) return;
+        const current = element.getBoundingClientRect();
+        const deltaX = previous.left - current.left;
+        const deltaY = previous.top - current.top;
+        if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+        element.animate([
+          { translate: `${deltaX}px ${deltaY}px` },
+          { translate: '0 0' }
+        ], {
+          duration: 480,
+          easing: 'cubic-bezier(.2, .82, .2, 1)'
+        });
+      });
+    }
+
+    function setMode(nextMode) {
+      if (nextMode === app.mode) return;
+      const token = ++app.transitionToken;
+      const applyMode = () => {
+        if (token !== app.transitionToken) return;
+        app.mode = nextMode;
+        document.querySelectorAll('[data-mode]').forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.mode === nextMode));
+        });
+        renderMap({ motion: 'reorder' });
+        requestAnimationFrame(() => els.axis?.classList.remove('is-axis-changing'));
+      };
+
+      if (!motionAllowed()) {
+        applyMode();
+        return;
+      }
+      els.mapShell?.classList.add('is-reordering');
+      els.axis?.classList.add('is-axis-changing');
+      window.setTimeout(applyMode, 130);
+    }
+
+    function setContinuity(value) {
+      const token = ++app.transitionToken;
+      const applyContinuity = () => {
+        if (token !== app.transitionToken) return;
+        app.filters.continuity = value;
+        app.selectedContinuityId = value;
+        els.continuityFilter.value = value;
+        renderMap({ motion: 'continuity' });
+      };
+
+      const lanes = [...document.querySelectorAll('.lane')];
+      if (!motionAllowed() || !lanes.length) {
+        applyContinuity();
+        return;
+      }
+      els.mapShell?.classList.add('is-continuity-changing');
+      lanes.forEach((lane) => {
+        lane.classList.add(value === 'all' || lane.dataset.continuityId === value ? 'is-focus-target' : 'is-departing');
+      });
+      window.setTimeout(applyContinuity, 190);
+    }
+
+    function armInitialMapReveal() {
+      if (app.hasRevealedMap || !els.mapShell) return;
+      const reveal = () => {
+        if (app.hasRevealedMap) return;
+        app.hasRevealedMap = true;
+        els.mapShell.classList.remove('is-awaiting-deploy');
+        if (!motionAllowed()) return;
+        els.mapShell.classList.add('is-initializing');
+        window.setTimeout(() => els.mapShell?.classList.remove('is-initializing'), 1250);
+      };
+      if (!motionAllowed() || !('IntersectionObserver' in window)) {
+        reveal();
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        reveal();
+      }, { threshold: .08 });
+      observer.observe(els.mapShell);
+    }
+
+    function decadeOf(year) {
+      return Math.floor(year / 10) * 10;
+    }
+
+    function compareByMode(a, b) {
+      if (app.mode === 'release') return a.releaseStart - b.releaseStart || (a.storyOrder || 0) - (b.storyOrder || 0);
+      return (a.storyOrder || a.releaseStart) - (b.storyOrder || b.releaseStart) || a.releaseStart - b.releaseStart;
+    }
+
+    function getVisibleProductions() {
+      return app.data.productions.filter((item) => {
+        if (app.filters.continuity !== 'all' && item.continuityId !== app.filters.continuity) return false;
+        if (app.filters.format !== 'all' && item.format !== app.filters.format) return false;
+        if (app.filters.decade !== 'all' && String(decadeOf(item.releaseStart)) !== app.filters.decade) return false;
+        if (app.filters.classification !== 'all' && item.classification !== app.filters.classification) return false;
+        if (app.filters.beginner === 'friendly' && !item.beginnerFriendly) return false;
+        if (app.filters.beginner === 'context' && item.beginnerFriendly) return false;
+        if (app.filters.mainlineOnly && !item.mainline) return false;
+        return true;
+      });
+    }
+
+    function positionFor(item, itemsInLane) {
+      if (app.mode === 'release') {
+        const years = app.data.productions.map((entry) => entry.releaseStart);
+        const min = Math.min(...years);
+        const max = Math.max(...years);
+        return ((item.releaseStart - min) / Math.max(1, max - min)) * 88 + 6;
+      }
+      const sorted = [...itemsInLane].sort(compareByMode);
+      const index = sorted.findIndex((entry) => entry.id === item.id);
+      if (sorted.length <= 1) return 50;
+      return (index / (sorted.length - 1)) * 88 + 6;
+    }
+
+    function renderTicks() {
+      els.ticks.innerHTML = '';
+      els.axisTitle.textContent = app.mode === 'release' ? 'Release year' : 'Story position';
+      const ticks = app.mode === 'release'
+        ? [1979, 1985, 1995, 2005, 2015, 2024]
+        : ['Earlier', 'Middle', 'Later'];
+      ticks.forEach((tick, index) => {
+        const marker = document.createElement('div');
+        marker.className = 'tick';
+        marker.style.left = app.mode === 'release' ? `${((tick - 1979) / (2024 - 1979)) * 88 + 6}%` : `${[8, 50, 92][index]}%`;
+        marker.textContent = tick;
+        els.ticks.appendChild(marker);
+      });
+    }
+
+    function productionLabel(item) {
+      const range = item.releaseEnd && item.releaseEnd !== item.releaseStart ? `${item.releaseStart}-${item.releaseEnd}` : item.releaseStart;
+      return `${formatLabel[item.format]} / ${range}`;
+    }
+
+    function escapeMarkup(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function renderMap({ motion = 'none' } = {}) {
+      const previousRects = motion === 'reorder' ? captureProductionRects() : null;
+      const visible = getVisibleProductions();
+      const activePath = app.data.paths.find((path) => path.id === app.activePathId);
+      const pathIds = new Set(activePath?.productionIds || []);
+      const selected = app.data.productions.find((item) => item.id === app.selectedProductionId);
+      const relatedIds = new Set((selected?.relationshipIds || []).map((rel) => rel.productionId));
+      app.data.productions.forEach((item) => {
+        (item.relationshipIds || []).forEach((rel) => {
+          if (rel.productionId === app.selectedProductionId) relatedIds.add(item.id);
+        });
+      });
+
+      els.lanes.innerHTML = '';
+      renderTicks();
+
+      const visibleContinuityIds = new Set();
+      let productionMotionIndex = 0;
+      app.data.continuities.forEach((continuity, continuityIndex) => {
+        const laneItems = visible.filter((item) => item.continuityId === continuity.id).sort(compareByMode);
+        if (!laneItems.length) return;
+        visibleContinuityIds.add(continuity.id);
+        const lane = document.createElement('section');
+        lane.className = `lane${app.selectedContinuityId === continuity.id ? ' is-selected' : ''}`;
+        lane.style.setProperty('--lane-color', continuity.color);
+        lane.style.setProperty('--motion-index', continuityIndex);
+        const lastPositionByRow = [];
+        const rowAssignments = new Map();
+        laneItems.forEach((item) => {
+          const position = positionFor(item, laneItems);
+          let row = lastPositionByRow.findIndex((lastPosition) => position - lastPosition >= 19);
+          if (row === -1) {
+            row = lastPositionByRow.length;
+            lastPositionByRow.push(position);
+          } else {
+            lastPositionByRow[row] = position;
+          }
+          rowAssignments.set(item.id, row);
+        });
+        const rowCount = lastPositionByRow.length;
+        lane.style.setProperty('--lane-height', `${rowCount === 1 ? 104 : rowCount * 60}px`);
+        lane.setAttribute('role', 'listitem');
+        lane.dataset.continuityId = continuity.id;
+
+        const label = document.createElement('div');
+        label.className = 'lane-label';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = `${continuity.symbol} ${continuity.name}`;
+        button.addEventListener('click', () => setContinuity(continuity.id));
+        const summary = document.createElement('p');
+        summary.className = 'lane-summary';
+        summary.textContent = continuity.watchNote;
+        label.append(button, summary);
+
+        const track = document.createElement('div');
+        track.className = 'track';
+        laneItems.forEach((item, index) => {
+          const production = document.createElement('button');
+          production.type = 'button';
+          production.className = [
+            'production',
+            item.classification === 'supplemental' ? 'is-supplemental' : '',
+            ['compilation', 'retelling'].some((type) => (item.relationshipIds || []).some((rel) => rel.type === type)) ? 'is-compilation' : '',
+            app.selectedProductionId === item.id ? 'is-selected' : '',
+            app.activePathId && !pathIds.has(item.id) ? 'is-muted' : '',
+            pathIds.has(item.id) ? 'is-path' : '',
+            relatedIds.has(item.id) ? 'is-related' : '',
+            selected && item.id !== selected.id && !relatedIds.has(item.id) ? 'is-context-muted' : ''
+          ].filter(Boolean).join(' ');
+          production.style.left = `${positionFor(item, laneItems)}%`;
+          production.style.top = rowCount === 1 ? '50%' : `${14 + rowAssignments.get(item.id) * (72 / (rowCount - 1))}%`;
+          production.style.setProperty('--lane-color', continuity.color);
+          production.style.setProperty('--motion-index', productionMotionIndex++);
+          const pathIndex = activePath?.productionIds.indexOf(item.id) ?? -1;
+          if (pathIndex >= 0) production.style.setProperty('--path-index', pathIndex);
+          production.dataset.productionId = item.id;
+          production.setAttribute('aria-label', `${item.title}, ${continuity.name}, ${productionLabel(item)}`);
+          production.setAttribute('aria-controls', 'detailPanel');
+          production.setAttribute('aria-expanded', String(app.selectedProductionId === item.id));
+          production.innerHTML = `<span>${item.shortTitle || item.title}<small>${app.mode === 'release' ? item.releaseStart : item.inUniverseDate || 'Story position'}</small></span>`;
+          production.addEventListener('click', () => selectProduction(item.id));
+          production.addEventListener('keydown', (event) => handleProductionKeys(event, item, laneItems, visible));
+          track.appendChild(production);
+        });
+
+        lane.append(label, track);
+        els.lanes.appendChild(lane);
+      });
+
+      if (!visible.length) {
+        els.lanes.innerHTML = '<p class="empty-state">No productions match the current filter set. Reset the view or broaden the filters.</p>';
+      }
+
+      els.statVisible.textContent = visible.length;
+      els.statContinuities.textContent = visibleContinuityIds.size;
+      els.statMode.textContent = app.mode === 'release' ? 'Release' : 'Story';
+      if (motion === 'continuity') {
+        els.mapShell?.classList.remove('is-continuity-changing');
+        els.mapShell?.classList.add('is-continuity-revealing');
+      }
+      if (motion === 'path') els.mapShell?.classList.add('is-path-activating');
+      if (motion === 'selection') els.mapShell?.classList.add('is-targeting');
+
+      requestAnimationFrame(() => {
+        animateProductionReorder(previousRects);
+        if (motion === 'reorder') {
+          els.connectorLayer.innerHTML = '';
+          window.setTimeout(renderConnectors, 490);
+        } else {
+          renderConnectors();
+        }
+      });
+      window.setTimeout(() => {
+        els.mapShell?.classList.remove('is-reordering', 'is-continuity-revealing', 'is-path-activating', 'is-targeting');
+      }, motion === 'path' ? 1250 : 560);
+    }
+
+    function connectorPoint(element, shellBox) {
+      const box = element.getBoundingClientRect();
+      return {
+        x: box.left + box.width / 2 - shellBox.left - 176,
+        y: box.top + box.height / 2 - shellBox.top - 45
+      };
+    }
+
+    function appendConnector(from, to, className, index, color, uncertain = false) {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const distance = Math.max(34, Math.abs(to.x - from.x) * .32);
+      const direction = to.x >= from.x ? 1 : -1;
+      path.setAttribute('d', `M ${from.x} ${from.y} C ${from.x + distance * direction} ${from.y}, ${to.x - distance * direction} ${to.y}, ${to.x} ${to.y}`);
+      path.setAttribute('pathLength', '1');
+      path.classList.add(className);
+      if (className === 'route-connector') path.setAttribute('marker-end', 'url(#route-arrow)');
+      if (uncertain) path.classList.add('is-uncertain');
+      path.style.setProperty('--connector-color', color);
+      path.style.setProperty('--connector-delay', `${index * 90}ms`);
+      els.connectorLayer.appendChild(path);
+    }
+
+    function renderConnectors() {
+      const shell = document.querySelector('.map-shell');
+      const markers = [...document.querySelectorAll('.production')];
+      if (!shell || !markers.length || window.matchMedia('(max-width: 720px)').matches) {
+        els.connectorLayer.innerHTML = '';
+        return;
+      }
+      const shellBox = shell.getBoundingClientRect();
+      const selected = app.data.productions.find((item) => item.id === app.selectedProductionId);
+      els.connectorLayer.setAttribute('viewBox', `0 0 ${shellBox.width - 176} ${shellBox.height - 45}`);
+      els.connectorLayer.innerHTML = `
+        <defs>
+          <marker id="route-arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 6 3 L 0 6 Z" fill="#f0c52f"></path>
+          </marker>
+        </defs>`;
+
+      const activePath = app.data.paths.find((path) => path.id === app.activePathId);
+      const routeMarkers = (activePath?.productionIds || [])
+        .map((id) => document.querySelector(`[data-production-id="${id}"]`))
+        .filter(Boolean);
+      routeMarkers.slice(0, -1).forEach((fromElement, index) => {
+        const toElement = routeMarkers[index + 1];
+        const from = connectorPoint(fromElement, shellBox);
+        const to = connectorPoint(toElement, shellBox);
+        const deltaX = to.x - from.x;
+        const deltaY = to.y - from.y;
+        const distance = Math.hypot(deltaX, deltaY);
+        const offset = Math.min(58, distance * .22);
+        const unitX = distance ? deltaX / distance : 0;
+        const unitY = distance ? deltaY / distance : 0;
+        appendConnector(
+          { x: from.x + unitX * offset, y: from.y + unitY * offset },
+          { x: to.x - unitX * offset, y: to.y - unitY * offset },
+          'route-connector',
+          index,
+          '#f0c52f'
+        );
+      });
+
+      if (!selected) return;
+      const relationships = [...(selected.relationshipIds || [])];
+      app.data.productions.forEach((item) => {
+        (item.relationshipIds || []).forEach((rel) => {
+          if (rel.productionId !== selected.id || relationships.some((entry) => entry.productionId === item.id)) return;
+          relationships.push({ ...rel, productionId: item.id });
+        });
+      });
+      relationships.forEach((rel, index) => {
+        const from = document.querySelector(`[data-production-id="${selected.id}"]`);
+        const to = document.querySelector(`[data-production-id="${rel.productionId}"]`);
+        if (!from || !to) return;
+        appendConnector(
+          connectorPoint(from, shellBox),
+          connectorPoint(to, shellBox),
+          'relationship-connector',
+          index,
+          rel.confidence === 'disputed' ? '#cf3033' : '#7fc1d0',
+          rel.confidence !== 'confirmed'
+        );
+      });
+    }
+
+    function handleProductionKeys(event, item, laneItems, visible) {
+      const keyMap = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+      if (!(event.key in keyMap)) return;
+      event.preventDefault();
+      const pool = event.key === 'ArrowUp' || event.key === 'ArrowDown' ? visible.sort(compareByMode) : laneItems.sort(compareByMode);
+      const currentIndex = pool.findIndex((entry) => entry.id === item.id);
+      const next = pool[(currentIndex + keyMap[event.key] + pool.length) % pool.length];
+      const nextButton = document.querySelector(`[data-production-id="${next.id}"]`);
+      nextButton?.focus();
+    }
+
+    function selectProduction(id) {
+      app.selectedProductionId = id;
+      const item = app.data.productions.find((entry) => entry.id === id);
+      const continuity = app.data.continuities.find((entry) => entry.id === item.continuityId);
+      app.selectedContinuityId = continuity.id;
+      renderMap({ motion: 'selection' });
+      renderDetail(item, continuity);
+    }
+
+    function openDetailDrawer() {
+      els.detail.removeAttribute('inert');
+      els.detail.setAttribute('aria-hidden', 'false');
+      els.detail.classList.add('is-open');
+      document.body.classList.add('detail-drawer-open');
+    }
+
+    function closeDetailDrawer({ restoreFocus = true, rerender = true } = {}) {
+      const closingProductionId = app.selectedProductionId;
+      app.detailSwapToken += 1;
+      app.selectedProductionId = null;
+      els.detail.classList.remove('is-open');
+      els.detailContent.classList.remove('is-swapping', 'is-revealing');
+      els.detail.setAttribute('aria-hidden', 'true');
+      els.detail.setAttribute('inert', '');
+      document.body.classList.remove('detail-drawer-open');
+      if (rerender) renderMap();
+      if (restoreFocus && closingProductionId) {
+        requestAnimationFrame(() => {
+          document.querySelector(`[data-production-id="${closingProductionId}"]`)?.focus();
+        });
+      }
+    }
+
+    function renderDetail(item, continuity) {
+      const swapToken = ++app.detailSwapToken;
+      const release = item.releaseEnd && item.releaseEnd !== item.releaseStart ? `${item.releaseStart}-${item.releaseEnd}` : item.releaseStart;
+      const dependency = item.standalone ? 'Can be watched independently' : 'Prior viewing recommended';
+      const beginner = item.beginnerFriendly ? 'Beginner-friendly' : 'Context helpful';
+      const uncertainty = item.uncertainty ? `<span class="tag">${item.uncertainty}</span>` : '';
+      const cover = item.coverImage;
+      const coverNote = cover?.note ? `<span class="cover-note">${escapeMarkup(cover.note)}</span>` : '';
+      const relations = (item.relationshipIds || []).map((rel) => {
+        const target = app.data.productions.find((entry) => entry.id === rel.productionId);
+        if (!target) return '';
+        return `<li><button type="button" data-related-id="${target.id}"><strong>${relationLabel[rel.type]}</strong>: ${target.shortTitle || target.title}${rel.confidence ? ` / ${rel.confidence}` : ''}${rel.note ? `<br>${rel.note}` : ''}</button></li>`;
+      }).join('');
+      const updateContent = () => {
+        if (swapToken !== app.detailSwapToken) return;
+        els.detailContent.innerHTML = `
+          <div class="detail-overview">
+            <figure class="production-thumbnail">
+              <img src="${escapeMarkup(cover.path)}" alt="Cover artwork for ${escapeMarkup(item.title)}" width="230" height="345" />
+              <figcaption>
+                <span>${escapeMarkup(continuity.name)} / ${escapeMarkup(formatLabel[item.format])}</span>
+                ${coverNote}
+                <a class="cover-source" href="${escapeMarkup(cover.sourceUrl)}" target="_blank" rel="noreferrer">Artwork source: ${escapeMarkup(cover.sourceName)}</a>
+              </figcaption>
+            </figure>
+            <div class="detail-heading">
+              <p class="mini-label">Selected Production / ${continuity.symbol}</p>
+              <h2 id="detailTitle">${item.title}</h2>
+              <div class="detail-meta">
+                <span class="tag">${continuity.name}</span>
+                <span class="tag">${formatLabel[item.format]}</span>
+                <span class="tag">Released ${release}</span>
+                <span class="tag">${item.inUniverseDate || 'Story placement uncertain'}</span>
+                <span class="tag">${item.mainline ? 'Mainline' : 'Supplemental'}</span>
+                <span class="tag">${beginner}</span>
+                <span class="tag">${dependency}</span>
+                ${uncertainty}
+              </div>
+            </div>
+          </div>
+          <div class="detail-drawer-grid">
+            <p class="detail-description">${item.description}</p>
+            <div class="relationship-scan">
+              <h3>Relationship Scan</h3>
+              ${relations ? `<ul class="relation-list">${relations}</ul>` : '<p>No required nearby productions in this MVP dataset.</p>'}
+            </div>
+          </div>
+        `;
+        els.detailContent.dataset.productionId = item.id;
+        els.detailContent.querySelectorAll('[data-related-id]').forEach((button) => {
+          button.addEventListener('click', () => selectProduction(button.dataset.relatedId));
+        });
+        openDetailDrawer();
+        els.detailContent.classList.add('is-revealing');
+        requestAnimationFrame(() => els.detailContent.classList.remove('is-swapping'));
+        window.setTimeout(() => els.detailContent.classList.remove('is-revealing'), 560);
+      };
+
+      const isSwapping = motionAllowed()
+        && els.detail.classList.contains('is-open')
+        && els.detailContent.dataset.productionId
+        && els.detailContent.dataset.productionId !== item.id;
+      if (isSwapping) {
+        els.detailContent.classList.add('is-swapping');
+        window.setTimeout(updateContent, 140);
+      } else {
+        updateContent();
+      }
+    }
+
+    function populateControls() {
+      els.continuityFilter.innerHTML = '<option value="all">All continuities</option>' + app.data.continuities.map((item) => `<option value="${item.id}">${item.name}</option>`).join('');
+      const decades = [...new Set(app.data.productions.map((item) => decadeOf(item.releaseStart)))].sort();
+      els.decadeFilter.innerHTML = '<option value="all">All decades</option>' + decades.map((decade) => `<option value="${decade}">${decade}s</option>`).join('');
+      els.methodNotes.innerHTML = app.data.methodologyNotes.map((note) => `<li>${note}</li>`).join('');
+      els.sourceList.innerHTML = app.data.sources.map((source) => `<li><a href="${source.url}" target="_blank" rel="noreferrer">${source.name}</a></li>`).join('');
+      els.pathGrid.innerHTML = app.data.paths.map((path) => `
+        <button class="path-button" type="button" data-path-id="${path.id}">
+          <strong>${path.label}</strong>
+          <span>${path.description}</span>
+          <span>${path.productionIds.length} productions highlighted</span>
+        </button>
+      `).join('');
+    }
+
+    function wireControls() {
+      document.querySelectorAll('[data-mode]').forEach((button) => {
+        button.addEventListener('click', () => setMode(button.dataset.mode));
+      });
+      [
+        ['continuity', els.continuityFilter],
+        ['format', els.formatFilter],
+        ['decade', els.decadeFilter],
+        ['classification', els.classificationFilter],
+        ['beginner', els.beginnerFilter]
+      ].forEach(([key, element]) => {
+        element.addEventListener('change', () => {
+          if (key === 'continuity') {
+            setContinuity(element.value);
+            return;
+          }
+          app.filters[key] = element.value;
+          renderMap();
+        });
+      });
+      els.mainlineToggle.addEventListener('change', () => {
+        app.filters.mainlineOnly = els.mainlineToggle.checked;
+        renderMap();
+      });
+      els.resetButton.addEventListener('click', () => {
+        app.transitionToken += 1;
+        app.mode = 'story';
+        app.selectedProductionId = null;
+        app.selectedContinuityId = 'all';
+        app.activePathId = null;
+        app.filters = { continuity: 'all', format: 'all', decade: 'all', classification: 'all', beginner: 'all', mainlineOnly: false };
+        document.querySelectorAll('[data-mode]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.mode === 'story')));
+        els.continuityFilter.value = 'all';
+        els.formatFilter.value = 'all';
+        els.decadeFilter.value = 'all';
+        els.classificationFilter.value = 'all';
+        els.beginnerFilter.value = 'all';
+        els.mainlineToggle.checked = false;
+        document.querySelectorAll('.path-button').forEach((button) => button.classList.remove('is-active'));
+        closeDetailDrawer({ restoreFocus: false, rerender: false });
+        renderMap({ motion: 'continuity' });
+      });
+      els.pathGrid.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-path-id]');
+        if (!button) return;
+        app.activePathId = app.activePathId === button.dataset.pathId ? null : button.dataset.pathId;
+        if (app.activePathId) {
+          app.filters.continuity = 'all';
+          app.filters.format = 'all';
+          app.filters.decade = 'all';
+          app.filters.classification = 'all';
+          app.filters.beginner = 'all';
+          app.filters.mainlineOnly = false;
+          app.selectedContinuityId = 'all';
+          els.continuityFilter.value = 'all';
+          els.formatFilter.value = 'all';
+          els.decadeFilter.value = 'all';
+          els.classificationFilter.value = 'all';
+          els.beginnerFilter.value = 'all';
+          els.mainlineToggle.checked = false;
+        }
+        document.querySelectorAll('.path-button').forEach((pathButton) => pathButton.classList.toggle('is-active', pathButton.dataset.pathId === app.activePathId));
+        renderMap({ motion: app.activePathId ? 'path' : 'none' });
+        document.querySelector('.map-shell')?.scrollIntoView({ behavior: motionAllowed() ? 'smooth' : 'auto', block: 'start' });
+      });
+      els.detailClose.addEventListener('click', () => closeDetailDrawer());
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && els.detail.classList.contains('is-open')) {
+          event.preventDefault();
+          closeDetailDrawer();
+        }
+      });
+      window.addEventListener('resize', renderConnectors);
+    }
+
+    async function init() {
+      try {
+        const response = await fetch('assets/data/gundam-universe-map.json');
+        app.data = await response.json();
+        populateControls();
+        wireControls();
+        if (motionAllowed()) els.mapShell?.classList.add('is-awaiting-deploy');
+        renderMap();
+        armInitialMapReveal();
+      } catch (error) {
+        els.lanes.innerHTML = '<p class="empty-state">The Gundam dataset could not be loaded. Check the local data file path.</p>';
+        console.error(error);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

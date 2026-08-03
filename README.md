@@ -23,6 +23,22 @@ Current positioning:
 - SEO-friendly standalone pages that can grow into a searchable archive
 - Original UI and data storytelling, avoiding direct reuse of copyrighted panels or character art wherever possible
 
+## Project URL policy
+
+Each visualization has two intentionally different public surfaces:
+
+| Project | Canonical landing page | Interactive app page |
+| --- | --- | --- |
+| Dragon Ball Sociogram | `/projects/dragon-ball-sociogram.html` | `/dragonball-character-sociogram/` |
+| Manga and Anime Timeline | `/projects/manga-anime-timeline.html` | `/manga-timeline.html` |
+| Pokedex Type Treemap | `/projects/pokedex-type-treemap.html` | `/pokemon_territory_map.html` |
+| Nintendo Game Universe Map | `/projects/nintendo-game-universe-map.html` | `/nintendo-game-universe-map.html` |
+| Gundam Universe Map | `/projects/gundam-universe-map.html` | `/gundam-universe-map.html` |
+
+The `/projects/` URL is the canonical SEO and sharing URL and is the only project URL included in the sitemap. The interactive URL remains available for direct use and iframe previews, but its canonical and Open Graph URL point to the matching landing page. Interactive-page JSON-LD describes the app at its real app URL and connects it to the landing page with `mainEntityOfPage`.
+
+Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize both surfaces to the canonical landing path while retaining the `landing`, `interactive`, and `preview` surface labels.
+
 ## Current site structure
 
 ```text

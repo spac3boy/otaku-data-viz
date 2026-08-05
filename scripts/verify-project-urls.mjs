@@ -96,6 +96,62 @@ for (const project of projects) {
     `${project.name}: preview iframe pageviews are not disabled`
   );
 
+  if (project.name === 'Dragon Ball Sociogram') {
+    const nodesMatch = appHtml.match(/^const nodes=(\[.*\]);$/m);
+    const linksMatch = appHtml.match(/^const links=(\[.*\]);$/m);
+    check(nodesMatch && linksMatch, `${project.name}: embedded network data arrays are missing`);
+
+    if (nodesMatch && linksMatch) {
+      try {
+        const nodes = JSON.parse(nodesMatch[1]);
+        const links = JSON.parse(linksMatch[1]);
+        const degree = new Map(nodes.map((node) => [node.id, 0]));
+        const relationshipTypeCounts = new Map();
+        const seriesCounts = new Map();
+
+        links.forEach((link) => {
+          degree.set(link.source, (degree.get(link.source) || 0) + 1);
+          degree.set(link.target, (degree.get(link.target) || 0) + 1);
+          relationshipTypeCounts.set(link.type, (relationshipTypeCounts.get(link.type) || 0) + 1);
+        });
+        nodes.forEach((node) => {
+          (node.series || []).forEach((series) => {
+            seriesCounts.set(series, (seriesCounts.get(series) || 0) + 1);
+          });
+        });
+
+        const expectedNetworkStats = new Map([
+          ['node-count', nodes.length],
+          ['link-count', links.length],
+          ['type-count', relationshipTypeCounts.size],
+          ['series-count', seriesCounts.size],
+          ['goku-degree', degree.get('goku') || 0],
+          ['vegeta-degree', degree.get('vegeta') || 0],
+          ['frieza-degree', degree.get('frieza') || 0],
+          ['ally-count', relationshipTypeCounts.get('ally') || 0],
+          ['enemy-count', relationshipTypeCounts.get('enemy') || 0],
+          ['family-count', relationshipTypeCounts.get('family') || 0],
+          ['mentor-count', relationshipTypeCounts.get('mentor') || 0],
+          ['db-count', seriesCounts.get('db') || 0],
+          ['dbz-count', seriesCounts.get('dbz') || 0],
+          ['dbs-count', seriesCounts.get('dbs') || 0]
+        ]);
+
+        expectedNetworkStats.forEach((expectedValue, statName) => {
+          const pattern = new RegExp(`data-network-stat="${statName}"[^>]*>([\\d,]+)<`, 'g');
+          const displayedValues = [...landingHtml.matchAll(pattern)]
+            .map((match) => Number(match[1].replace(/,/g, '')));
+          check(
+            displayedValues.length > 0 && displayedValues.every((value) => value === expectedValue),
+            `${project.name}: displayed ${statName} does not match embedded network data (${expectedValue})`
+          );
+        });
+      } catch (error) {
+        failures.push(`${project.name}: embedded network data is not valid JSON (${error.message})`);
+      }
+    }
+  }
+
   const linkMatches = [...landingHtml.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*data-event="open_interactive_visualization"/g)]
     .map((match) => new URL(match[1], `${origin}${project.landing}`).pathname);
   check(linkMatches.length > 0, `${project.name}: no Open Interactive Visualization links found`);

@@ -208,6 +208,28 @@
       font-weight: 950;
       text-transform: uppercase;
     }
+    .era-list {
+      display: grid;
+      margin-top: 24px;
+      border-top: 1.5px solid var(--ink);
+    }
+    .era-list section {
+      padding: 20px 0;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .era-list h3 {
+      margin: 4px 0 10px;
+    }
+    .era-range {
+      margin: 0;
+      font-size: .72rem;
+      font-weight: 950;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .era-list section > p:last-child {
+      margin-bottom: 0;
+    }
     .sticky-aside {
       grid-area: aside;
       position: sticky;
@@ -420,6 +442,7 @@
         <strong>On this page</strong>
         <nav>
           <a href="#what-this-shows">What this shows</a>
+          <a href="#history-by-era">History by era</a>
           <a href="#top-insights">Top insights</a>
           <a href="#how-to-use">How to use it</a>
           <a href="#methodology">Methodology</a>
@@ -451,6 +474,43 @@
               <h2>Why A Timeline?</h2>
               <p>Manga and anime history is full of overlapping formats: newspaper strips, magazines, serialized manga, theatrical animation, TV anime, OVAs, films, streaming hits, adaptations, and long-running franchises.</p>
               <p>A timeline helps those layers sit in the same visual space. Instead of asking only what came first or what is most popular, it lets fans compare eras, genres, release patterns, and adaptation relationships.</p>
+            </article>
+
+            <article class="article-panel" id="history-by-era">
+              <h2>Anime And Manga History By Era</h2>
+              <p>This project divides more than a century of selected titles into broad editorial eras. The boundaries are navigation aids rather than an official periodization: formats, genres, creators, and audiences overlap across every transition.</p>
+              <div class="era-list">
+                <section>
+                  <p class="era-range">1902–1945 / Print foundations</p>
+                  <h3>Newspaper Manga And Early Character Culture</h3>
+                  <p>Early entries such as <em>Tagosaku and Mokube's Sightseeing in Tokyo</em>, <em>The Adventures of Shō-chan</em>, and <em>Norakuro</em> trace the growth of recurring characters, newspaper storytelling, children's publishing, and early franchise-like popularity before the postwar manga boom.</p>
+                </section>
+                <section>
+                  <p class="era-range">1945–1963 / Postwar foundations</p>
+                  <h3>Modern Manga Language Takes Shape</h3>
+                  <p><em>Sazae-san</em>, <em>New Treasure Island</em>, and the manga version of <em>Astro Boy</em> mark different parts of the postwar expansion: everyday newspaper comedy, cinematic page composition, long-form characters, and stories capable of moving between print and animation.</p>
+                </section>
+                <section>
+                  <p class="era-range">1963–1979 / Television and magazine expansion</p>
+                  <h3>Anime Becomes A Recurring Broadcast Form</h3>
+                  <p>The 1963 <em>Astro Boy</em> television series opens the timeline's TV-anime era. Titles including <em>Speed Racer</em>, <em>Ashita no Joe</em>, <em>Doraemon</em>, and <em>The Rose of Versailles</em> show television growth happening alongside increasingly distinct manga demographics and genres.</p>
+                </section>
+                <section>
+                  <p class="era-range">1979–1995 / Franchises, auteurs, and the OVA era</p>
+                  <h3>More Formats Create More Kinds Of Landmark</h3>
+                  <p><em>Mobile Suit Gundam</em>, <em>Dragon Ball</em>, <em>Akira</em>, and <em>Sailor Moon</em> demonstrate how this period supports several histories at once: durable media franchises, influential creators, theatrical prestige, home-video experimentation, and genre-defining magazine hits.</p>
+                </section>
+                <section>
+                  <p class="era-range">1995–2010 / Global gateways</p>
+                  <h3>International Fandom Finds Multiple Entry Points</h3>
+                  <p><em>Pokémon</em>, <em>One Piece</em>, <em>Naruto</em>, <em>Spirited Away</em>, and <em>Death Note</em> represent different routes into worldwide fandom. Television, theatrical releases, translated manga, home video, and online fan culture made anime and manga history increasingly global and interconnected.</p>
+                </section>
+                <section>
+                  <p class="era-range">2010–present / Streaming and platform era</p>
+                  <h3>Discovery Accelerates Across Borders</h3>
+                  <p><em>Attack on Titan</em>, <em>Demon Slayer</em>, <em>Jujutsu Kaisen</em>, <em>Chainsaw Man</em>, <em>Spy × Family</em>, and <em>Frieren</em> sit in an era shaped by digital manga platforms, streaming distribution, simultaneous online conversation, and faster movement between domestic success and global visibility.</p>
+                </section>
+              </div>
             </article>
 
             <article class="article-panel" id="top-insights">

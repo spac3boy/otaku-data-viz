@@ -37,7 +37,7 @@ Each visualization has two intentionally different public surfaces:
 
 The `/projects/` URL is the canonical SEO and sharing URL and is the only project URL included in the sitemap. The interactive URL remains available for direct use and iframe previews, but its canonical and Open Graph URL point to the matching landing page. Interactive-page JSON-LD describes the app at its real app URL and connects it to the landing page with `mainEntityOfPage`.
 
-Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize both surfaces to the canonical landing path while retaining the `landing`, `interactive`, and `preview` surface labels.
+Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
 ## Current site structure
 

@@ -90,6 +90,11 @@ for (const project of projects) {
     appHtml.includes(`"mainEntityOfPage": "${canonical}"`),
     `${project.name}: interactive JSON-LD does not point to its landing page`
   );
+  check(
+    appHtml.includes("const isAnalyticsPreview = new URLSearchParams(window.location.search).get('preview') === '1';")
+      && appHtml.includes("gtag('config', 'G-653DY2M8K5', { send_page_view: !isAnalyticsPreview });"),
+    `${project.name}: preview iframe pageviews are not disabled`
+  );
 
   const linkMatches = [...landingHtml.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*data-event="open_interactive_visualization"/g)]
     .map((match) => new URL(match[1], `${origin}${project.landing}`).pathname);
@@ -136,6 +141,13 @@ const filesToMirror = [
   'assets/js/analytics-events.js',
   ...projects.flatMap((project) => [project.landing.replace(/^\//, ''), siteFile(project.app).slice(root.length + 1)])
 ];
+
+const analyticsEvents = await readFile(path.join(root, 'assets/js/analytics-events.js'), 'utf8');
+check(
+  analyticsEvents.includes('if (isPreview) return;'),
+  'Shared analytics tracker does not suppress custom events inside preview iframes'
+);
+
 for (const relativePath of filesToMirror) {
   const [source, published] = await Promise.all([
     readFile(path.join(root, relativePath), 'utf8'),

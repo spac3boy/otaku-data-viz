@@ -196,6 +196,19 @@ const gscQuery = async (token, payload) => {
 
 const metricValue = (row, index) => Number(row?.metricValues?.[index]?.value || 0);
 
+const excludePreviewPageFilter = {
+  notExpression: {
+    filter: {
+      fieldName: 'pageLocation',
+      stringFilter: {
+        matchType: 'CONTAINS',
+        value: 'preview=1',
+        caseSensitive: false
+      }
+    }
+  }
+};
+
 const projectPathGroups = new Map([
   ['/projects/dragon-ball-sociogram.html', '/projects/dragon-ball-sociogram.html'],
   ['/dragonball-character-sociogram/', '/projects/dragon-ball-sociogram.html'],
@@ -402,6 +415,7 @@ const weeklyDetail = async (token, range) => {
 const gaTotals = async (token, range) => {
   const report = await gaRunReport(token, {
     dateRanges: [range],
+    dimensionFilter: excludePreviewPageFilter,
     metrics: [
       { name: 'activeUsers' },
       { name: 'sessions' },
@@ -423,6 +437,7 @@ const gaTopPages = async (token, range) => {
   const report = await gaRunReport(token, {
     dateRanges: [range],
     dimensions: [{ name: 'pagePath' }],
+    dimensionFilter: excludePreviewPageFilter,
     metrics: [
       { name: 'screenPageViews' },
       { name: 'activeUsers' }

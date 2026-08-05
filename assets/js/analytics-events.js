@@ -66,13 +66,15 @@
   const currentProject = getProjectDefinition(window.location.pathname);
   const currentPageType = getProjectPageType(window.location.pathname, currentProject);
   const isPreview = new URLSearchParams(window.location.search).get('preview') === '1';
+  if (isPreview) return;
+
   const projectAnalyticsParams = currentProject ? {
     content_group: `project:${currentProject.id}`,
     project_id: currentProject.id,
     project_name: currentProject.name,
     project_category: currentProject.category,
     project_page_type: currentPageType,
-    project_surface: isPreview ? 'preview' : (window.self !== window.top ? 'embed' : currentPageType),
+    project_surface: window.self !== window.top ? 'embed' : currentPageType,
     canonical_project_path: currentProject.landingPath
   } : {};
 

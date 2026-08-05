@@ -117,6 +117,15 @@ for (const project of projects) {
     relatedLinks.every((pathname) => pathname === '/index.html' || projects.some((item) => item.landing === pathname)),
     `${project.name}: a related-project card bypasses a canonical landing page`
   );
+  const expectedRelatedLinks = projects
+    .filter((item) => item.landing !== project.landing)
+    .map((item) => item.landing);
+  const uniqueRelatedLinks = new Set(relatedLinks);
+  check(
+    uniqueRelatedLinks.size === expectedRelatedLinks.length
+      && expectedRelatedLinks.every((pathname) => uniqueRelatedLinks.has(pathname)),
+    `${project.name}: related-project cards must link to every other canonical project exactly once`
+  );
 }
 
 const sitemap = await readFile(path.join(root, 'docs/sitemap.xml'), 'utf8');

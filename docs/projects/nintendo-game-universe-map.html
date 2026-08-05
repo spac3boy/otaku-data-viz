@@ -216,6 +216,21 @@
       font-weight: 950;
       text-transform: uppercase;
     }
+    .finding-list {
+      display: grid;
+      margin-top: 24px;
+      border-top: 1.5px solid var(--ink);
+    }
+    .finding-list section {
+      padding: 20px 0;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .finding-list h3 {
+      margin: 0 0 10px;
+    }
+    .finding-list section > p:last-child {
+      margin-bottom: 0;
+    }
     .sticky-aside {
       grid-area: aside;
       position: sticky;
@@ -469,10 +484,10 @@
                 <li><strong>Best way to use it:</strong> switch among Games, Franchises, and Consoles, then select a bubble to inspect cover art, release details, genre, role, and verified sales where available.</li>
               </ul>
               <div class="stat-strip" aria-label="Project summary">
-                <div><strong>406</strong><span>Curated releases</span></div>
-                <div><strong>1979</strong><span>Catalog begins</span></div>
-                <div><strong>3</strong><span>Map views</span></div>
-                <div><strong>Sales</strong><span>Bubble sizing</span></div>
+                <div><strong data-nintendo-stat="release-count">406</strong><span>Curated releases</span></div>
+                <div><strong data-nintendo-stat="franchise-count">100</strong><span>Franchises</span></div>
+                <div><strong data-nintendo-stat="era-count">13</strong><span>Hardware eras</span></div>
+                <div><strong data-nintendo-stat="year-range">1979–2026</strong><span>Timeline span</span></div>
               </div>
             </article>
 
@@ -483,10 +498,26 @@
             </article>
 
             <article class="article-panel" id="top-insights">
-              <h2>What This Visualization Reveals</h2>
-              <p>The full timeline makes Nintendo’s shifts in strategy visible. Long-running pillars such as Mario, Zelda, Pokémon, Kirby, and Fire Emblem sit alongside smaller experiments that helped define a particular console or moment.</p>
-              <p>The franchise view focuses on series with at least three catalog entries, so it behaves differently from the title-by-title Games view. The Consoles view reveals how output clusters around hardware generations and where portable and home-console histories overlap.</p>
-              <p>Sales-based sizing separates commercial scale from catalog presence. A franchise can occupy many years without every release becoming a giant bubble, while a single breakout title can immediately reshape the visual field.</p>
+              <h2>What The Nintendo Catalog Data Reveals</h2>
+              <p>The curated map contains <strong data-nintendo-stat="release-count">406</strong> releases across <strong data-nintendo-stat="franchise-count">100</strong> franchise labels and <strong data-nintendo-stat="era-count">13</strong> hardware eras from <strong data-nintendo-stat="first-year">1979</strong> through <strong data-nintendo-stat="last-year">2026</strong>. These findings describe this visualization’s editorial catalog, not Nintendo’s complete worldwide release history.</p>
+              <div class="finding-list">
+                <section>
+                  <h3>Switch Has The Largest Hardware-Era Group</h3>
+                  <p>The Switch era contains <strong data-nintendo-stat="switch-count">75</strong> curated releases, more than Nintendo 3DS at <strong data-nintendo-stat="three-ds-count">36</strong> and Nintendo DS at <strong data-nintendo-stat="ds-count">35</strong>. That concentration reflects both the length and breadth of the Switch period and the catalog’s emphasis on Nintendo-developed, published, and platform-defining games.</p>
+                </section>
+                <section>
+                  <h3>Pokémon Leads The Represented Franchises</h3>
+                  <p>Pokémon appears on <strong data-nintendo-stat="pokemon-count">35</strong> catalog records, followed by Mario with <strong data-nintendo-stat="mario-count">32</strong>, Zelda with <strong data-nintendo-stat="zelda-count">28</strong>, and Kirby with <strong data-nintendo-stat="kirby-count">25</strong>. Paired versions may share one record, while remakes and materially distinct editions can appear separately.</p>
+                </section>
+                <section>
+                  <h3>Platform Games Form The Largest Genre</h3>
+                  <p>Platform games account for <strong data-nintendo-stat="platform-count">73</strong> releases in the catalog. RPG follows with <strong data-nintendo-stat="rpg-count">58</strong>, while Adventure contributes <strong data-nintendo-stat="adventure-count">40</strong>. These broad editorial tags make very different eras comparable without treating genre boundaries as absolute.</p>
+                </section>
+                <section>
+                  <h3>The 2000s Are The Densest Catalog Decade</h3>
+                  <p>The map includes <strong data-nintendo-stat="decade-2000-count">122</strong> releases from the 2000s, compared with <strong data-nintendo-stat="decade-2010-count">99</strong> from the 2010s and <strong data-nintendo-stat="decade-1990-count">73</strong> from the 1990s. This measures representation inside the curated dataset, not Nintendo’s total output during each decade.</p>
+                </section>
+              </div>
               <div class="cta-panel">
                 <p class="mini-label">Mid-page jump</p>
                 <h2>Ready To Explore Nintendo History?</h2>
@@ -518,10 +549,10 @@
 
             <article class="article-panel" id="methodology">
               <h2>Methodology And Data Note</h2>
-              <p>The embedded catalog contains 406 Nintendo-developed, Nintendo-published, and selected hardware-defining releases from 1979 through July 2026. Paired versions such as Pokémon releases may share one bubble, while remakes and materially distinct editions appear separately.</p>
+              <p>The embedded catalog contains 406 Nintendo-developed, Nintendo-published, and selected hardware-defining releases from 1979 through 2026. Paired versions such as Pokémon releases may share one bubble, while remakes and materially distinct editions appear separately. The counts shown on this landing page are calculated directly from that embedded catalog.</p>
               <p>This is a curated history of Nintendo’s own catalog and platform identity, not a database of every third-party title released for Nintendo hardware. The inclusion rules prioritize Nintendo’s development and publishing role, recurring properties, historical importance, and representation across hardware eras.</p>
               <p>Reported sales are used only when a defensible figure is available, with Nintendo investor materials preferred for modern first-party titles. Cover art is loaded on demand from matching Wikipedia article data and may be unavailable when a stable image cannot be matched. Dates, roles, franchise assignments, and sales figures remain open to correction as sources improve.</p>
-              <p><strong>Last updated:</strong> July 29, 2026. Bubble size indicates reported sales, not critical quality or cultural importance.</p>
+              <p><strong>Last updated:</strong> August 5, 2026. Bubble size indicates reported sales, not critical quality or cultural importance.</p>
               <p class="disclaimer-box">This is an unofficial fan-made data visualization. Otaku Data Viz is not affiliated with or endorsed by Nintendo. All game names, artwork, trademarks, and related references belong to their respective owners and are used for commentary, analysis, and fan discussion.</p>
             </article>
 

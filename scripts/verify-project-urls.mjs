@@ -1,6 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { createContext, runInContext } from 'node:vm';
 
 const root = process.cwd();
 const origin = 'https://otakudataviz.com';
@@ -210,6 +211,74 @@ for (const project of projects) {
       });
     } catch (error) {
       failures.push(`${project.name}: published Pokémon dataset is not valid JSON (${error.message})`);
+    }
+  }
+
+  if (project.name === 'Nintendo Game Universe Map') {
+    const catalogStart = appHtml.indexOf('    const games = [');
+    const catalogEnd = appHtml.indexOf('    const genreColors = {', catalogStart);
+    check(catalogStart >= 0 && catalogEnd > catalogStart, `${project.name}: embedded catalog block is missing`);
+
+    if (catalogStart >= 0 && catalogEnd > catalogStart) {
+      try {
+        const context = createContext(Object.create(null));
+        const catalogCode = `${appHtml.slice(catalogStart, catalogEnd)}\nglobalThis.__nintendoGames = games;`;
+        runInContext(catalogCode, context, { timeout: 1000 });
+        const games = context.__nintendoGames;
+        check(Array.isArray(games) && games.length > 0, `${project.name}: embedded catalog is empty`);
+
+        if (Array.isArray(games) && games.length > 0) {
+          const countBy = (field) => games.reduce((counts, game) => {
+            counts.set(game[field], (counts.get(game[field]) || 0) + 1);
+            return counts;
+          }, new Map());
+          const eraCounts = countBy('era');
+          const franchiseCounts = countBy('franchise');
+          const genreCounts = countBy('genre');
+          const decadeCounts = games.reduce((counts, game) => {
+            const decade = Math.floor(Number(game.year) / 10) * 10;
+            counts.set(decade, (counts.get(decade) || 0) + 1);
+            return counts;
+          }, new Map());
+          const years = games.map((game) => Number(game.year));
+          const firstYear = Math.min(...years);
+          const lastYear = Math.max(...years);
+
+          const expectedNintendoStats = new Map([
+            ['release-count', games.length],
+            ['franchise-count', franchiseCounts.size],
+            ['era-count', eraCounts.size],
+            ['year-range', `${firstYear}–${lastYear}`],
+            ['first-year', firstYear],
+            ['last-year', lastYear],
+            ['switch-count', eraCounts.get('Switch') || 0],
+            ['three-ds-count', eraCounts.get('Nintendo 3DS') || 0],
+            ['ds-count', eraCounts.get('Nintendo DS') || 0],
+            ['pokemon-count', franchiseCounts.get('Pokémon') || 0],
+            ['mario-count', franchiseCounts.get('Mario') || 0],
+            ['zelda-count', franchiseCounts.get('Zelda') || 0],
+            ['kirby-count', franchiseCounts.get('Kirby') || 0],
+            ['platform-count', genreCounts.get('Platform') || 0],
+            ['rpg-count', genreCounts.get('RPG') || 0],
+            ['adventure-count', genreCounts.get('Adventure') || 0],
+            ['decade-2000-count', decadeCounts.get(2000) || 0],
+            ['decade-2010-count', decadeCounts.get(2010) || 0],
+            ['decade-1990-count', decadeCounts.get(1990) || 0]
+          ]);
+
+          expectedNintendoStats.forEach((expectedValue, statName) => {
+            const pattern = new RegExp(`data-nintendo-stat="${statName}"[^>]*>([^<]+)<`, 'g');
+            const displayedValues = [...landingHtml.matchAll(pattern)].map((match) => match[1].trim());
+            check(
+              displayedValues.length > 0
+                && displayedValues.every((value) => value === String(expectedValue)),
+              `${project.name}: displayed ${statName} does not match the embedded catalog (${expectedValue})`
+            );
+          });
+        }
+      } catch (error) {
+        failures.push(`${project.name}: embedded catalog could not be evaluated (${error.message})`);
+      }
     }
   }
 

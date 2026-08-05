@@ -152,6 +152,67 @@ for (const project of projects) {
     }
   }
 
+  if (project.name === 'Pokedex Type Treemap') {
+    try {
+      const dataPath = path.join(root, 'docs/assets/data/pokemon-treemap-data.json');
+      const dataset = JSON.parse(await readFile(dataPath, 'utf8'));
+      const pokemon = Array.isArray(dataset.pokemon) ? dataset.pokemon : [];
+      check(pokemon.length > 0, `${project.name}: published Pokémon dataset is empty`);
+      check(
+        Number(dataset.speciesCount) === pokemon.length,
+        `${project.name}: dataset speciesCount does not match its Pokémon records`
+      );
+
+      const primaryTypeCounts = new Map();
+      const generationCounts = new Map();
+      const familyCounts = new Map();
+      let dualTypeCount = 0;
+      let singleTypeCount = 0;
+
+      pokemon.forEach((entry) => {
+        primaryTypeCounts.set(entry.primaryType, (primaryTypeCounts.get(entry.primaryType) || 0) + 1);
+        generationCounts.set(String(entry.generation), (generationCounts.get(String(entry.generation)) || 0) + 1);
+        familyCounts.set(
+          entry.evolutionFamilyName,
+          (familyCounts.get(entry.evolutionFamilyName) || 0) + 1
+        );
+        if (Array.isArray(entry.types) && entry.types.length > 1) dualTypeCount += 1;
+        if (Array.isArray(entry.types) && entry.types.length === 1) singleTypeCount += 1;
+      });
+
+      const expectedPokedexStats = new Map([
+        ['species-count', pokemon.length],
+        ['primary-type-count', primaryTypeCounts.size],
+        ['generation-count', generationCounts.size],
+        ['family-count', new Set(pokemon.map((entry) => entry.evolutionFamilyId)).size],
+        ['water-count', primaryTypeCounts.get('Water') || 0],
+        ['normal-count', primaryTypeCounts.get('Normal') || 0],
+        ['grass-count', primaryTypeCounts.get('Grass') || 0],
+        ['flying-count', primaryTypeCounts.get('Flying') || 0],
+        ['generation-five-count', generationCounts.get('5') || 0],
+        ['generation-one-count', generationCounts.get('1') || 0],
+        ['generation-six-count', generationCounts.get('6') || 0],
+        ['dual-type-count', dualTypeCount],
+        ['single-type-count', singleTypeCount],
+        ['eevee-family-count', familyCounts.get('Eevee Evolution Family') || 0],
+        ['applin-family-count', familyCounts.get('Applin Evolution Family') || 0],
+        ['wurmple-family-count', familyCounts.get('Wurmple Evolution Family') || 0]
+      ]);
+
+      expectedPokedexStats.forEach((expectedValue, statName) => {
+        const pattern = new RegExp(`data-pokedex-stat="${statName}"[^>]*>([\\d,]+)<`, 'g');
+        const displayedValues = [...landingHtml.matchAll(pattern)]
+          .map((match) => Number(match[1].replace(/,/g, '')));
+        check(
+          displayedValues.length > 0 && displayedValues.every((value) => value === expectedValue),
+          `${project.name}: displayed ${statName} does not match the published dataset (${expectedValue})`
+        );
+      });
+    } catch (error) {
+      failures.push(`${project.name}: published Pokémon dataset is not valid JSON (${error.message})`);
+    }
+  }
+
   const linkMatches = [...landingHtml.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*data-event="open_interactive_visualization"/g)]
     .map((match) => new URL(match[1], `${origin}${project.landing}`).pathname);
   check(linkMatches.length > 0, `${project.name}: no Open Interactive Visualization links found`);

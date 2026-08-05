@@ -208,6 +208,21 @@
       font-weight: 950;
       text-transform: uppercase;
     }
+    .finding-list {
+      display: grid;
+      margin-top: 24px;
+      border-top: 1.5px solid var(--ink);
+    }
+    .finding-list section {
+      padding: 20px 0;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .finding-list h3 {
+      margin: 0 0 10px;
+    }
+    .finding-list section > p:last-child {
+      margin-bottom: 0;
+    }
     .sticky-aside {
       grid-area: aside;
       position: sticky;
@@ -440,10 +455,10 @@
                 <li><strong>Best way to use it:</strong> click a type block, drill into an evolution family, then select a Pokémon from the treemap or Index to inspect its Dex-style panel.</li>
               </ul>
               <div class="stat-strip" aria-label="Project summary">
-                <div><strong>18</strong><span>Primary types</span></div>
-                <div><strong>BST</strong><span>Size option</span></div>
-                <div><strong>Dex</strong><span>Entry panel</span></div>
-                <div><strong>Fan</strong><span>Exploration model</span></div>
+                <div><strong data-pokedex-stat="species-count">1,025</strong><span>Pokémon species</span></div>
+                <div><strong data-pokedex-stat="primary-type-count">18</strong><span>Primary types</span></div>
+                <div><strong data-pokedex-stat="generation-count">9</strong><span>Generations</span></div>
+                <div><strong data-pokedex-stat="family-count">541</strong><span>Evolution families</span></div>
               </div>
             </article>
 
@@ -454,10 +469,26 @@
             </article>
 
             <article class="article-panel" id="top-insights">
-              <h2>What This Visualization Reveals</h2>
-              <p>The treemap makes it easier to compare how Pokémon types and evolution families occupy visual space. Depending on the sizing mode, the chart can emphasize either species count or total base stat weight.</p>
-              <p>Drilling from type to family to species helps fans move from broad patterns into individual Pokémon. A big type block gives one kind of overview; a selected Dex entry gives another kind of close reading.</p>
-              <p>The interface is playful on purpose. It borrows the feeling of a Pokédex while using a standard data-visualization structure underneath: nested categories, sortable lists, filtered views, and detail panels.</p>
+              <h2>What The Pokémon Type Data Reveals</h2>
+              <p>The published dataset contains <strong data-pokedex-stat="species-count">1,025</strong> Pokémon species across <strong data-pokedex-stat="generation-count">9</strong> generations and <strong data-pokedex-stat="primary-type-count">18</strong> primary-type groups. These findings describe the static dataset used by this visualization, with each species counted once in its primary-type block.</p>
+              <div class="finding-list">
+                <section>
+                  <h3>Water Is The Largest Primary-Type Group</h3>
+                  <p>Water leads the treemap with <strong data-pokedex-stat="water-count">134</strong> species, followed by Normal with <strong data-pokedex-stat="normal-count">118</strong> and Grass with <strong data-pokedex-stat="grass-count">103</strong>. Flying has only <strong data-pokedex-stat="flying-count">9</strong> primary-type entries because many Flying Pokémon use Flying as their secondary type instead.</p>
+                </section>
+                <section>
+                  <h3>Generation V Adds The Most Species</h3>
+                  <p>Generation V contributes <strong data-pokedex-stat="generation-five-count">156</strong> species, narrowly exceeding Generation I at <strong data-pokedex-stat="generation-one-count">151</strong>. Generation VI is the smallest group in this snapshot with <strong data-pokedex-stat="generation-six-count">72</strong> species.</p>
+                </section>
+                <section>
+                  <h3>Dual Types Slightly Outnumber Single Types</h3>
+                  <p><strong data-pokedex-stat="dual-type-count">526</strong> species have two listed types, compared with <strong data-pokedex-stat="single-type-count">499</strong> that have one. The treemap still assigns every species to one primary-type block so the visual groups remain mutually exclusive.</p>
+                </section>
+                <section>
+                  <h3>Eevee Forms The Largest Evolution Family</h3>
+                  <p>The Eevee family contains <strong data-pokedex-stat="eevee-family-count">9</strong> species records. The next-largest families in this dataset are Applin and Wurmple with <strong data-pokedex-stat="applin-family-count">5</strong> and <strong data-pokedex-stat="wurmple-family-count">5</strong> members respectively.</p>
+                </section>
+              </div>
               <div class="cta-panel">
                 <p class="mini-label">Mid-page jump</p>
                 <h2>Ready To Explore The Treemap?</h2>
@@ -490,10 +521,10 @@
 
             <article class="article-panel" id="methodology">
               <h2>Methodology And Data Note</h2>
-              <p>The visualization uses embedded data, a static JSON file, or a live PokéAPI fallback depending on what is available. The interface groups Pokémon by primary type and evolution family, then displays species-level details where the data exists.</p>
+              <p>The visualization uses embedded data, a static JSON file, or a live PokéAPI fallback depending on what is available. The interface groups Pokémon by primary type and evolution family, then displays species-level details where the data exists. The counts shown on this landing page are calculated from the published static JSON snapshot containing 1,025 species records.</p>
               <p>The scope is designed for interactive exploration, not as a complete competitive database. Values such as base stats total, type, generation, evolution stage, sprite references, abilities, and card-style move details are used to support browsing and comparison.</p>
               <p>Known limitations: some detailed fields may depend on available static or fallback data, type grouping uses primary type for the treemap, and card-style move details are simplified for presentation. Verify any formal data need against official game resources or dedicated databases.</p>
-              <p><strong>Last updated:</strong> May 26, 2026. Interpret tile size as a visualization setting, not an official importance ranking.</p>
+              <p><strong>Last updated:</strong> August 5, 2026. Interpret tile size as a visualization setting, not an official importance ranking.</p>
               <p class="disclaimer-box">This is an unofficial fan-made data visualization. Otaku Data Viz is not affiliated with Pokémon, Nintendo, Game Freak, Creatures, The Pokémon Company, or any related rights holders. All names and references are used for commentary, analysis, and fan discussion.</p>
             </article>
 

@@ -208,6 +208,21 @@
       font-weight: 950;
       text-transform: uppercase;
     }
+    .finding-list {
+      display: grid;
+      margin-top: 24px;
+      border-top: 1.5px solid var(--ink);
+    }
+    .finding-list section {
+      padding: 20px 0;
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .finding-list h3 {
+      margin: 0 0 10px;
+    }
+    .finding-list section > p:last-child {
+      margin-bottom: 0;
+    }
     .sticky-aside {
       grid-area: aside;
       position: sticky;
@@ -467,10 +482,10 @@
                 <li><strong>Best way to use it:</strong> start with all series, search for a favorite character, then narrow by saga or relationship type to inspect a smaller cluster.</li>
               </ul>
               <div class="stat-strip" aria-label="Project summary">
-                <div><strong>3</strong><span>Series filters</span></div>
-                <div><strong>8</strong><span>Link types</span></div>
-                <div><strong>Live</strong><span>Interactive map</span></div>
-                <div><strong>Fan</strong><span>Exploration model</span></div>
+                <div><strong data-network-stat="node-count">169</strong><span>Characters</span></div>
+                <div><strong data-network-stat="link-count">333</strong><span>Relationships</span></div>
+                <div><strong data-network-stat="type-count">8</strong><span>Link types</span></div>
+                <div><strong data-network-stat="series-count">3</strong><span>Series</span></div>
               </div>
             </article>
 
@@ -481,10 +496,26 @@
             </article>
 
             <article class="article-panel" id="top-insights">
-              <h2>What This Dragon Ball Visualization Reveals</h2>
-              <p>Central characters naturally act as hubs because so many stories, training arcs, rivalries, and family lines run through them. A sociogram makes that structure visible at a glance.</p>
-              <p>Families, rivalries, mentors, alliances, enemy groups, and major story arcs create different types of connections. The map helps fans see Dragon Ball as a relationship network, not just a battle timeline or power-scaling ladder.</p>
-              <p>Network maps can also reveal clusters, bridges, and character groups in a way a normal wiki page cannot. A villain team, a family tree, a tournament cast, or a mentor chain can become easier to spot when the connections are drawn together.</p>
+              <h2>What The Dragon Ball Relationship Data Reveals</h2>
+              <p>The current hand-modeled network contains <strong data-network-stat="node-count">169</strong> characters connected by <strong data-network-stat="link-count">333</strong> relationship links. These findings describe this curated visualization—not an official canon ranking or a complete count of every relationship in Dragon Ball.</p>
+              <div class="finding-list">
+                <section>
+                  <h3>Goku Is The Network's Main Hub</h3>
+                  <p>Goku has <strong data-network-stat="goku-degree">71</strong> modeled connections, compared with <strong data-network-stat="vegeta-degree">24</strong> for Vegeta and <strong data-network-stat="frieza-degree">18</strong> for Frieza. The count reflects visible links in this dataset: family, mentors, rivals, allies, enemies, origins, romance, and special relationships all contribute equally.</p>
+                </section>
+                <section>
+                  <h3>Alliances Outnumber Enmities And Family Links</h3>
+                  <p>The map includes <strong data-network-stat="ally-count">126</strong> ally links, <strong data-network-stat="enemy-count">55</strong> enemy links, <strong data-network-stat="family-count">52</strong> family links, and <strong data-network-stat="mentor-count">30</strong> mentor links. That balance reflects how frequently tournament opponents, former villains, training partners, and temporary teams become part of the wider cast network.</p>
+                </section>
+                <section>
+                  <h3>Teams Create Dense Local Clusters</h3>
+                  <p>Groups such as the Red Ribbon Army, Ginyu Force, Pride Troopers, Universe 6 Saiyans, Heeters, and Pilaf Gang produce tightly connected pockets. Family and mentor links then bridge those pockets to the central cast, making the map more than a simple hero-versus-villain diagram.</p>
+                </section>
+                <section>
+                  <h3>The Series Filters Overlap</h3>
+                  <p><em>Dragon Ball</em> appears on <strong data-network-stat="db-count">52</strong> character records, <em>Dragon Ball Z</em> on <strong data-network-stat="dbz-count">75</strong>, and <em>Dragon Ball Super</em> on <strong data-network-stat="dbs-count">86</strong>. These totals are not mutually exclusive because returning characters can belong to more than one series.</p>
+                </section>
+              </div>
               <div class="cta-panel">
                 <p class="mini-label">Mid-page jump</p>
                 <h2>Ready To Explore The Map?</h2>
@@ -520,7 +551,7 @@
               <p>The current visualization uses a hand-modeled relationship dataset embedded in the interactive Dragon Ball Sociogram prototype. It covers Dragon Ball, Dragon Ball Z, and Dragon Ball Super with filters for series, sagas, factions, and relationship categories.</p>
               <p>The relationship categories are simplified for infographic clarity. Some links can reasonably belong to more than one category, and the map should be read as an exploratory model rather than a complete canon database.</p>
               <p>Known limitations: not every minor character, adaptation-only detail, movie continuity, game-only character, or alternate interpretation is included. Future updates may refine categories, add corrections, and expand scope.</p>
-              <p><strong>Last updated:</strong> May 26, 2026. Interpret node size as a rough importance signal inside this visualization, not as an official ranking.</p>
+              <p><strong>Last updated:</strong> August 5, 2026. Displayed network counts are calculated from the current embedded dataset. Interpret node size as a rough importance signal inside this visualization, not as an official ranking.</p>
               <p class="disclaimer-box">This is an unofficial fan-made data visualization. Otaku Data Viz is not affiliated with Dragon Ball, Toei Animation, Shueisha, Akira Toriyama, Bird Studio, Bandai, or any related rights holders. All names and references are used for commentary, analysis, and fan discussion.</p>
             </article>
 

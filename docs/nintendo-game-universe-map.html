@@ -11,7 +11,8 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-653DY2M8K5');
+    const isAnalyticsPreview = new URLSearchParams(window.location.search).get('preview') === '1';
+    gtag('config', 'G-653DY2M8K5', { send_page_view: !isAnalyticsPreview });
   </script>
   <script src="/assets/js/analytics-events.js" defer></script>
   <meta charset="UTF-8" />

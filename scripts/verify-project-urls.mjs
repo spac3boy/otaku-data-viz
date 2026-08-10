@@ -334,6 +334,7 @@ for (const page of ['index.html', 'projects.html']) {
 
 const filesToMirror = [
   'assets/js/analytics-events.js',
+  'analytics/fixtures/weekly-performance.json',
   ...projects.flatMap((project) => [project.landing.replace(/^\//, ''), siteFile(project.app).slice(root.length + 1)])
 ];
 
@@ -342,6 +343,44 @@ check(
   analyticsEvents.includes('if (isPreview) return;'),
   'Shared analytics tracker does not suppress custom events inside preview iframes'
 );
+check(
+  analyticsEvents.includes("track('reference_engagement'")
+    && analyticsEvents.includes('referenceEngagementThreshold = 10_000')
+    && analyticsEvents.includes("document.visibilityState === 'visible'"),
+  'Shared analytics tracker does not record the visible-time reference engagement signal'
+);
+check(
+  analyticsEvents.includes("markReferenceEngagement('interactive_control'")
+    && analyticsEvents.includes("markReferenceEngagement('interactive_filter'")
+    && analyticsEvents.includes("markReferenceEngagement('interactive_search'"),
+  'Shared analytics tracker does not record meaningful interactive controls'
+);
+
+const [sourceDashboard, publishedDashboard] = await Promise.all([
+  readFile(path.join(root, 'analytics-dashboard.html'), 'utf8'),
+  readFile(path.join(root, 'docs/analytics/index.html'), 'utf8')
+]);
+check(sourceDashboard === publishedDashboard, 'Analytics dashboard source and docs copy differ');
+check(
+  sourceDashboard.includes("const isFixtureMode = isLocalHost && queryParams.get('fixture') === '1';")
+    && sourceDashboard.includes('Local fixture mode.')
+    && sourceDashboard.includes("activeChartMode = 'reference'"),
+  'Analytics dashboard does not expose the guarded local reference-scorecard fixture'
+);
+
+try {
+  const fixture = JSON.parse(await readFile(path.join(root, 'analytics/fixtures/weekly-performance.json'), 'utf8'));
+  check(fixture.fixture === true, 'Analytics dashboard fixture is not labeled as fixture data');
+  check(
+    Number(fixture.summary?.engagedReferenceSessions) > 0
+      && Number(fixture.summary?.referenceSessions) >= Number(fixture.summary?.engagedReferenceSessions)
+      && Array.isArray(fixture.history)
+      && fixture.history.length >= 4,
+    'Analytics dashboard fixture does not exercise the reference scorecard'
+  );
+} catch (error) {
+  failures.push(`Analytics dashboard fixture is invalid JSON (${error.message})`);
+}
 
 for (const relativePath of filesToMirror) {
   const [source, published] = await Promise.all([

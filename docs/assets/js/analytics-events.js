@@ -78,12 +78,60 @@
     canonical_project_path: currentProject.landingPath
   } : {};
 
+  let engagementTimer = null;
+  let referenceEngagementSent = false;
+  let visibleStartedAt = null;
+  let visibleDuration = 0;
+  const referenceEngagementThreshold = 10_000;
+
+  const markReferenceEngagement = (trigger, details = {}) => {
+    if (!currentProject || referenceEngagementSent) return;
+    referenceEngagementSent = true;
+    if (engagementTimer) window.clearTimeout(engagementTimer);
+    track('reference_engagement', {
+      ...projectAnalyticsParams,
+      engagement_trigger: trigger,
+      ...details
+    });
+  };
+
+  window.odvAnalytics = Object.freeze({
+    markReferenceEngagement,
+    track
+  });
+
+  const pauseVisibleTimer = () => {
+    if (visibleStartedAt !== null) {
+      visibleDuration += performance.now() - visibleStartedAt;
+      visibleStartedAt = null;
+    }
+    if (engagementTimer) window.clearTimeout(engagementTimer);
+  };
+
+  const resumeVisibleTimer = () => {
+    if (!currentProject || referenceEngagementSent || document.visibilityState !== 'visible') return;
+    visibleStartedAt = performance.now();
+    const remaining = Math.max(0, referenceEngagementThreshold - visibleDuration);
+    engagementTimer = window.setTimeout(() => {
+      markReferenceEngagement('engaged_time_10s');
+    }, remaining);
+  };
+
   if (currentProject && typeof window.gtag === 'function') {
     window.gtag('set', projectAnalyticsParams);
     track('project_page_view', {
       ...projectAnalyticsParams,
       page_path: window.location.pathname
     });
+  }
+
+  if (currentProject) {
+    resumeVisibleTimer();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') resumeVisibleTimer();
+      else pauseVisibleTimer();
+    });
+    window.addEventListener('pagehide', pauseVisibleTimer);
   }
 
   const getPageLocation = (target) => {
@@ -121,8 +169,13 @@
     };
   };
 
+  const engagementEvents = new Set([
+    'open_interactive_visualization',
+    'click_related_project'
+  ]);
+
   document.addEventListener('click', (event) => {
-    const control = event.target.closest('a, button');
+    const control = event.target.closest('a, button, [role="button"]');
     if (!control) return;
 
     const location = getPageLocation(control);
@@ -130,11 +183,23 @@
     const isCopyLink = control.hasAttribute('data-copy-link');
 
     if (shareChannel || isCopyLink) {
+      markReferenceEngagement('share_or_copy_link', {
+        control_type: shareChannel || 'copy_link'
+      });
       track('social_share_click', {
         ...projectAnalyticsParams,
         platform: shareChannel || 'copy_link',
         location,
         destination_url: control.href || window.location.href
+      });
+      return;
+    }
+
+    if (currentPageType === 'interactive' && !(control instanceof HTMLAnchorElement)) {
+      const label = control.getAttribute('aria-label') || control.textContent || control.tagName;
+      markReferenceEngagement('interactive_control', {
+        control_type: control.getAttribute('role') || control.tagName.toLowerCase(),
+        control_label: label.replace(/\s+/g, ' ').trim().slice(0, 80)
       });
       return;
     }
@@ -151,6 +216,9 @@
       && getProjectPageType(destination.pathname, destinationProject) === 'landing';
 
     if (control.dataset.event) {
+      if (engagementEvents.has(control.dataset.event)) {
+        markReferenceEngagement(control.dataset.event);
+      }
       track(control.dataset.event, {
         ...projectAnalyticsParams,
         location,
@@ -204,5 +272,20 @@
         destination_url: destinationUrl
       });
     }
+  });
+
+  document.addEventListener('change', (event) => {
+    if (currentPageType !== 'interactive' || !event.target.matches('select, input')) return;
+    markReferenceEngagement('interactive_filter', {
+      control_type: event.target.type || event.target.tagName.toLowerCase()
+    });
+  });
+
+  document.addEventListener('input', (event) => {
+    if (currentPageType !== 'interactive' || !event.target.matches('input[type="search"], input[type="text"]')) return;
+    if (event.target.value.trim().length < 2) return;
+    markReferenceEngagement('interactive_search', {
+      control_type: event.target.type || 'text'
+    });
   });
 })();

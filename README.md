@@ -7,6 +7,7 @@ Live site target:
 - Primary domain: `https://otakudataviz.com`
 - GitHub Pages fallback: `https://spac3boy.github.io/otaku-data-viz/`
 - Repository: `https://github.com/spac3boy/otaku-data-viz`
+- Product strategy and reference-authority scorecard: [`STRATEGY.md`](STRATEGY.md)
 
 > This is an unofficial fan project. It is not affiliated with any anime, manga, game, publisher, studio, platform, or rights holder. Franchise names and referenced properties belong to their respective owners.
 

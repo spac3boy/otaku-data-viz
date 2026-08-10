@@ -342,6 +342,18 @@ check(
   analyticsEvents.includes('if (isPreview) return;'),
   'Shared analytics tracker does not suppress custom events inside preview iframes'
 );
+check(
+  analyticsEvents.includes("track('reference_engagement'")
+    && analyticsEvents.includes('referenceEngagementThreshold = 10_000')
+    && analyticsEvents.includes("document.visibilityState === 'visible'"),
+  'Shared analytics tracker does not record the visible-time reference engagement signal'
+);
+check(
+  analyticsEvents.includes("markReferenceEngagement('interactive_control'")
+    && analyticsEvents.includes("markReferenceEngagement('interactive_filter'")
+    && analyticsEvents.includes("markReferenceEngagement('interactive_search'"),
+  'Shared analytics tracker does not record meaningful interactive controls'
+);
 
 for (const relativePath of filesToMirror) {
   const [source, published] = await Promise.all([

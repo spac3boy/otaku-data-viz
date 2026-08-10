@@ -196,6 +196,15 @@ const gscQuery = async (token, payload) => {
 
 const metricValue = (row, index) => Number(row?.metricValues?.[index]?.value || 0);
 
+const isAiReferralSource = (value = '') => /(?:chatgpt|openai|perplexity|copilot|gemini|bard|claude|anthropic|poe\.com|you\.com)/i.test(value);
+
+const isBrandedQuery = (value = '') => {
+  const normalized = String(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  return normalized.includes('otakudataviz')
+    || normalized.includes('otaku data viz')
+    || normalized.includes('otaku data visualization');
+};
+
 const excludePreviewPageFilter = {
   notExpression: {
     filter: {
@@ -333,10 +342,26 @@ const trendPoint = (range, values, source = 'api') => ({
   sessions: Number(values.sessions || 0),
   views: Number(values.views || 0),
   engagementRate: Number(values.engagementRate || 0),
+  referenceSessions: Number(values.referenceSessions || 0),
+  engagedReferenceSessions: Number(values.engagedReferenceSessions || 0),
+  referenceEngagementRate: Number(values.referenceEngagementRate || 0),
+  visualizationOpens: Number(values.visualizationOpens || 0),
+  relatedReferenceClicks: Number(values.relatedReferenceClicks || 0),
+  returningUsers: Number(values.returningUsers || 0),
+  directSessions: Number(values.directSessions || 0),
+  referralSessions: Number(values.referralSessions || 0),
+  aiReferralSessions: Number(values.aiReferralSessions || 0),
   organicClicks: Number(values.organicClicks || 0),
   organicImpressions: Number(values.organicImpressions || 0),
   organicCtr: Number(values.organicCtr || 0),
   avgPosition: Number(values.avgPosition || 0),
+  brandedClicks: Number(values.brandedClicks || 0),
+  brandedImpressions: Number(values.brandedImpressions || 0),
+  nonBrandedClicks: Number(values.nonBrandedClicks || 0),
+  nonBrandedImpressions: Number(values.nonBrandedImpressions || 0),
+  classifiedQueryImpressions: Number(values.classifiedQueryImpressions || 0),
+  nonBrandedImpressionShare: Number(values.nonBrandedImpressionShare || 0),
+  organicPagesWithClicks: Number(values.organicPagesWithClicks || 0),
   shareClicks: Number(values.shareClicks || 0),
   copyLinkClicks: Number(values.copyLinkClicks || 0),
   source
@@ -363,10 +388,26 @@ const mergeHistory = (...groups) => {
       sessions: Number(row.sessions || 0),
       views: Number(row.views || 0),
       engagementRate: Number(row.engagementRate || 0),
+      referenceSessions: Number(row.referenceSessions || 0),
+      engagedReferenceSessions: Number(row.engagedReferenceSessions || 0),
+      referenceEngagementRate: Number(row.referenceEngagementRate || 0),
+      visualizationOpens: Number(row.visualizationOpens || 0),
+      relatedReferenceClicks: Number(row.relatedReferenceClicks || 0),
+      returningUsers: Number(row.returningUsers || 0),
+      directSessions: Number(row.directSessions || 0),
+      referralSessions: Number(row.referralSessions || 0),
+      aiReferralSessions: Number(row.aiReferralSessions || 0),
       organicClicks: Number(row.organicClicks || 0),
       organicImpressions: Number(row.organicImpressions || 0),
       organicCtr: Number(row.organicCtr || 0),
       avgPosition: Number(row.avgPosition || 0),
+      brandedClicks: Number(row.brandedClicks || 0),
+      brandedImpressions: Number(row.brandedImpressions || 0),
+      nonBrandedClicks: Number(row.nonBrandedClicks || 0),
+      nonBrandedImpressions: Number(row.nonBrandedImpressions || 0),
+      classifiedQueryImpressions: Number(row.classifiedQueryImpressions || 0),
+      nonBrandedImpressionShare: Number(row.nonBrandedImpressionShare || 0),
+      organicPagesWithClicks: Number(row.organicPagesWithClicks || 0),
       shareClicks: Number(row.shareClicks || 0),
       copyLinkClicks: Number(row.copyLinkClicks || 0),
       source: row.source || 'api'
@@ -379,14 +420,20 @@ const mergeHistory = (...groups) => {
 };
 
 const weeklyTrend = async (token, range) => {
-  const [ga, gsc, shares] = await Promise.all([
+  const [ga, reference, acquisition, gsc, discovery, shares] = await Promise.all([
     gaTotals(token, range),
+    gaReferenceMetrics(token, range),
+    gaAcquisitionMetrics(token, range),
     gscTotals(token, range),
+    gscDiscoveryMix(token, range),
     gaShareEvents(token, range)
   ]);
   const values = {
     ...ga,
+    ...reference,
+    ...acquisition,
     ...gsc,
+    ...discovery,
     shareClicks: shares.reduce((sum, row) => sum + row.shareClicks, 0),
     copyLinkClicks: shares
       .filter((row) => row.platform === 'copy_link')
@@ -431,6 +478,98 @@ const gaTotals = async (token, range) => {
     views: metricValue(row, 2),
     engagementRate: metricValue(row, 3)
   };
+};
+
+const acquisitionMetricsFromReports = (sourceReport, returningReport) => {
+  const sourceRows = (sourceReport.rows || []).map((row) => ({
+    source: row.dimensionValues?.[0]?.value || '(not set)',
+    medium: row.dimensionValues?.[1]?.value || '(not set)',
+    sessions: metricValue(row, 0)
+  }));
+  const returningUsers = (returningReport.rows || [])
+    .filter((row) => row.dimensionValues?.[0]?.value === 'returning')
+    .reduce((sum, row) => sum + metricValue(row, 0), 0);
+
+  return {
+    returningUsers,
+    directSessions: sourceRows
+      .filter((row) => row.source === '(direct)' || row.medium === '(none)')
+      .reduce((sum, row) => sum + row.sessions, 0),
+    referralSessions: sourceRows
+      .filter((row) => row.medium === 'referral')
+      .reduce((sum, row) => sum + row.sessions, 0),
+    aiReferralSessions: sourceRows
+      .filter((row) => isAiReferralSource(row.source))
+      .reduce((sum, row) => sum + row.sessions, 0)
+  };
+};
+
+const gaAcquisitionMetrics = async (token, range) => {
+  const [sourceReport, returningReport] = await Promise.all([
+    gaRunReport(token, {
+      dateRanges: [range],
+      dimensions: [{ name: 'sessionSource' }, { name: 'sessionMedium' }],
+      metrics: [{ name: 'sessions' }],
+      limit: 1000
+    }),
+    gaRunReport(token, {
+      dateRanges: [range],
+      dimensions: [{ name: 'newVsReturning' }],
+      metrics: [{ name: 'activeUsers' }],
+      limit: 10
+    })
+  ]);
+
+  return acquisitionMetricsFromReports(sourceReport, returningReport);
+};
+
+const referenceMetricsFromReport = (report) => {
+  const rows = new Map((report.rows || []).map((row) => [
+    row.dimensionValues?.[0]?.value || '',
+    {
+      events: metricValue(row, 0),
+      sessions: metricValue(row, 1)
+    }
+  ]));
+  const referenceSessions = rows.get('project_page_view')?.sessions || 0;
+  const engagedReferenceSessions = rows.get('reference_engagement')?.sessions || 0;
+
+  return {
+    referenceSessions,
+    engagedReferenceSessions,
+    referenceEngagementRate: referenceSessions
+      ? engagedReferenceSessions / referenceSessions
+      : 0,
+    visualizationOpens: rows.get('open_interactive_visualization')?.events || 0,
+    relatedReferenceClicks: rows.get('click_related_project')?.events || 0
+  };
+};
+
+const gaReferenceMetrics = async (token, range) => {
+  const report = await gaRunReport(token, {
+    dateRanges: [range],
+    dimensions: [{ name: 'eventName' }],
+    metrics: [
+      { name: 'eventCount' },
+      { name: 'sessions' }
+    ],
+    dimensionFilter: {
+      filter: {
+        fieldName: 'eventName',
+        inListFilter: {
+          values: [
+            'project_page_view',
+            'reference_engagement',
+            'open_interactive_visualization',
+            'click_related_project'
+          ]
+        }
+      }
+    },
+    limit: 20
+  });
+
+  return referenceMetricsFromReport(report);
 };
 
 const gaTopPages = async (token, range) => {
@@ -515,6 +654,58 @@ const gscTotals = async (token, range) => {
   };
 };
 
+const searchDiscoveryFromReport = (report) => {
+  const values = (report.rows || []).reduce((summary, row) => {
+    const branded = isBrandedQuery(row.keys?.[0] || '');
+    const prefix = branded ? 'branded' : 'nonBranded';
+    summary[`${prefix}Clicks`] += Number(row.clicks || 0);
+    summary[`${prefix}Impressions`] += Number(row.impressions || 0);
+    return summary;
+  }, {
+    brandedClicks: 0,
+    brandedImpressions: 0,
+    nonBrandedClicks: 0,
+    nonBrandedImpressions: 0
+  });
+  const classifiedQueryImpressions = values.brandedImpressions + values.nonBrandedImpressions;
+
+  return {
+    ...values,
+    classifiedQueryImpressions,
+    nonBrandedImpressionShare: classifiedQueryImpressions
+      ? values.nonBrandedImpressions / classifiedQueryImpressions
+      : 0
+  };
+};
+
+const organicPageCoverageFromReport = (report) => ({
+  organicPagesWithClicks: (report.rows || []).filter((row) => Number(row.clicks || 0) > 0).length
+});
+
+const gscDiscoveryMix = async (token, range) => {
+  const [queryReport, pageReport] = await Promise.all([
+    gscQuery(token, {
+      startDate: range.startDate,
+      endDate: range.endDate,
+      dimensions: ['query'],
+      rowLimit: 25000,
+      startRow: 0
+    }),
+    gscQuery(token, {
+      startDate: range.startDate,
+      endDate: range.endDate,
+      dimensions: ['page'],
+      rowLimit: 25000,
+      startRow: 0
+    })
+  ]);
+
+  return {
+    ...searchDiscoveryFromReport(queryReport),
+    ...organicPageCoverageFromReport(pageReport)
+  };
+};
+
 const gscTopPages = async (token, range) => {
   const report = await gscQuery(token, {
     startDate: range.startDate,
@@ -542,6 +733,7 @@ const gscTopQueries = async (token, range) => {
 
   return (report.rows || []).map((row) => ({
     query: row.keys?.[0] || '',
+    queryType: isBrandedQuery(row.keys?.[0] || '') ? 'branded' : 'non-branded',
     topPage: groupedProjectPath(row.keys?.[1] || ''),
     clicks: Number(row.clicks || 0),
     impressions: Number(row.impressions || 0),
@@ -592,7 +784,7 @@ const mergeTopPages = (gaPages, gscPages, shareEvents) => {
 const sheetNameA1 = (sheetName) => `'${sheetName.replace(/'/g, "''")}'`;
 
 const sheetClear = async (token, sheetName) => {
-  const range = encodeURIComponent(`${sheetNameA1(sheetName)}!A:Z`);
+  const range = encodeURIComponent(`${sheetNameA1(sheetName)}!A:AZ`);
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/${range}:clear`;
   await apiFetch(url, token, { method: 'POST', body: '{}' });
 };
@@ -622,7 +814,9 @@ const buildInsights = (current, previous, topPages, topQueries, shareEvents) => 
 
   return [
     `Users were ${pct(current.users, previous.users)} week over week, with ${current.users.toLocaleString('en-US')} users and ${current.views.toLocaleString('en-US')} views.`,
+    `${current.engagedReferenceSessions.toLocaleString('en-US')} of ${current.referenceSessions.toLocaleString('en-US')} reference sessions were engaged (${(current.referenceEngagementRate * 100).toFixed(1)}%).`,
     `Google Search delivered ${current.organicClicks.toLocaleString('en-US')} clicks from ${current.organicImpressions.toLocaleString('en-US')} impressions.`,
+    `${current.nonBrandedImpressions.toLocaleString('en-US')} classified query impressions were non-branded; AI sources referred ${current.aiReferralSessions.toLocaleString('en-US')} sessions.`,
     `Top page: ${topPage}. Top query: ${topQuery}.`,
     topShare
       ? `Most shared item: ${topShare.pagePath} via ${topShare.platform} (${topShare.shareClicks.toLocaleString('en-US')} clicks).`
@@ -637,8 +831,14 @@ const main = async () => {
   const [
     gaCurrent,
     gaPrevious,
+    referenceCurrent,
+    referencePrevious,
+    acquisitionCurrent,
+    acquisitionPrevious,
     gscCurrent,
     gscPrevious,
+    discoveryCurrent,
+    discoveryPrevious,
     gaPages,
     gscPages,
     topQueries,
@@ -647,8 +847,14 @@ const main = async () => {
   ] = await Promise.all([
     gaTotals(token, ranges.current),
     gaTotals(token, ranges.previous),
+    gaReferenceMetrics(token, ranges.current),
+    gaReferenceMetrics(token, ranges.previous),
+    gaAcquisitionMetrics(token, ranges.current),
+    gaAcquisitionMetrics(token, ranges.previous),
     gscTotals(token, ranges.current),
     gscTotals(token, ranges.previous),
+    gscDiscoveryMix(token, ranges.current),
+    gscDiscoveryMix(token, ranges.previous),
     gaTopPages(token, ranges.current),
     gscTopPages(token, ranges.current),
     gscTopQueries(token, ranges.current),
@@ -658,7 +864,10 @@ const main = async () => {
 
   const summary = {
     ...gaCurrent,
+    ...referenceCurrent,
+    ...acquisitionCurrent,
     ...gscCurrent,
+    ...discoveryCurrent,
     shareClicks: shareEvents.reduce((sum, row) => sum + row.shareClicks, 0),
     copyLinkClicks: shareEvents
       .filter((row) => row.platform === 'copy_link')
@@ -667,7 +876,10 @@ const main = async () => {
 
   const previous = {
     ...gaPrevious,
+    ...referencePrevious,
+    ...acquisitionPrevious,
     ...gscPrevious,
+    ...discoveryPrevious,
     shareClicks: previousShareEvents.reduce((sum, row) => sum + row.shareClicks, 0),
     copyLinkClicks: previousShareEvents
       .filter((row) => row.platform === 'copy_link')
@@ -721,8 +933,21 @@ const main = async () => {
         users: row.users,
         sessions: row.sessions,
         views: row.views,
+        referenceSessions: row.referenceSessions,
+        engagedReferenceSessions: row.engagedReferenceSessions,
+        referenceEngagementRate: row.referenceEngagementRate,
+        visualizationOpens: row.visualizationOpens,
+        relatedReferenceClicks: row.relatedReferenceClicks,
+        returningUsers: row.returningUsers,
+        directSessions: row.directSessions,
+        referralSessions: row.referralSessions,
+        aiReferralSessions: row.aiReferralSessions,
         organicClicks: row.organicClicks,
         organicImpressions: row.organicImpressions,
+        brandedImpressions: row.brandedImpressions,
+        nonBrandedImpressions: row.nonBrandedImpressions,
+        nonBrandedImpressionShare: row.nonBrandedImpressionShare,
+        organicPagesWithClicks: row.organicPagesWithClicks,
         shareClicks: row.shareClicks
       })),
       topPages: topPages.length,
@@ -741,7 +966,7 @@ const main = async () => {
     backfilledDetails.map((detail) => [`${detail.range.startDate}:${detail.range.endDate}`, detail])
   );
   const weeklySummaryRows = [
-    ['week_start', 'week_end', 'users', 'sessions', 'views', 'engagement_rate', 'organic_clicks', 'organic_impressions', 'organic_ctr', 'avg_position', 'share_clicks', 'copy_link_clicks', 'top_page', 'top_query', 'summary', 'updated_at'],
+    ['week_start', 'week_end', 'users', 'sessions', 'views', 'engagement_rate', 'reference_sessions', 'engaged_reference_sessions', 'reference_engagement_rate', 'visualization_opens', 'related_reference_clicks', 'returning_users', 'direct_sessions', 'referral_sessions', 'ai_referral_sessions', 'organic_clicks', 'organic_impressions', 'organic_ctr', 'avg_position', 'branded_clicks', 'branded_impressions', 'non_branded_clicks', 'non_branded_impressions', 'classified_query_impressions', 'non_branded_impression_share', 'organic_pages_with_clicks', 'share_clicks', 'copy_link_clicks', 'top_page', 'top_query', 'summary', 'updated_at'],
     ...history.map((row) => {
       const detail = detailsByWeek.get(`${row.weekStart}:${row.weekEnd}`);
       const rowSummary = row.weekStart === ranges.current.startDate && row.weekEnd === ranges.current.endDate
@@ -754,10 +979,26 @@ const main = async () => {
         row.sessions,
         row.views,
         row.engagementRate,
+        row.referenceSessions,
+        row.engagedReferenceSessions,
+        row.referenceEngagementRate,
+        row.visualizationOpens,
+        row.relatedReferenceClicks,
+        row.returningUsers,
+        row.directSessions,
+        row.referralSessions,
+        row.aiReferralSessions,
         row.organicClicks,
         row.organicImpressions,
         row.organicCtr,
         row.avgPosition,
+        row.brandedClicks,
+        row.brandedImpressions,
+        row.nonBrandedClicks,
+        row.nonBrandedImpressions,
+        row.classifiedQueryImpressions,
+        row.nonBrandedImpressionShare,
+        row.organicPagesWithClicks,
         row.shareClicks,
         row.copyLinkClicks,
         detail?.topPages?.[0]?.page || '',
@@ -784,11 +1025,12 @@ const main = async () => {
   ];
 
   const topQueryRows = [
-    ['week_start', 'week_end', 'query', 'clicks', 'impressions', 'ctr', 'position', 'top_page'],
+    ['week_start', 'week_end', 'query', 'query_type', 'clicks', 'impressions', 'ctr', 'position', 'top_page'],
     ...backfilledDetails.flatMap((detail) => detail.topQueries.map((row) => [
       detail.range.startDate,
       detail.range.endDate,
       row.query,
+      row.queryType,
       row.clicks,
       row.impressions,
       row.ctr,
@@ -832,10 +1074,25 @@ const main = async () => {
     ['Sessions', summary.sessions, previous.sessions, `${summary.sessions - previous.sessions}`],
     ['Views', summary.views, previous.views, `${summary.views - previous.views}`],
     ['Engagement rate', summary.engagementRate, previous.engagementRate, `${summary.engagementRate - previous.engagementRate}`],
+    ['Reference sessions', summary.referenceSessions, previous.referenceSessions, `${summary.referenceSessions - previous.referenceSessions}`],
+    ['Engaged reference sessions', summary.engagedReferenceSessions, previous.engagedReferenceSessions, `${summary.engagedReferenceSessions - previous.engagedReferenceSessions}`],
+    ['Reference engagement rate', summary.referenceEngagementRate, previous.referenceEngagementRate, `${summary.referenceEngagementRate - previous.referenceEngagementRate}`],
+    ['Visualization opens', summary.visualizationOpens, previous.visualizationOpens, `${summary.visualizationOpens - previous.visualizationOpens}`],
+    ['Related-reference clicks', summary.relatedReferenceClicks, previous.relatedReferenceClicks, `${summary.relatedReferenceClicks - previous.relatedReferenceClicks}`],
+    ['Returning users', summary.returningUsers, previous.returningUsers, `${summary.returningUsers - previous.returningUsers}`],
+    ['Direct sessions', summary.directSessions, previous.directSessions, `${summary.directSessions - previous.directSessions}`],
+    ['Referral sessions', summary.referralSessions, previous.referralSessions, `${summary.referralSessions - previous.referralSessions}`],
+    ['AI referral sessions', summary.aiReferralSessions, previous.aiReferralSessions, `${summary.aiReferralSessions - previous.aiReferralSessions}`],
     ['Organic clicks', summary.organicClicks, previous.organicClicks, `${summary.organicClicks - previous.organicClicks}`],
     ['Organic impressions', summary.organicImpressions, previous.organicImpressions, `${summary.organicImpressions - previous.organicImpressions}`],
     ['Organic CTR', summary.organicCtr, previous.organicCtr, `${summary.organicCtr - previous.organicCtr}`],
     ['Avg. organic position', summary.avgPosition, previous.avgPosition, `${summary.avgPosition - previous.avgPosition}`],
+    ['Branded clicks (classified queries)', summary.brandedClicks, previous.brandedClicks, `${summary.brandedClicks - previous.brandedClicks}`],
+    ['Branded impressions (classified queries)', summary.brandedImpressions, previous.brandedImpressions, `${summary.brandedImpressions - previous.brandedImpressions}`],
+    ['Non-branded clicks (classified queries)', summary.nonBrandedClicks, previous.nonBrandedClicks, `${summary.nonBrandedClicks - previous.nonBrandedClicks}`],
+    ['Non-branded impressions (classified queries)', summary.nonBrandedImpressions, previous.nonBrandedImpressions, `${summary.nonBrandedImpressions - previous.nonBrandedImpressions}`],
+    ['Non-branded impression share', summary.nonBrandedImpressionShare, previous.nonBrandedImpressionShare, `${summary.nonBrandedImpressionShare - previous.nonBrandedImpressionShare}`],
+    ['Organic pages with clicks', summary.organicPagesWithClicks, previous.organicPagesWithClicks, `${summary.organicPagesWithClicks - previous.organicPagesWithClicks}`],
     ['Share clicks', summary.shareClicks, previous.shareClicks, `${summary.shareClicks - previous.shareClicks}`],
     ['Copy-link clicks', summary.copyLinkClicks, previous.copyLinkClicks, `${summary.copyLinkClicks - previous.copyLinkClicks}`],
     ['Latest weekly readout', insights.join(' ')],
@@ -890,7 +1147,71 @@ if (process.env.VERIFY_PROJECT_GROUPING === '1') {
   if (mismatches.length) {
     throw new Error(`Project grouping verification failed: ${JSON.stringify(mismatches)}`);
   }
+  const referenceFixture = referenceMetricsFromReport({
+    rows: [
+      { dimensionValues: [{ value: 'project_page_view' }], metricValues: [{ value: '14' }, { value: '10' }] },
+      { dimensionValues: [{ value: 'reference_engagement' }], metricValues: [{ value: '9' }, { value: '7' }] },
+      { dimensionValues: [{ value: 'open_interactive_visualization' }], metricValues: [{ value: '4' }, { value: '3' }] },
+      { dimensionValues: [{ value: 'click_related_project' }], metricValues: [{ value: '2' }, { value: '2' }] }
+    ]
+  });
+  if (
+    referenceFixture.referenceSessions !== 10
+    || referenceFixture.engagedReferenceSessions !== 7
+    || referenceFixture.referenceEngagementRate !== 0.7
+    || referenceFixture.visualizationOpens !== 4
+    || referenceFixture.relatedReferenceClicks !== 2
+  ) {
+    throw new Error(`Reference metric verification failed: ${JSON.stringify(referenceFixture)}`);
+  }
+  const acquisitionFixture = acquisitionMetricsFromReports({
+    rows: [
+      { dimensionValues: [{ value: '(direct)' }, { value: '(none)' }], metricValues: [{ value: '4' }] },
+      { dimensionValues: [{ value: 'chatgpt.com' }, { value: 'referral' }], metricValues: [{ value: '2' }] },
+      { dimensionValues: [{ value: 'reddit.com' }, { value: 'referral' }], metricValues: [{ value: '3' }] }
+    ]
+  }, {
+    rows: [
+      { dimensionValues: [{ value: 'new' }], metricValues: [{ value: '6' }] },
+      { dimensionValues: [{ value: 'returning' }], metricValues: [{ value: '5' }] }
+    ]
+  });
+  if (
+    acquisitionFixture.returningUsers !== 5
+    || acquisitionFixture.directSessions !== 4
+    || acquisitionFixture.referralSessions !== 5
+    || acquisitionFixture.aiReferralSessions !== 2
+  ) {
+    throw new Error(`Acquisition metric verification failed: ${JSON.stringify(acquisitionFixture)}`);
+  }
+  const discoveryFixture = searchDiscoveryFromReport({
+    rows: [
+      { keys: ['otaku data viz'], clicks: 1, impressions: 10 },
+      { keys: ['anime history timeline'], clicks: 4, impressions: 90 }
+    ]
+  });
+  if (
+    discoveryFixture.brandedClicks !== 1
+    || discoveryFixture.brandedImpressions !== 10
+    || discoveryFixture.nonBrandedClicks !== 4
+    || discoveryFixture.nonBrandedImpressions !== 90
+    || discoveryFixture.nonBrandedImpressionShare !== 0.9
+  ) {
+    throw new Error(`Search discovery verification failed: ${JSON.stringify(discoveryFixture)}`);
+  }
+  const coverageFixture = organicPageCoverageFromReport({
+    rows: [
+      { keys: ['https://otakudataviz.com/a'], clicks: 2, impressions: 20 },
+      { keys: ['https://otakudataviz.com/b'], clicks: 0, impressions: 12 },
+      { keys: ['https://otakudataviz.com/c'], clicks: 1, impressions: 8 }
+    ]
+  });
+  if (coverageFixture.organicPagesWithClicks !== 2) {
+    throw new Error(`Organic page coverage verification failed: ${JSON.stringify(coverageFixture)}`);
+  }
   console.log(`Project analytics grouping passed for ${expectedGroups.length} interactive URL variants.`);
+  console.log('Reference session metric mapping passed for the offline GA4 fixture.');
+  console.log('Acquisition and branded discovery mapping passed for offline fixtures.');
 } else {
   main().catch((error) => {
     console.error(error.message);

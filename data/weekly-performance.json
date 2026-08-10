@@ -1,0 +1,441 @@
+{
+  "site": "Otaku Data Viz",
+  "updatedAt": "2026-08-09T12:01:12.257Z",
+  "ga4PropertyId": "538946986",
+  "measurementId": "G-653DY2M8K5",
+  "searchConsoleProperty": "sc-domain:otakudataviz.com",
+  "sheetId": "1lI4PMgqxdZ2DT0-xbcv3N3YQktbdJJ-Ng-wTuyW66aM",
+  "week": {
+    "start": "2026-08-02",
+    "end": "2026-08-08",
+    "label": "2026-08-02 to 2026-08-08"
+  },
+  "summary": {
+    "users": 18,
+    "sessions": 36,
+    "views": 97,
+    "engagementRate": 0.6388888888888888,
+    "organicClicks": 5,
+    "organicImpressions": 282,
+    "organicCtr": 0.01773049645390071,
+    "avgPosition": 9.73758865248227,
+    "shareClicks": 1,
+    "copyLinkClicks": 0
+  },
+  "previous": {
+    "users": 24,
+    "sessions": 42,
+    "views": 158,
+    "engagementRate": 0.9285714285714286,
+    "organicClicks": 2,
+    "organicImpressions": 134,
+    "organicCtr": 0.014925373134328358,
+    "avgPosition": 9.902985074626866,
+    "shareClicks": 1,
+    "copyLinkClicks": 0
+  },
+  "history": [
+    {
+      "weekStart": "2026-05-24",
+      "weekEnd": "2026-05-30",
+      "users": 38,
+      "sessions": 45,
+      "views": 75,
+      "engagementRate": 0.9333333333333333,
+      "organicClicks": 4,
+      "organicImpressions": 129,
+      "organicCtr": 0.031007751937984496,
+      "avgPosition": 11.232558139534884,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-05-31",
+      "weekEnd": "2026-06-06",
+      "users": 19,
+      "sessions": 21,
+      "views": 38,
+      "engagementRate": 0.9523809523809523,
+      "organicClicks": 2,
+      "organicImpressions": 174,
+      "organicCtr": 0.011494252873563218,
+      "avgPosition": 11.063218390804598,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-06-07",
+      "weekEnd": "2026-06-13",
+      "users": 9,
+      "sessions": 9,
+      "views": 11,
+      "engagementRate": 1,
+      "organicClicks": 1,
+      "organicImpressions": 44,
+      "organicCtr": 0.022727272727272728,
+      "avgPosition": 10.136363636363637,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-06-14",
+      "weekEnd": "2026-06-20",
+      "users": 15,
+      "sessions": 15,
+      "views": 17,
+      "engagementRate": 1,
+      "organicClicks": 2,
+      "organicImpressions": 82,
+      "organicCtr": 0.024390243902439025,
+      "avgPosition": 23.890243902439025,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-06-21",
+      "weekEnd": "2026-06-27",
+      "users": 8,
+      "sessions": 9,
+      "views": 20,
+      "engagementRate": 0.7777777777777778,
+      "organicClicks": 1,
+      "organicImpressions": 138,
+      "organicCtr": 0.007246376811594203,
+      "avgPosition": 15.268115942028986,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-06-28",
+      "weekEnd": "2026-07-04",
+      "users": 3,
+      "sessions": 3,
+      "views": 3,
+      "engagementRate": 1,
+      "organicClicks": 0,
+      "organicImpressions": 211,
+      "organicCtr": 0,
+      "avgPosition": 13.966824644549764,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-07-05",
+      "weekEnd": "2026-07-11",
+      "users": 1,
+      "sessions": 1,
+      "views": 1,
+      "engagementRate": 1,
+      "organicClicks": 0,
+      "organicImpressions": 100,
+      "organicCtr": 0,
+      "avgPosition": 11.57,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-07-12",
+      "weekEnd": "2026-07-18",
+      "users": 2,
+      "sessions": 2,
+      "views": 4,
+      "engagementRate": 1,
+      "organicClicks": 1,
+      "organicImpressions": 81,
+      "organicCtr": 0.012345679012345678,
+      "avgPosition": 13.518518518518519,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-07-19",
+      "weekEnd": "2026-07-25",
+      "users": 17,
+      "sessions": 26,
+      "views": 42,
+      "engagementRate": 0.8461538461538461,
+      "organicClicks": 7,
+      "organicImpressions": 125,
+      "organicCtr": 0.056,
+      "avgPosition": 8.672,
+      "shareClicks": 0,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-07-26",
+      "weekEnd": "2026-08-01",
+      "users": 24,
+      "sessions": 42,
+      "views": 158,
+      "engagementRate": 0.9285714285714286,
+      "organicClicks": 2,
+      "organicImpressions": 134,
+      "organicCtr": 0.014925373134328358,
+      "avgPosition": 9.902985074626866,
+      "shareClicks": 1,
+      "copyLinkClicks": 0,
+      "source": "api"
+    },
+    {
+      "weekStart": "2026-08-02",
+      "weekEnd": "2026-08-08",
+      "users": 18,
+      "sessions": 36,
+      "views": 97,
+      "engagementRate": 0.6388888888888888,
+      "organicClicks": 5,
+      "organicImpressions": 282,
+      "organicCtr": 0.01773049645390071,
+      "avgPosition": 9.73758865248227,
+      "shareClicks": 1,
+      "copyLinkClicks": 0,
+      "source": "api"
+    }
+  ],
+  "topPages": [
+    {
+      "page": "/projects/manga-anime-timeline.html",
+      "views": 19,
+      "users": 11,
+      "organicClicks": 3,
+      "organicImpressions": 142,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/",
+      "views": 15,
+      "users": 10,
+      "organicClicks": 1,
+      "organicImpressions": 40,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/projects.html",
+      "views": 14,
+      "users": 5,
+      "organicClicks": 0,
+      "organicImpressions": 0,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/projects/nintendo-game-universe-map.html",
+      "views": 14,
+      "users": 3,
+      "organicClicks": 0,
+      "organicImpressions": 12,
+      "shareClicks": 1,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/projects/dragon-ball-sociogram.html",
+      "views": 12,
+      "users": 4,
+      "organicClicks": 1,
+      "organicImpressions": 85,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/index.html",
+      "views": 10,
+      "users": 3,
+      "organicClicks": 0,
+      "organicImpressions": 0,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/projects/pokedex-type-treemap.html",
+      "views": 5,
+      "users": 2,
+      "organicClicks": 0,
+      "organicImpressions": 4,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/contact.html",
+      "views": 4,
+      "users": 1,
+      "organicClicks": 0,
+      "organicImpressions": 0,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/lab.html",
+      "views": 3,
+      "users": 3,
+      "organicClicks": 0,
+      "organicImpressions": 1,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    },
+    {
+      "page": "/about.html",
+      "views": 1,
+      "users": 1,
+      "organicClicks": 0,
+      "organicImpressions": 0,
+      "shareClicks": 0,
+      "copyLinkClicks": 0
+    }
+  ],
+  "topQueries": [
+    {
+      "query": "manga timeline",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 1,
+      "impressions": 5,
+      "ctr": 0.2,
+      "position": 7.6
+    },
+    {
+      "query": "anime history timeline",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 15
+    },
+    {
+      "query": "anime time line",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "query": "anime timeline",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 11.5
+    },
+    {
+      "query": "dragon ball character family tree relationship chart",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 9
+    },
+    {
+      "query": "dragon ball character family tree relationships",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 7
+    },
+    {
+      "query": "dragon ball character relationship chart",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 4,
+      "ctr": 0,
+      "position": 6.5
+    },
+    {
+      "query": "dragon ball character relationship chart family tree",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 6.666666666666667
+    },
+    {
+      "query": "dragon ball character relationship diagram or family tree",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 5
+    },
+    {
+      "query": "dragon ball character relationships family tree",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 6
+    },
+    {
+      "query": "dragon ball characters starting with i",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "query": "dragon ball family tree relationship chart",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "query": "dragon ball versus connections",
+      "topPage": "/projects/dragon-ball-sociogram.html",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 8
+    },
+    {
+      "query": "history of anime timeline",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 22
+    },
+    {
+      "query": "manga history timeline",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 10
+    },
+    {
+      "query": "timeline manga",
+      "topPage": "/projects/manga-anime-timeline.html",
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 11
+    }
+  ],
+  "shareEvents": [
+    {
+      "pagePath": "/projects/nintendo-game-universe-map.html",
+      "platform": "x",
+      "shareClicks": 1,
+      "eventName": "social_share_click",
+      "destinationUrl": ""
+    }
+  ],
+  "insights": [
+    "Users were -25.0% week over week, with 18 users and 97 views.",
+    "Google Search delivered 5 clicks from 282 impressions.",
+    "Top page: /projects/manga-anime-timeline.html. Top query: manga timeline.",
+    "Most shared item: /projects/nintendo-game-universe-map.html via x (1 clicks)."
+  ]
+}

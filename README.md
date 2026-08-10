@@ -41,6 +41,20 @@ The `/projects/` URL is the canonical SEO and sharing URL and is the only projec
 
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
+## Canonical build workflow
+
+The repository root is the canonical source for the website. The `docs/` directory is generated output for GitHub Pages and should not be edited directly.
+
+```bash
+npm run build
+npm run check:build
+npm run verify
+```
+
+`npm run build` copies only the controlled pages, assets, data, and deployment configuration declared in `scripts/build-site.mjs`. It refuses to proceed if `docs/` contains an unmanaged file, preventing accidental publication or silent deletion. `npm run check:build` is read-only and fails whenever the published tree drifts from the canonical source.
+
+When the analytics updater refreshes `data/weekly-performance.json`, run the build afterward to publish the new snapshot. Future site changes should be made in the root source and propagated to `docs/` only through this build.
+
 ## Current site structure
 
 ```text

@@ -2,6 +2,7 @@ import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { createContext, runInContext } from 'node:vm';
+import { verifySiteBuild } from './build-site.mjs';
 
 const root = process.cwd();
 const origin = 'https://otakudataviz.com';
@@ -155,7 +156,7 @@ for (const project of projects) {
 
   if (project.name === 'Pokedex Type Treemap') {
     try {
-      const dataPath = path.join(root, 'docs/assets/data/pokemon-treemap-data.json');
+      const dataPath = path.join(root, 'assets/data/pokemon-treemap-data.json');
       const dataset = JSON.parse(await readFile(dataPath, 'utf8'));
       const pokemon = Array.isArray(dataset.pokemon) ? dataset.pokemon : [];
       check(pokemon.length > 0, `${project.name}: published Pokémon dataset is empty`);
@@ -314,7 +315,7 @@ for (const project of projects) {
   );
 }
 
-const sitemap = await readFile(path.join(root, 'docs/sitemap.xml'), 'utf8');
+const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
 for (const project of projects) {
   check(sitemap.includes(`<loc>${origin}${project.landing}</loc>`), `${project.name}: canonical landing missing from sitemap`);
   for (const appPath of appPaths(project)) {
@@ -331,12 +332,6 @@ for (const page of ['index.html', 'projects.html']) {
     );
   }
 }
-
-const filesToMirror = [
-  'assets/js/analytics-events.js',
-  'analytics/fixtures/weekly-performance.json',
-  ...projects.flatMap((project) => [project.landing.replace(/^\//, ''), siteFile(project.app).slice(root.length + 1)])
-];
 
 const analyticsEvents = await readFile(path.join(root, 'assets/js/analytics-events.js'), 'utf8');
 check(
@@ -356,11 +351,7 @@ check(
   'Shared analytics tracker does not record meaningful interactive controls'
 );
 
-const [sourceDashboard, publishedDashboard] = await Promise.all([
-  readFile(path.join(root, 'analytics-dashboard.html'), 'utf8'),
-  readFile(path.join(root, 'docs/analytics/index.html'), 'utf8')
-]);
-check(sourceDashboard === publishedDashboard, 'Analytics dashboard source and docs copy differ');
+const sourceDashboard = await readFile(path.join(root, 'analytics-dashboard.html'), 'utf8');
 check(
   sourceDashboard.includes("const isFixtureMode = isLocalHost && queryParams.get('fixture') === '1';")
     && sourceDashboard.includes('Local fixture mode.')
@@ -382,13 +373,8 @@ try {
   failures.push(`Analytics dashboard fixture is invalid JSON (${error.message})`);
 }
 
-for (const relativePath of filesToMirror) {
-  const [source, published] = await Promise.all([
-    readFile(path.join(root, relativePath), 'utf8'),
-    readFile(path.join(root, 'docs', relativePath), 'utf8')
-  ]);
-  check(source === published, `${relativePath}: source and docs copy differ`);
-}
+const siteBuild = await verifySiteBuild({ root });
+siteBuild.failures.forEach((failure) => failures.push(`Site build: ${failure}`));
 
 const pagesToCheck = [
   'index.html',
@@ -416,5 +402,5 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log(`Project URL verification passed for ${projects.length} landing/app pairs.`);
-  console.log('Canonical tags, Open Graph URLs, JSON-LD relationships, sitemap entries, buttons, previews, related links, project cards, local targets, and docs mirrors are consistent.');
+  console.log(`Canonical tags, Open Graph URLs, JSON-LD relationships, sitemap entries, buttons, previews, related links, project cards, local targets, and ${siteBuild.fileCount} generated docs files are consistent.`);
 }

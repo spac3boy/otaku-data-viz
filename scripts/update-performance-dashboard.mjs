@@ -9,7 +9,6 @@ const config = {
   searchConsoleProperty: process.env.GSC_SITE_URL || 'sc-domain:otakudataviz.com',
   sheetId: process.env.GOOGLE_SHEET_ID || '1lI4PMgqxdZ2DT0-xbcv3N3YQktbdJJ-Ng-wTuyW66aM',
   outputPath: process.env.DASHBOARD_DATA_PATH || 'data/weekly-performance.json',
-  docsOutputPath: process.env.DOCS_DASHBOARD_DATA_PATH || 'docs/data/weekly-performance.json',
   reportDays: Number(process.env.REPORT_DAYS || 7),
   backfillWeeks: process.env.BACKFILL_WEEKS ? Number(process.env.BACKFILL_WEEKS) : null,
   historyStartDate: process.env.HISTORY_START_DATE || '2020-01-01',
@@ -958,9 +957,7 @@ const main = async () => {
   }
 
   await mkdir(path.dirname(config.outputPath), { recursive: true });
-  await mkdir(path.dirname(config.docsOutputPath), { recursive: true });
   await writeFile(config.outputPath, `${JSON.stringify(dashboard, null, 2)}\n`);
-  await writeFile(config.docsOutputPath, `${JSON.stringify(dashboard, null, 2)}\n`);
 
   const detailsByWeek = new Map(
     backfilledDetails.map((detail) => [`${detail.range.startDate}:${detail.range.endDate}`, detail])

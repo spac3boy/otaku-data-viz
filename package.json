@@ -1,0 +1,10 @@
+{
+  "name": "otaku-data-viz",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs",
+    "check:build": "node scripts/build-site.mjs --check",
+    "verify": "node scripts/verify-project-urls.mjs"
+  }
+}

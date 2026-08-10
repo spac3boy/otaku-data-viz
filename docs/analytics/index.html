@@ -1,0 +1,1411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Otaku Data Viz Performance Dashboard</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #090b09;
+      --paper: #f5eddb;
+      --paper-soft: #fbf5e8;
+      --paper-deep: #e8deca;
+      --line: rgba(9, 11, 9, .78);
+      --muted: rgba(9, 11, 9, .72);
+      --fade: rgba(9, 11, 9, .12);
+      --green: #087f5b;
+      --red: #b42318;
+      --yellow: #ffcc00;
+      --blue: #00a7e1;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      --display: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 24% 10%, rgba(9, 11, 9, .055), transparent 25%),
+        radial-gradient(circle at 70% 78%, rgba(108, 83, 37, .08), transparent 28%),
+        repeating-linear-gradient(0deg, rgba(9, 11, 9, .018) 0 1px, transparent 1px 5px),
+        var(--paper);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .2;
+      mix-blend-mode: multiply;
+      background:
+        radial-gradient(circle, rgba(9, 11, 9, .17) 0 .7px, transparent .8px) 0 0 / 13px 13px,
+        repeating-linear-gradient(115deg, transparent 0 17px, rgba(9, 11, 9, .08) 17px 18px);
+      z-index: -1;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 32px auto;
+      padding: clamp(18px, 3.6vw, 40px);
+      border: 2px solid var(--ink);
+      background:
+        linear-gradient(90deg, rgba(9, 11, 9, .035) 1px, transparent 1px) 0 0 / 48px 48px,
+        linear-gradient(0deg, rgba(9, 11, 9, .028) 1px, transparent 1px) 0 0 / 48px 48px,
+        var(--paper-soft);
+      box-shadow: 0 0 0 1px rgba(9, 11, 9, .2);
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin: calc(clamp(18px, 3.6vw, 40px) * -1) calc(clamp(18px, 3.6vw, 40px) * -1) 24px;
+      padding: clamp(18px, 3.6vw, 40px);
+      border-bottom: 2px solid var(--ink);
+      background:
+        linear-gradient(90deg, transparent 0 12%, rgba(9, 11, 9, .14) 12% 12.6%, transparent 12.6%),
+        radial-gradient(circle, rgba(9, 11, 9, .12) 0 2px, transparent 2.4px) 0 0 / 24px 24px,
+        var(--paper-deep);
+    }
+
+    h1, h2, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-family: var(--display);
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(1.35rem, 2vw, 1.85rem);
+      font-weight: 900;
+      line-height: .92;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .subhead {
+      color: var(--muted);
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .sheet-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 16px;
+      border: 2px solid var(--ink);
+      color: var(--paper-soft);
+      background: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 950;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .sheet-link:hover,
+    .sheet-link:focus-visible {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 rgba(9, 11, 9, .24);
+      outline: none;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .sheet-link.secondary {
+      color: var(--ink);
+      background: var(--paper-soft);
+    }
+
+    .data-mode {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 2px solid var(--ink);
+      background: var(--yellow);
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+
+    .data-mode[hidden] { display: none; }
+
+    .data-mode a { white-space: nowrap; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card,
+    .table-panel,
+    .insights {
+      background: rgba(251, 245, 232, .78);
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      box-shadow: none;
+    }
+
+    .card {
+      min-height: 116px;
+      padding: 18px;
+      position: relative;
+      overflow: visible;
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 8px;
+      background:
+        repeating-linear-gradient(90deg, var(--ink) 0 3px, transparent 3px 5px, var(--ink) 5px 6px, transparent 6px 12px);
+      opacity: .82;
+    }
+
+    .card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(9, 11, 9, .2);
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .info {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border: 0;
+      color: var(--ink);
+      background: transparent;
+      padding: 0;
+      text-transform: none;
+      cursor: help;
+    }
+
+    .info:hover,
+    .info:focus-visible {
+      color: var(--ink);
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0 rgba(9, 11, 9, .2);
+      outline: none;
+    }
+
+    .info svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .info::after {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: calc(100% + 8px);
+      width: min(260px, 72vw);
+      padding: 8px 10px;
+      border: 1.5px solid var(--ink);
+      color: var(--paper-soft);
+      background: var(--ink);
+      box-shadow: 5px 5px 0 rgba(9, 11, 9, .22);
+      content: attr(data-definition);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      line-height: 1.35;
+      text-transform: none;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease;
+    }
+
+    .info:hover::after,
+    .info:focus-visible::after {
+      opacity: 1;
+    }
+
+    .value {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--display);
+      font-size: 2.35rem;
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: 0;
+    }
+
+    .delta {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .delta.up { color: var(--green); }
+    .delta.down { color: var(--red); }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .chart-panel {
+      margin-top: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(251, 245, 232, .78);
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .chart-copy {
+      min-width: 0;
+    }
+
+    .chart-meta {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    .chart-controls {
+      display: inline-grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      min-width: min(520px, 100%);
+      border: 1.5px solid var(--ink);
+      background: var(--paper-deep);
+    }
+
+    .chart-actions {
+      display: grid;
+      gap: 10px;
+      justify-items: end;
+    }
+
+    .period-controls {
+      display: inline-grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      min-width: min(340px, 100%);
+      border: 1.5px solid var(--ink);
+      background: var(--paper-deep);
+    }
+
+    .chart-tab,
+    .period-tab {
+      min-height: 34px;
+      border: 0;
+      border-right: 1.5px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .chart-tab:last-child,
+    .period-tab:last-child {
+      border-right: 0;
+    }
+
+    .chart-tab[aria-selected="true"],
+    .period-tab[aria-selected="true"] {
+      background: var(--ink);
+      color: var(--paper-soft);
+    }
+
+    .chart-window-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 12px;
+      font-family: var(--mono);
+    }
+
+    .week-nav {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-deep);
+      color: var(--ink);
+      cursor: pointer;
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .week-nav:hover,
+    .week-nav:focus-visible {
+      background: var(--ink);
+      color: var(--paper-soft);
+      outline: none;
+    }
+
+    .week-nav:disabled {
+      cursor: not-allowed;
+      opacity: .36;
+      background: rgba(9, 11, 9, .08);
+      color: var(--muted);
+    }
+
+    .week-window-label {
+      min-width: 0;
+      flex: 1;
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 950;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .chart-shell {
+      position: relative;
+      min-height: 330px;
+      border: 1.5px solid rgba(9, 11, 9, .36);
+      background:
+        linear-gradient(90deg, rgba(9, 11, 9, .05) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(0deg, rgba(9, 11, 9, .045) 1px, transparent 1px) 0 0 / 42px 42px,
+        rgba(245, 237, 219, .58);
+    }
+
+    .chart-svg {
+      display: block;
+      width: 100%;
+      height: 330px;
+      opacity: 0;
+      transform: translateX(0);
+      transition: opacity 260ms ease, transform 320ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .chart-svg.from-prev {
+      transform: translateX(-18px);
+    }
+
+    .chart-svg.from-next {
+      transform: translateX(18px);
+    }
+
+    .chart-svg.is-active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .chart-axis,
+    .chart-grid-line {
+      stroke: rgba(9, 11, 9, .22);
+      stroke-width: 1;
+      shape-rendering: crispEdges;
+    }
+
+    .chart-series {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: square;
+      stroke-linejoin: round;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 620ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .chart-svg.is-active .chart-series {
+      stroke-dashoffset: 0;
+    }
+
+    .chart-point {
+      stroke: var(--paper-soft);
+      stroke-width: 2;
+      cursor: crosshair;
+      opacity: 0;
+      transform: scale(.45);
+      transform-box: fill-box;
+      transform-origin: center;
+      transition:
+        opacity 180ms ease,
+        transform 260ms cubic-bezier(.2, .8, .2, 1);
+      transition-delay: var(--point-delay, 180ms);
+    }
+
+    .chart-svg.is-active .chart-point {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .chart-week-band {
+      fill: rgba(9, 11, 9, .035);
+    }
+
+    .chart-week-band:nth-of-type(even) {
+      fill: rgba(0, 167, 225, .055);
+    }
+
+    .chart-week-boundary {
+      stroke: rgba(9, 11, 9, .16);
+      stroke-width: 1;
+      stroke-dasharray: 4 5;
+      shape-rendering: crispEdges;
+    }
+
+    .chart-label {
+      fill: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid var(--ink);
+      background: var(--swatch);
+    }
+
+    .chart-tooltip {
+      position: absolute;
+      z-index: 20;
+      min-width: 190px;
+      padding: 10px;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-soft);
+      box-shadow: 5px 5px 0 rgba(9, 11, 9, .22);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      line-height: 1.45;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -100%);
+    }
+
+    .chart-tooltip strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .chart-empty {
+      display: grid;
+      min-height: 330px;
+      place-items: center;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.86rem;
+      font-weight: 850;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chart-svg,
+      .chart-series,
+      .chart-point {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .table-panel,
+    .insights {
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .table-panel h2::after,
+    .insights h2::after {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 4px;
+      margin-top: 10px;
+      background: var(--ink);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+
+    th,
+    td {
+      padding: 10px 8px;
+      border-bottom: 1.5px solid rgba(9, 11, 9, .18);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    td.num,
+    th.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .insights {
+      margin-top: 16px;
+    }
+
+    .insights ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .insights li + li { margin-top: 8px; }
+
+    .empty {
+      color: var(--muted);
+      padding: 18px 0 4px;
+    }
+
+    @media (max-width: 900px) {
+      header {
+        display: block;
+      }
+
+      .sheet-link {
+        display: inline-block;
+        margin-top: 12px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-head {
+        display: block;
+      }
+
+      .chart-controls {
+        margin-top: 12px;
+      }
+
+      .chart-tab { font-size: .58rem; }
+
+      .data-mode {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .chart-actions {
+        justify-items: stretch;
+      }
+
+      .chart-window-controls {
+        align-items: stretch;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        width: min(100% - 20px, 1180px);
+        padding-top: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      th:nth-child(3),
+      td:nth-child(3) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Otaku Data Viz Performance</h1>
+        <p class="subhead" id="weekLabel">Loading weekly report...</p>
+      </div>
+      <div class="header-actions">
+        <a class="sheet-link secondary" id="fixtureLink" href="?fixture=1">Preview Fixture</a>
+        <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1lI4PMgqxdZ2DT0-xbcv3N3YQktbdJJ-Ng-wTuyW66aM/edit" target="_blank" rel="noopener noreferrer">Open Google Sheet</a>
+      </div>
+    </header>
+
+    <aside class="data-mode" id="dataMode" hidden>
+      <span><strong>Local fixture mode.</strong> Every value on this page is sample data for interface testing, not GA4 or Search Console performance.</span>
+      <a href="?">Return to local data</a>
+    </aside>
+
+    <section class="grid" id="metricGrid" aria-label="Visible chart metrics"></section>
+
+    <section class="chart-panel" aria-labelledby="masterTrendTitle">
+      <div class="chart-head">
+        <div class="chart-copy">
+          <h2 id="masterTrendTitle">Weekly Trend</h2>
+          <p class="chart-meta" id="chartMeta">Loading trend data...</p>
+        </div>
+        <div class="chart-actions">
+          <div class="period-controls" role="tablist" aria-label="Trend timeframe">
+            <button class="period-tab" type="button" data-chart-period="weekly" role="tab" aria-selected="true">Weekly</button>
+            <button class="period-tab" type="button" data-chart-period="monthly" role="tab" aria-selected="false">Monthly</button>
+            <button class="period-tab" type="button" data-chart-period="annual" role="tab" aria-selected="false">Annual</button>
+          </div>
+          <div class="chart-controls" role="tablist" aria-label="Trend metric group">
+            <button class="chart-tab" type="button" data-chart-mode="reference" role="tab" aria-selected="true">Reference</button>
+            <button class="chart-tab" type="button" data-chart-mode="traffic" role="tab" aria-selected="false">Traffic</button>
+            <button class="chart-tab" type="button" data-chart-mode="search" role="tab" aria-selected="false">Search</button>
+            <button class="chart-tab" type="button" data-chart-mode="acquisition" role="tab" aria-selected="false">Sources</button>
+            <button class="chart-tab" type="button" data-chart-mode="sharing" role="tab" aria-selected="false">Sharing</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-window-controls" aria-label="Chart window">
+        <button class="week-nav" type="button" id="prevWeeks" aria-label="Show previous chart window">&lt;</button>
+        <div class="week-window-label" id="weekWindowLabel">Latest Window</div>
+        <button class="week-nav" type="button" id="nextWeeks" aria-label="Show next chart window">&gt;</button>
+      </div>
+      <div class="chart-shell" id="chartShell">
+        <div class="chart-empty">Trend data will appear after weekly snapshots are recorded.</div>
+        <div class="chart-tooltip" id="chartTooltip" role="status" aria-live="polite"></div>
+      </div>
+      <div class="chart-legend" id="chartLegend" aria-label="Chart legend"></div>
+    </section>
+
+    <section class="content-grid">
+      <div class="table-panel">
+        <h2>Top Pages</h2>
+        <table>
+          <thead>
+            <tr><th>Page</th><th class="num">Views</th><th class="num">Search Clicks</th></tr>
+          </thead>
+          <tbody id="topPages"></tbody>
+        </table>
+      </div>
+
+      <div class="table-panel">
+        <h2>Top Search Queries</h2>
+        <table>
+          <thead>
+            <tr><th>Query</th><th>Type</th><th class="num">Clicks</th><th class="num">Position</th></tr>
+          </thead>
+          <tbody id="topQueries"></tbody>
+        </table>
+      </div>
+
+      <div class="table-panel">
+        <h2>Share Activity</h2>
+        <table>
+          <thead>
+            <tr><th>Page</th><th>Platform</th><th class="num">Clicks</th></tr>
+          </thead>
+          <tbody id="shareEvents"></tbody>
+        </table>
+      </div>
+
+      <div class="insights">
+        <h2>Weekly Readout</h2>
+        <ul id="insights"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const queryParams = new URLSearchParams(window.location.search);
+    const isLocalHost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+    const isFixtureMode = isLocalHost && queryParams.get('fixture') === '1';
+    const isDeployedMirror = window.location.pathname.includes('/analytics/');
+    const dataPath = isFixtureMode
+      ? (isDeployedMirror ? './fixtures/weekly-performance.json' : 'analytics/fixtures/weekly-performance.json')
+      : (isDeployedMirror ? '../data/weekly-performance.json' : 'data/weekly-performance.json');
+
+    const number = new Intl.NumberFormat('en-US');
+    const percent = new Intl.NumberFormat('en-US', { style: 'percent', maximumFractionDigits: 1 });
+    const monthYear = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' });
+    let activeChartMode = 'reference';
+    let activeChartPeriod = 'weekly';
+    let dashboardData = null;
+    let chartWindowStart = 0;
+    let chartTransitionDirection = 'none';
+
+    const periodConfig = {
+      weekly: {
+        title: 'Weekly Trend',
+        metaSuffix: 'weekly',
+        windowSize: 4,
+        unit: 'weeks',
+        pointPrefix: 'Week'
+      },
+      monthly: {
+        title: 'Monthly Trend',
+        metaSuffix: 'monthly',
+        windowSize: 4,
+        unit: 'months',
+        pointPrefix: 'Month'
+      },
+      annual: {
+        title: 'Annual Trend',
+        metaSuffix: 'annual',
+        windowSize: 4,
+        unit: 'years',
+        pointPrefix: 'Year'
+      }
+    };
+
+    const metricDefinitions = [
+      ['engagedReferenceSessions', 'Engaged Reference Sessions', 'number', 'GA4 sessions containing at least one reference_engagement event. This is the weekly or selected-period form of the MERS north-star metric.'],
+      ['referenceSessions', 'Reference Sessions', 'number', 'GA4 sessions containing a project_page_view event on a canonical landing page or interactive visualization.'],
+      ['referenceEngagementRate', 'Reference Engagement Rate', 'percent', 'Engaged reference sessions divided by all reference sessions.'],
+      ['visualizationOpens', 'Visualization Opens', 'number', 'Clicks from canonical reference pages into their interactive visualizations.'],
+      ['organicClicks', 'Organic Clicks', 'number', 'Search Console clicks: visits from Google Search results to Otaku Data Viz during the selected period.'],
+      ['organicImpressions', 'Organic Impressions', 'number', 'Search Console impressions: how often Otaku Data Viz appeared in Google Search results.'],
+      ['nonBrandedImpressionShare', 'Non-Branded Share', 'percent', 'The share of visible, classified Search Console query impressions that did not contain an Otaku Data Viz brand variant.'],
+      ['organicPagesWithClicks', 'Pages Earning Clicks', 'number', 'Canonical Search Console pages that earned at least one organic click during the reporting window.'],
+      ['returningUsers', 'Returning Users', 'number', 'GA4 active users classified as returning because they had at least one previous session.'],
+      ['directSessions', 'Direct Sessions', 'number', 'GA4 sessions attributed to direct or no-referrer acquisition.'],
+      ['referralSessions', 'Referral Sessions', 'number', 'GA4 sessions attributed to referral traffic.'],
+      ['aiReferralSessions', 'AI Referral Sessions', 'number', 'GA4 sessions whose source matched a known AI answer-engine source. This does not measure zero-click citations.']
+    ];
+
+    const chartModes = {
+      reference: {
+        label: 'Reference',
+        meta: 'Weekly reference usage trend',
+        series: [
+          { key: 'referenceSessions', label: 'Reference Sessions', color: '#00a7e1' },
+          { key: 'engagedReferenceSessions', label: 'Engaged Reference', color: '#087f5b' },
+          { key: 'visualizationOpens', label: 'Visualization Opens', color: '#ffcc00' }
+        ]
+      },
+      traffic: {
+        label: 'Traffic',
+        meta: 'Weekly GA4 traffic trend',
+        series: [
+          { key: 'views', label: 'Views', color: '#00a7e1' },
+          { key: 'sessions', label: 'Sessions', color: '#ffcc00' },
+          { key: 'users', label: 'Users', color: '#087f5b' }
+        ]
+      },
+      search: {
+        label: 'Search',
+        meta: 'Weekly Google Search visibility trend',
+        series: [
+          { key: 'organicImpressions', label: 'Impressions', color: '#00a7e1' },
+          { key: 'nonBrandedImpressions', label: 'Non-Branded Impressions', color: '#ffcc00' },
+          { key: 'organicClicks', label: 'Clicks', color: '#087f5b' }
+        ]
+      },
+      acquisition: {
+        label: 'Acquisition',
+        meta: 'Weekly returning and referral trend',
+        series: [
+          { key: 'returningUsers', label: 'Returning Users', color: '#087f5b' },
+          { key: 'referralSessions', label: 'Referral Sessions', color: '#00a7e1' },
+          { key: 'aiReferralSessions', label: 'AI Referral Sessions', color: '#ffcc00' }
+        ]
+      },
+      sharing: {
+        label: 'Sharing',
+        meta: 'Weekly share-button click trend',
+        series: [
+          { key: 'shareClicks', label: 'Share Clicks', color: '#00a7e1' },
+          { key: 'copyLinkClicks', label: 'Copy Link', color: '#ffcc00' }
+        ]
+      }
+    };
+
+    const formatValue = (value, type) => {
+      const numeric = Number(value || 0);
+      return type === 'percent' ? percent.format(numeric) : number.format(numeric);
+    };
+
+    const deltaText = (current, previous, type) => {
+      const now = Number(current || 0);
+      const before = Number(previous || 0);
+      if (!before && !now) return 'No prior data yet';
+      if (!before) return 'New this week';
+      const change = (now - before) / before;
+      const absolute = type === 'percent' ? `${((now - before) * 100).toFixed(1)} pts` : number.format(now - before);
+      return `${change >= 0 ? '+' : ''}${percent.format(change)} (${absolute})`;
+    };
+
+    const deltaClass = (current, previous) => {
+      const now = Number(current || 0);
+      const before = Number(previous || 0);
+      if (now > before) return 'up';
+      if (now < before) return 'down';
+      return '';
+    };
+
+    const renderRows = (target, rows, cells, emptyText) => {
+      target.innerHTML = '';
+      if (!rows.length) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td class="empty" colspan="${cells.length}">${emptyText}</td>`;
+        target.append(row);
+        return;
+      }
+
+      rows.slice(0, 8).forEach((item) => {
+        const row = document.createElement('tr');
+        row.innerHTML = cells.map((cell) => {
+          const value = cell.format ? cell.format(item[cell.key]) : (item[cell.key] || '');
+          return `<td class="${cell.numeric ? 'num' : ''}">${value}</td>`;
+        }).join('');
+        target.append(row);
+      });
+    };
+
+    const compactDate = (value) => {
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
+
+    const compactWeek = (row) => `${compactDate(row.weekStart)}-${compactDate(row.weekEnd)}`;
+
+    const periodLabel = (row) => row.periodLabel || compactWeek(row);
+
+    const periodRangeLabel = (rows) => {
+      const first = rows[0];
+      const last = rows[rows.length - 1];
+      if (!first || !last) return '';
+      return first === last ? periodLabel(first) : `${periodLabel(first)} to ${periodLabel(last)}`;
+    };
+
+    const addDateDays = (value, days) => {
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return value;
+      date.setDate(date.getDate() + days);
+      return date.toISOString().slice(0, 10);
+    };
+
+    const blankWeek = (weekStart) => ({
+      weekStart,
+      weekEnd: addDateDays(weekStart, 6),
+      periodLabel: compactWeek({ weekStart, weekEnd: addDateDays(weekStart, 6) }),
+      users: null,
+      sessions: null,
+      views: null,
+      engagementRate: null,
+      referenceSessions: null,
+      engagedReferenceSessions: null,
+      referenceEngagementRate: null,
+      visualizationOpens: null,
+      relatedReferenceClicks: null,
+      returningUsers: null,
+      directSessions: null,
+      referralSessions: null,
+      aiReferralSessions: null,
+      organicClicks: null,
+      organicImpressions: null,
+      organicCtr: null,
+      avgPosition: null,
+      brandedClicks: null,
+      brandedImpressions: null,
+      nonBrandedClicks: null,
+      nonBrandedImpressions: null,
+      classifiedQueryImpressions: null,
+      nonBrandedImpressionShare: null,
+      organicPagesWithClicks: null,
+      shareClicks: null,
+      copyLinkClicks: null,
+      source: 'empty'
+    });
+
+    const padPeriods = (history, windowSize = periodConfig[activeChartPeriod].windowSize) => {
+      if (!history.length) return [];
+      const padded = [...history];
+      while (padded.length < windowSize && activeChartPeriod === 'weekly') {
+        const first = padded[0];
+        padded.unshift(blankWeek(addDateDays(first.weekStart, -7)));
+      }
+      return padded;
+    };
+
+    const emptyTotals = () => ({
+      users: 0,
+      sessions: 0,
+      views: 0,
+      engagementRate: 0,
+      referenceSessions: 0,
+      engagedReferenceSessions: 0,
+      referenceEngagementRate: 0,
+      visualizationOpens: 0,
+      relatedReferenceClicks: 0,
+      returningUsers: 0,
+      directSessions: 0,
+      referralSessions: 0,
+      aiReferralSessions: 0,
+      organicClicks: 0,
+      organicImpressions: 0,
+      organicCtr: 0,
+      avgPosition: 0,
+      brandedClicks: 0,
+      brandedImpressions: 0,
+      nonBrandedClicks: 0,
+      nonBrandedImpressions: 0,
+      classifiedQueryImpressions: 0,
+      nonBrandedImpressionShare: 0,
+      organicPagesWithClicks: 0,
+      shareClicks: 0,
+      copyLinkClicks: 0
+    });
+
+    const aggregateRows = (rows) => {
+      const totals = rows
+        .filter((row) => row && row.source !== 'empty')
+        .reduce((acc, row) => {
+          const sessions = Number(row.sessions || 0);
+          const impressions = Number(row.organicImpressions || 0);
+          acc.users += Number(row.users || 0);
+          acc.sessions += sessions;
+          acc.views += Number(row.views || 0);
+          acc.referenceSessions += Number(row.referenceSessions || 0);
+          acc.engagedReferenceSessions += Number(row.engagedReferenceSessions || 0);
+          acc.visualizationOpens += Number(row.visualizationOpens || 0);
+          acc.relatedReferenceClicks += Number(row.relatedReferenceClicks || 0);
+          acc.returningUsers += Number(row.returningUsers || 0);
+          acc.directSessions += Number(row.directSessions || 0);
+          acc.referralSessions += Number(row.referralSessions || 0);
+          acc.aiReferralSessions += Number(row.aiReferralSessions || 0);
+          acc.organicClicks += Number(row.organicClicks || 0);
+          acc.organicImpressions += impressions;
+          acc.brandedClicks += Number(row.brandedClicks || 0);
+          acc.brandedImpressions += Number(row.brandedImpressions || 0);
+          acc.nonBrandedClicks += Number(row.nonBrandedClicks || 0);
+          acc.nonBrandedImpressions += Number(row.nonBrandedImpressions || 0);
+          acc.classifiedQueryImpressions += Number(row.classifiedQueryImpressions || 0);
+          acc.organicPagesWithClicks = Math.max(acc.organicPagesWithClicks, Number(row.organicPagesWithClicks || 0));
+          acc.shareClicks += Number(row.shareClicks || 0);
+          acc.copyLinkClicks += Number(row.copyLinkClicks || 0);
+          acc.engagementNumerator += Number(row.engagementRate || 0) * sessions;
+          acc.positionNumerator += Number(row.avgPosition || 0) * impressions;
+          return acc;
+        }, {
+          ...emptyTotals(),
+          engagementNumerator: 0,
+          positionNumerator: 0
+        });
+
+      totals.engagementRate = totals.sessions ? totals.engagementNumerator / totals.sessions : 0;
+      totals.referenceEngagementRate = totals.referenceSessions
+        ? totals.engagedReferenceSessions / totals.referenceSessions
+        : 0;
+      totals.organicCtr = totals.organicImpressions ? totals.organicClicks / totals.organicImpressions : 0;
+      totals.avgPosition = totals.organicImpressions ? totals.positionNumerator / totals.organicImpressions : 0;
+      totals.nonBrandedImpressionShare = totals.classifiedQueryImpressions
+        ? totals.nonBrandedImpressions / totals.classifiedQueryImpressions
+        : 0;
+      delete totals.engagementNumerator;
+      delete totals.positionNumerator;
+      return totals;
+    };
+
+    const aggregatePeriodGroup = (rows, label) => {
+      const totals = aggregateRows(rows);
+      return {
+        ...totals,
+        weekStart: rows[0].weekStart,
+        weekEnd: rows[rows.length - 1].weekEnd,
+        periodLabel: label,
+        source: rows.some((row) => row.source !== 'empty') ? 'api' : 'empty'
+      };
+    };
+
+    const groupHistory = (history, period) => {
+      if (period === 'weekly') return history.map((row) => ({ ...row, periodLabel: compactWeek(row) }));
+
+      const groups = new Map();
+      history
+        .filter((row) => row.source !== 'empty')
+        .forEach((row) => {
+          const date = new Date(`${row.weekEnd}T00:00:00`);
+          const key = period === 'annual'
+            ? String(date.getFullYear())
+            : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+          const label = period === 'annual'
+            ? String(date.getFullYear())
+            : monthYear.format(date);
+          if (!groups.has(key)) groups.set(key, { label, rows: [] });
+          groups.get(key).rows.push(row);
+        });
+
+      return [...groups.values()].map((group) => aggregatePeriodGroup(group.rows, group.label));
+    };
+
+    const visibleHistory = (data) => {
+      const config = periodConfig[activeChartPeriod];
+      const history = padPeriods(groupHistory(normalizeHistory(data), activeChartPeriod), config.windowSize);
+      const maxWindowStart = Math.max(0, history.length - config.windowSize);
+      chartWindowStart = Math.min(Math.max(0, chartWindowStart), maxWindowStart);
+      return {
+        allHistory: history,
+        rows: history.slice(chartWindowStart, chartWindowStart + config.windowSize),
+        maxWindowStart,
+        config
+      };
+    };
+
+    const previousVisibleHistory = (allHistory, config) => {
+      const start = Math.max(0, chartWindowStart - config.windowSize);
+      return allHistory.slice(start, chartWindowStart);
+    };
+
+    const renderMetricCards = (currentRows, previousRows, label) => {
+      const metricGrid = document.getElementById('metricGrid');
+      const current = aggregateRows(currentRows);
+      const previous = aggregateRows(previousRows);
+      metricGrid.setAttribute('aria-label', `${label} metrics`);
+      metricGrid.innerHTML = metricDefinitions.map(([key, metricLabel, type, definition]) => `
+        <article class="card">
+          <span class="label">${metricLabel}<span class="info" tabindex="0" role="img" aria-label="${definition}" data-definition="${definition}"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 22H4v-2h16v2ZM4 20H2V4h2v16Zm18 0h-2V4h2v16Zm-9-9v6h-2v-6h2Zm0-2h-2V7h2v2Zm7-5H4V2h16v2Z"/></svg></span></span>
+          <span class="value">${formatValue(current[key], type)}</span>
+          <span class="delta ${deltaClass(current[key], previous[key])}">${deltaText(current[key], previous[key], type)}</span>
+        </article>
+      `).join('');
+    };
+
+    const formatChartMetric = (key, value) => {
+      if (value === null || value === undefined || value === '') return 'No data';
+      if (key === 'engagementRate' || key === 'referenceEngagementRate' || key === 'organicCtr' || key === 'nonBrandedImpressionShare') return percent.format(Number(value || 0));
+      if (key === 'avgPosition') return Number(value || 0).toFixed(1);
+      return number.format(Number(value || 0));
+    };
+
+    const buildPath = (points) => points
+      .map((point, index) => `${index ? 'L' : 'M'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
+      .join(' ');
+
+    const normalizeHistory = (data) => {
+      const history = Array.isArray(data.history) ? data.history : [];
+      if (history.length) return history;
+
+      const previous = data.previous || {};
+      const summary = data.summary || {};
+      return [
+        {
+          weekStart: 'Previous',
+          weekEnd: 'Previous',
+          ...previous,
+          source: 'fallback-previous'
+        },
+        {
+          weekStart: data.week?.start || 'Current',
+          weekEnd: data.week?.end || 'Current',
+          ...summary,
+          source: 'fallback-current'
+        }
+      ];
+    };
+
+    const renderChart = (data) => {
+      const shell = document.getElementById('chartShell');
+      const tooltip = document.getElementById('chartTooltip');
+      const legend = document.getElementById('chartLegend');
+      const meta = document.getElementById('chartMeta');
+      const prevButton = document.getElementById('prevWeeks');
+      const nextButton = document.getElementById('nextWeeks');
+      const windowLabel = document.getElementById('weekWindowLabel');
+      const mode = chartModes[activeChartMode];
+      const { allHistory, rows: history, maxWindowStart, config } = visibleHistory(data);
+      const previousRows = previousVisibleHistory(allHistory, config);
+      const populatedWeeks = history.filter((row) => row.source !== 'empty').length;
+
+      const rangeLabel = periodRangeLabel(history);
+      document.getElementById('masterTrendTitle').textContent = config.title;
+      meta.textContent = `${mode.meta.replace('Weekly', config.metaSuffix[0].toUpperCase() + config.metaSuffix.slice(1))} · ${config.windowSize}-${config.unit.slice(0, -1)} window${rangeLabel ? ` · ${rangeLabel}` : ''}`;
+      windowLabel.textContent = `${rangeLabel} · ${populatedWeeks} of ${history.length} ${config.unit} loaded`;
+      prevButton.disabled = chartWindowStart === 0;
+      nextButton.disabled = chartWindowStart >= maxWindowStart;
+      renderMetricCards(history, previousRows, rangeLabel || config.title);
+      legend.innerHTML = mode.series.map((item) => `
+        <span class="legend-item"><span class="legend-swatch" style="--swatch:${item.color}"></span>${item.label}</span>
+      `).join('');
+
+      if (!history.length) {
+        shell.innerHTML = '<div class="chart-empty">Trend data will appear after snapshots are recorded.</div>';
+        shell.append(tooltip);
+        return;
+      }
+
+      const width = 980;
+      const height = 330;
+      const pad = { top: 24, right: 24, bottom: 70, left: 52 };
+      const chartWidth = width - pad.left - pad.right;
+      const chartHeight = height - pad.top - pad.bottom;
+      const maxValue = Math.max(
+        1,
+        ...mode.series.flatMap((series) => history
+          .filter((row) => row.source !== 'empty')
+          .map((row) => Number(row[series.key] || 0)))
+      );
+      const steps = [0, .25, .5, .75, 1];
+
+      const visibleSlots = Math.max(2, history.length);
+      const xFor = (index) => pad.left + (chartWidth / (visibleSlots - 1)) * index;
+      const weekSlot = chartWidth / visibleSlots;
+      const yFor = (value) => pad.top + chartHeight - (Number(value || 0) / maxValue) * chartHeight;
+      const lineMarkup = mode.series.map((series) => {
+        const points = history
+          .map((row, index) => ({
+            x: xFor(index),
+            y: yFor(row[series.key]),
+            value: row[series.key],
+            row,
+            index
+          }))
+          .filter((point) => point.row.source !== 'empty');
+        return `
+          ${points.length > 1 ? `<path class="chart-series" d="${buildPath(points)}" stroke="${series.color}" pathLength="1" />` : ''}
+          ${points.map((point, index) => `
+            <circle class="chart-point" cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="5" fill="${series.color}" data-index="${point.index}" tabindex="0" style="--point-delay:${220 + index * 70}ms">
+              <title>${series.label}: ${formatChartMetric(series.key, point.value)}</title>
+            </circle>
+          `).join('')}
+        `;
+      }).join('');
+
+      const transitionClass = chartTransitionDirection === 'prev'
+        ? 'from-prev'
+        : chartTransitionDirection === 'next'
+          ? 'from-next'
+          : '';
+
+      shell.innerHTML = `
+        <svg class="chart-svg ${transitionClass}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="masterTrendTitle">
+          ${history.map((row, index) => {
+            const center = xFor(index);
+            const left = index === 0 ? pad.left : center - weekSlot / 2;
+            const right = index === history.length - 1 ? width - pad.right : center + weekSlot / 2;
+            return `
+              <rect class="chart-week-band" x="${left.toFixed(2)}" y="${pad.top}" width="${Math.max(1, right - left).toFixed(2)}" height="${chartHeight}" opacity="${row.source === 'empty' ? '.45' : '1'}" />
+              <line class="chart-week-boundary" x1="${center.toFixed(2)}" y1="${pad.top}" x2="${center.toFixed(2)}" y2="${height - pad.bottom}" />
+            `;
+          }).join('')}
+          ${steps.map((step) => {
+            const y = pad.top + chartHeight - chartHeight * step;
+            return `
+              <line class="chart-grid-line" x1="${pad.left}" y1="${y.toFixed(2)}" x2="${width - pad.right}" y2="${y.toFixed(2)}" />
+              <text class="chart-label" x="${pad.left - 10}" y="${(y + 4).toFixed(2)}" text-anchor="end">${number.format(Math.round(maxValue * step))}</text>
+            `;
+          }).join('')}
+          <line class="chart-axis" x1="${pad.left}" y1="${height - pad.bottom}" x2="${width - pad.right}" y2="${height - pad.bottom}" />
+          ${history.map((row, index) => `
+            <text class="chart-label" x="${xFor(index).toFixed(2)}" y="${height - 38}" text-anchor="middle">${config.pointPrefix} ${chartWindowStart + index + 1}</text>
+            <text class="chart-label" x="${xFor(index).toFixed(2)}" y="${height - 18}" text-anchor="middle">${periodLabel(row)}</text>
+          `).join('')}
+          ${lineMarkup}
+        </svg>
+      `;
+      shell.append(tooltip);
+      const svg = shell.querySelector('.chart-svg');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          svg?.classList.add('is-active');
+        });
+      });
+      chartTransitionDirection = 'none';
+
+      shell.querySelectorAll('.chart-point').forEach((point) => {
+        const showTooltip = () => {
+          const row = history[Number(point.dataset.index || 0)];
+          const values = mode.series.map((series) => `
+            <div><span style="color:${series.color}">■</span> ${series.label}: ${formatChartMetric(series.key, row[series.key])}</div>
+          `).join('');
+          tooltip.innerHTML = `<strong>${periodLabel(row)}</strong>${values}${row.source === 'empty' ? '<div>Waiting for weekly run</div>' : ''}`;
+          tooltip.style.left = `${(Number(point.getAttribute('cx')) / 980) * 100}%`;
+          tooltip.style.top = `${Number(point.getAttribute('cy')) + 2}px`;
+          tooltip.style.opacity = '1';
+        };
+        point.addEventListener('mouseenter', showTooltip);
+        point.addEventListener('focus', showTooltip);
+        point.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
+        point.addEventListener('blur', () => { tooltip.style.opacity = '0'; });
+      });
+    };
+
+    document.querySelectorAll('.chart-tab').forEach((button) => {
+      button.addEventListener('click', () => {
+        activeChartMode = button.dataset.chartMode;
+        document.querySelectorAll('.chart-tab').forEach((tab) => {
+          tab.setAttribute('aria-selected', String(tab === button));
+        });
+        if (dashboardData) renderChart(dashboardData);
+      });
+    });
+
+    document.querySelectorAll('.period-tab').forEach((button) => {
+      button.addEventListener('click', () => {
+        activeChartPeriod = button.dataset.chartPeriod;
+        chartWindowStart = dashboardData
+          ? Math.max(0, groupHistory(normalizeHistory(dashboardData), activeChartPeriod).length - periodConfig[activeChartPeriod].windowSize)
+          : 0;
+        chartTransitionDirection = 'next';
+        document.querySelectorAll('.period-tab').forEach((tab) => {
+          tab.setAttribute('aria-selected', String(tab === button));
+        });
+        if (dashboardData) renderChart(dashboardData);
+      });
+    });
+
+    document.getElementById('prevWeeks').addEventListener('click', () => {
+      chartWindowStart = Math.max(0, chartWindowStart - periodConfig[activeChartPeriod].windowSize);
+      chartTransitionDirection = 'prev';
+      if (dashboardData) renderChart(dashboardData);
+    });
+
+    document.getElementById('nextWeeks').addEventListener('click', () => {
+      chartWindowStart += periodConfig[activeChartPeriod].windowSize;
+      chartTransitionDirection = 'next';
+      if (dashboardData) renderChart(dashboardData);
+    });
+
+    const fixtureLink = document.getElementById('fixtureLink');
+    const dataMode = document.getElementById('dataMode');
+    if (!isLocalHost) {
+      fixtureLink.hidden = true;
+    } else if (isFixtureMode) {
+      fixtureLink.textContent = 'Using Fixture';
+      fixtureLink.href = '?';
+      dataMode.hidden = false;
+    }
+
+    fetch(dataPath)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Dashboard data request failed: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        dashboardData = data;
+        chartWindowStart = Math.max(0, groupHistory(normalizeHistory(data), activeChartPeriod).length - periodConfig[activeChartPeriod].windowSize);
+        document.getElementById('weekLabel').textContent = data.week?.label || 'Waiting for first weekly run';
+
+        renderChart(data);
+
+        renderRows(document.getElementById('topPages'), data.topPages || [], [
+          { key: 'page' },
+          { key: 'views', numeric: true, format: (value) => number.format(value || 0) },
+          { key: 'organicClicks', numeric: true, format: (value) => number.format(value || 0) }
+        ], 'Top pages will appear after the first run.');
+
+        renderRows(document.getElementById('topQueries'), data.topQueries || [], [
+          { key: 'query' },
+          { key: 'queryType' },
+          { key: 'clicks', numeric: true, format: (value) => number.format(value || 0) },
+          { key: 'position', numeric: true, format: (value) => Number(value || 0).toFixed(1) }
+        ], 'Top queries will appear after the first run.');
+
+        renderRows(document.getElementById('shareEvents'), data.shareEvents || [], [
+          { key: 'pagePath' },
+          { key: 'platform' },
+          { key: 'shareClicks', numeric: true, format: (value) => number.format(value || 0) }
+        ], 'Share activity will appear after share events are pulled from GA4.');
+
+        const insights = document.getElementById('insights');
+        insights.innerHTML = (data.insights || []).map((item) => `<li>${item}</li>`).join('');
+      })
+      .catch((error) => {
+        document.getElementById('weekLabel').textContent = 'Dashboard data could not be loaded.';
+        console.error(error);
+      });
+  </script>
+</body>
+</html>

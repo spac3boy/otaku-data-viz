@@ -127,9 +127,27 @@ The automated dashboard does not currently establish whether an external page or
 - Use quarterly reviews for query-cluster growth, citations, franchise concentration, and strategy decisions.
 - Do not set growth targets until at least four complete post-deployment weeks establish the first MERS baseline.
 
+## Local dashboard fixture
+
+The dashboard includes an explicitly labeled fixture mode for testing the scorecard interface without GA4 or Search Console credentials.
+
+Start a local server from the repository root:
+
+```bash
+python3 -m http.server 1234
+```
+
+Then open either fixture URL:
+
+- `http://localhost:1234/analytics-dashboard.html?fixture=1`
+- `http://localhost:1234/docs/analytics/?fixture=1`
+
+Fixture mode is accepted only on `localhost`, `127.0.0.1`, or the IPv6 loopback address. The dashboard displays a yellow sample-data warning and loads `analytics/fixtures/weekly-performance.json` or its deployed mirror. It never overwrites the live weekly-performance output.
+
 ## Implementation references
 
 - Browser event collection: `assets/js/analytics-events.js`
 - Deployed event collection mirror: `docs/assets/js/analytics-events.js`
 - GA4 and Search Console reporting: `scripts/update-performance-dashboard.mjs`
 - Analytics and URL validation: `scripts/verify-project-urls.mjs`
+- Local dashboard fixture: `analytics/fixtures/weekly-performance.json`

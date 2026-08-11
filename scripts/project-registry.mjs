@@ -79,7 +79,7 @@ export const validateProjectRegistry = (registry) => {
       if (!hasText(project.social?.[field])) failures.push(`${label}: social.${field} is required`);
     }
     if (!isSitePath(project.social?.imagePath)) failures.push(`${label}: social.imagePath must be root-relative`);
-    for (const field of ['appName', 'appDescription', 'applicationCategory']) {
+    for (const field of ['breadcrumbName', 'appName', 'appDescription', 'applicationCategory']) {
       if (!hasText(project.structuredData?.[field])) failures.push(`${label}: structuredData.${field} is required`);
     }
 

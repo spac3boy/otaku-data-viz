@@ -344,56 +344,146 @@
       .project-hero h1 { font-size: 2.85rem; }
     }
   </style>
+  <!-- project-structured-data:start -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#faq",
-    "url": "https://otakudataviz.com/projects/pokedex-type-treemap.html",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "What is the Pokédex Type Treemap?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Pokédex Type Treemap is a fan-made interactive visualization that groups Pokémon by primary type, evolution family, species count, and base stats inside a playful Pokédex-style interface."
+        "@type": "Organization",
+        "@id": "https://otakudataviz.com/#organization",
+        "name": "Otaku Data Viz",
+        "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "How does this Pokémon treemap work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Visitors can search Pokémon, sort entries, switch treemap sizing between base stats and count, click type blocks to drill into evolution families, click families to compare species, and select Pokémon to open Dex-style details."
+        "@type": "ImageObject",
+        "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#primaryimage",
+        "url": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "caption": "Abstract Pokédex-style treemap preview for the Pokedex Type Treemap by Otaku Data Viz."
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#webpage",
+        "url": "https://otakudataviz.com/projects/pokedex-type-treemap.html",
+        "name": "Pokédex Type Treemap | Pokémon Type & Evolution Map | Otaku Data Viz",
+        "description": "Explore an interactive Pokédex-style treemap that groups Pokémon by primary type, evolution family, species count, and base stats through fan-made data visualization.",
+        "inLanguage": "en",
+        "dateModified": "2026-08-10",
+        "isPartOf": {
+          "@id": "https://otakudataviz.com/#website"
+        },
+        "mainEntity": {
+          "@id": "https://otakudataviz.com/pokemon_territory_map.html#application"
+        },
+        "breadcrumb": {
+          "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#breadcrumb"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#primaryimage"
+        },
+        "hasPart": {
+          "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#faq"
         }
       },
       {
-        "@type": "Question",
-        "name": "Is this an official Pokémon project?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. This is an unofficial fan-made visualization for exploration, commentary, analysis, and fan discussion. Otaku Data Viz is not affiliated with Nintendo, Game Freak, Creatures, or The Pokémon Company."
+        "@type": "WebApplication",
+        "@id": "https://otakudataviz.com/pokemon_territory_map.html#application",
+        "name": "Pokedex Type Treemap",
+        "url": "https://otakudataviz.com/pokemon_territory_map.html",
+        "mainEntityOfPage": "https://otakudataviz.com/projects/pokedex-type-treemap.html",
+        "description": "An interactive Pokedex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "image": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "author": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "What Pokémon data is included?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The visualization uses Pokémon species data grouped by type and evolution family, with fields such as Pokédex number, type, generation, base stats total, evolution stage, sprite references, and selected card-style details when available."
-        }
+        "@type": "BreadcrumbList",
+        "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://otakudataviz.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://otakudataviz.com/projects.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Pokédex Type Treemap",
+            "item": "https://otakudataviz.com/projects/pokedex-type-treemap.html"
+          }
+        ]
       },
       {
-        "@type": "Question",
-        "name": "Can I suggest corrections or additions?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Otaku Data Viz welcomes suggestions, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
-        }
+        "@type": "FAQPage",
+        "@id": "https://otakudataviz.com/projects/pokedex-type-treemap.html#faq",
+        "url": "https://otakudataviz.com/projects/pokedex-type-treemap.html",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the Pokédex Type Treemap?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Pokédex Type Treemap is a fan-made interactive visualization that groups Pokémon by primary type, evolution family, species count, and base stats inside a playful Pokédex-style interface."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does this Pokémon treemap work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Visitors can search Pokémon, sort entries, switch treemap sizing between base stats and count, click type blocks to drill into evolution families, click families to compare species, and select Pokémon to open Dex-style details."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this an official Pokémon project?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. This is an unofficial fan-made visualization for exploration, commentary, analysis, and fan discussion. Otaku Data Viz is not affiliated with Nintendo, Game Freak, Creatures, or The Pokémon Company."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What Pokémon data is included?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The visualization uses Pokémon species data grouped by type and evolution family, with fields such as Pokédex number, type, generation, base stats total, evolution stage, sprite references, and selected card-style details when available."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I suggest corrections or additions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Otaku Data Viz welcomes suggestions, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
+            }
+          }
+        ]
       }
     ]
   }
   </script>
+  <!-- project-structured-data:end -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6742706951543902"
      crossorigin="anonymous"></script>
 </head>

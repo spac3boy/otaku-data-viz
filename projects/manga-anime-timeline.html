@@ -351,56 +351,146 @@
       .project-hero h1 { font-size: 2.85rem; }
     }
   </style>
+  <!-- project-structured-data:start -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#faq",
-    "url": "https://otakudataviz.com/projects/manga-anime-timeline.html",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "What is the Anime and Manga History Timeline?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Anime and Manga History Timeline is a fan-made interactive visualization that compares landmark manga and anime titles across years, categories, creators, studios, adaptation links, and cultural impact."
+        "@type": "Organization",
+        "@id": "https://otakudataviz.com/#organization",
+        "name": "Otaku Data Viz",
+        "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "How does this manga and anime timeline work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Visitors can switch between manga, anime, and compare modes; search titles, creators, studios, and impact notes; use advanced filters; zoom; scroll horizontally; and select timeline marks to open a details panel."
+        "@type": "ImageObject",
+        "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#primaryimage",
+        "url": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "caption": "Timeline preview for the Anime and Manga History Timeline by Otaku Data Viz."
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#webpage",
+        "url": "https://otakudataviz.com/projects/manga-anime-timeline.html",
+        "name": "Anime & Manga History Timeline | Otaku Data Viz",
+        "description": "Explore an interactive anime and manga history timeline featuring landmark titles, creators, studios, adaptations, genres, eras, and global breakout moments.",
+        "inLanguage": "en",
+        "dateModified": "2026-08-05",
+        "isPartOf": {
+          "@id": "https://otakudataviz.com/#website"
+        },
+        "mainEntity": {
+          "@id": "https://otakudataviz.com/manga-timeline.html#application"
+        },
+        "breadcrumb": {
+          "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#breadcrumb"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#primaryimage"
+        },
+        "hasPart": {
+          "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#faq"
         }
       },
       {
-        "@type": "Question",
-        "name": "Is this an official manga or anime database?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. This is an unofficial fan-made visualization for exploration, commentary, and analysis. It is not an official database or a substitute for publisher, studio, or rights-holder records."
+        "@type": "WebApplication",
+        "@id": "https://otakudataviz.com/manga-timeline.html#application",
+        "name": "Anime and Manga History Timeline",
+        "url": "https://otakudataviz.com/manga-timeline.html",
+        "mainEntityOfPage": "https://otakudataviz.com/projects/manga-anime-timeline.html",
+        "description": "An interactive timeline of landmark manga and anime titles, creators, studios, adaptations, genres, and global breakout moments.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "image": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "author": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "What titles are included in the timeline?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The timeline focuses on selected landmark, influential, popular, historically useful, and globally recognizable manga and anime titles. It is curated for visual storytelling rather than exhaustive catalog coverage."
-        }
+        "@type": "BreadcrumbList",
+        "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://otakudataviz.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://otakudataviz.com/projects.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Anime & Manga History Timeline",
+            "item": "https://otakudataviz.com/projects/manga-anime-timeline.html"
+          }
+        ]
       },
       {
-        "@type": "Question",
-        "name": "Can I suggest corrections or additions?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Otaku Data Viz welcomes suggestions, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
-        }
+        "@type": "FAQPage",
+        "@id": "https://otakudataviz.com/projects/manga-anime-timeline.html#faq",
+        "url": "https://otakudataviz.com/projects/manga-anime-timeline.html",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the Anime and Manga History Timeline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Anime and Manga History Timeline is a fan-made interactive visualization that compares landmark manga and anime titles across years, categories, creators, studios, adaptation links, and cultural impact."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does this manga and anime timeline work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Visitors can switch between manga, anime, and compare modes; search titles, creators, studios, and impact notes; use advanced filters; zoom; scroll horizontally; and select timeline marks to open a details panel."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this an official manga or anime database?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. This is an unofficial fan-made visualization for exploration, commentary, and analysis. It is not an official database or a substitute for publisher, studio, or rights-holder records."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What titles are included in the timeline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The timeline focuses on selected landmark, influential, popular, historically useful, and globally recognizable manga and anime titles. It is curated for visual storytelling rather than exhaustive catalog coverage."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I suggest corrections or additions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Otaku Data Viz welcomes suggestions, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
+            }
+          }
+        ]
       }
     ]
   }
   </script>
+  <!-- project-structured-data:end -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6742706951543902"
      crossorigin="anonymous"></script>
 </head>

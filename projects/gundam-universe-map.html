@@ -280,22 +280,31 @@
       .stat-strip div:last-child { border-bottom: 0; }
     }
   </style>
+  <!-- project-structured-data:start -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebSite",
-        "@id": "https://otakudataviz.com/#website",
-        "url": "https://otakudataviz.com/",
-        "name": "Otaku Data Viz",
-        "publisher": { "@id": "https://otakudataviz.com/#organization" }
-      },
-      {
         "@type": "Organization",
         "@id": "https://otakudataviz.com/#organization",
         "name": "Otaku Data Viz",
         "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": {
+          "@id": "https://otakudataviz.com/#organization"
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#primaryimage",
+        "url": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
+        "caption": "Gundam Watch Order and Timeline Map by Otaku Data Viz."
       },
       {
         "@type": "WebPage",
@@ -304,35 +313,60 @@
         "name": "Gundam Watch Order & Timeline Map | Otaku Data Viz",
         "description": "Explore the Gundam watch order by continuity, compare story chronology with release order, and find beginner-friendly standalone series and viewing paths.",
         "inLanguage": "en",
-        "isPartOf": { "@id": "https://otakudataviz.com/#website" },
-        "mainEntity": { "@id": "https://otakudataviz.com/gundam-universe-map.html#application" },
-        "breadcrumb": { "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#breadcrumb" },
+        "dateModified": "2026-07-31",
+        "isPartOf": {
+          "@id": "https://otakudataviz.com/#website"
+        },
+        "mainEntity": {
+          "@id": "https://otakudataviz.com/gundam-universe-map.html#application"
+        },
+        "breadcrumb": {
+          "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#breadcrumb"
+        },
         "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
-          "width": 1200,
-          "height": 630
+          "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#primaryimage"
+        },
+        "hasPart": {
+          "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#faq"
         }
       },
       {
-        "@type": ["WebApplication", "SoftwareApplication"],
+        "@type": "WebApplication",
         "@id": "https://otakudataviz.com/gundam-universe-map.html#application",
         "name": "Gundam Universe Map",
         "url": "https://otakudataviz.com/gundam-universe-map.html",
+        "mainEntityOfPage": "https://otakudataviz.com/projects/gundam-universe-map.html",
         "description": "An interactive fan-made Gundam watch order and timeline map comparing continuities, story chronology, release order, and newcomer viewing routes.",
         "applicationCategory": "EducationalApplication",
         "operatingSystem": "Any",
         "isAccessibleForFree": true,
         "image": "https://otakudataviz.com/assets/images/gundam-universe-map-og.png",
-        "author": { "@id": "https://otakudataviz.com/#organization" }
+        "author": {
+          "@id": "https://otakudataviz.com/#organization"
+        }
       },
       {
         "@type": "BreadcrumbList",
         "@id": "https://otakudataviz.com/projects/gundam-universe-map.html#breadcrumb",
         "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://otakudataviz.com/" },
-          { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://otakudataviz.com/projects.html" },
-          { "@type": "ListItem", "position": 3, "name": "Gundam Watch Order & Timeline Map", "item": "https://otakudataviz.com/projects/gundam-universe-map.html" }
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://otakudataviz.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://otakudataviz.com/projects.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Gundam Watch Order & Timeline Map",
+            "item": "https://otakudataviz.com/projects/gundam-universe-map.html"
+          }
         ]
       },
       {
@@ -342,28 +376,42 @@
           {
             "@type": "Question",
             "name": "Are all Gundam series in the same timeline?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Gundam includes multiple separate continuities. Productions within one continuity share fictional history, while series in different continuities can usually be watched independently." }
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Gundam includes multiple separate continuities. Productions within one continuity share fictional history, while series in different continuities can usually be watched independently."
+            }
           },
           {
             "@type": "Question",
             "name": "What order should I watch Gundam in?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Choose a continuity first, then use either story order or release order within that setting. Release order preserves how audiences originally encountered the franchise, while story order follows fictional chronology." }
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Choose a continuity first, then use either story order or release order within that setting. Release order preserves how audiences originally encountered the franchise, while story order follows fictional chronology."
+            }
           },
           {
             "@type": "Question",
             "name": "Do I need to watch Universal Century before another Gundam series?",
-            "acceptedAnswer": { "@type": "Answer", "text": "No. Alternate-universe series such as The Witch from Mercury, Iron-Blooded Orphans, Gundam 00, and Gundam Wing use separate settings and do not require Universal Century viewing." }
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Alternate-universe series such as The Witch from Mercury, Iron-Blooded Orphans, Gundam 00, and Gundam Wing use separate settings and do not require Universal Century viewing."
+            }
           },
           {
             "@type": "Question",
             "name": "Where should a Gundam beginner start?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Beginners can start with the original Mobile Suit Gundam for the franchise foundation or choose a modern standalone continuity. The map labels beginner-friendly productions and includes curated entry routes." }
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Beginners can start with the original Mobile Suit Gundam for the franchise foundation or choose a modern standalone continuity. The map labels beginner-friendly productions and includes curated entry routes."
+            }
           }
-        ]
+        ],
+        "url": "https://otakudataviz.com/projects/gundam-universe-map.html"
       }
     ]
   }
   </script>
+  <!-- project-structured-data:end -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6742706951543902"
      crossorigin="anonymous"></script>
 </head>

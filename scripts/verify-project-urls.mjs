@@ -4,6 +4,7 @@ import process from 'node:process';
 import { createContext, runInContext } from 'node:vm';
 import { verifySiteBuild } from './build-site.mjs';
 import { canonicalUrl, loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
+import { verifyProjectStructuredData } from './generate-project-structured-data.mjs';
 import { renderSitemap } from './generate-sitemap.mjs';
 import { validatePokemonDataset } from './validate-pokemon-data.mjs';
 
@@ -20,6 +21,9 @@ const failures = [];
 const check = (condition, message) => {
   if (!condition) failures.push(message);
 };
+
+const structuredDataBuild = await verifyProjectStructuredData({ root });
+structuredDataBuild.failures.forEach((failure) => failures.push(`Structured data: ${failure}`));
 
 const pokemonDataset = await validatePokemonDataset({ root });
 pokemonDataset.failures.forEach((failure) => failures.push(`Pokémon dataset: ${failure}`));
@@ -75,6 +79,10 @@ for (const project of projects) {
   const landingJsonLd = parseJsonLd(landingHtml, `${project.name} landing`);
   const appJsonLd = parseJsonLd(appHtml, `${project.name} interactive`);
   const landingNodes = jsonLdNodes(landingJsonLd);
+  const landingWebPage = landingNodes.find((node) => hasSchemaType(node, 'WebPage'));
+  const landingApplication = landingNodes.find((node) => hasSchemaType(node, 'WebApplication'));
+  const landingBreadcrumbs = landingNodes.find((node) => hasSchemaType(node, 'BreadcrumbList'));
+  const landingFaq = landingNodes.find((node) => hasSchemaType(node, 'FAQPage'));
 
   check(titleValue(landingHtml) === project.seo.title, `${project.name}: title does not match the project registry`);
   check(
@@ -97,6 +105,39 @@ for (const project of projects) {
   check(
     landingHtml.includes('id="methodology"'),
     `${project.name}: methodologyPath does not resolve to a methodology section`
+  );
+  check(Boolean(landingWebPage), `${project.name}: landing JSON-LD has no WebPage node`);
+  if (landingWebPage) {
+    check(landingWebPage.url === canonical, `${project.name}: WebPage URL does not match the registry`);
+    check(landingWebPage.name === project.seo.title, `${project.name}: WebPage name does not match the registry`);
+    check(
+      landingWebPage.description === project.seo.description,
+      `${project.name}: WebPage description does not match the registry`
+    );
+    check(
+      landingWebPage.dateModified === project.lastReviewed,
+      `${project.name}: WebPage dateModified does not match the registry`
+    );
+  }
+  check(Boolean(landingApplication), `${project.name}: landing JSON-LD has no WebApplication node`);
+  check(Boolean(landingBreadcrumbs), `${project.name}: landing JSON-LD has no BreadcrumbList node`);
+  if (landingBreadcrumbs) {
+    const items = landingBreadcrumbs.itemListElement || [];
+    check(
+      items.length === 3
+        && items[0]?.position === 1
+        && items[0]?.item === canonicalUrl(projectRegistry, '/')
+        && items[1]?.position === 2
+        && items[1]?.item === canonicalUrl(projectRegistry, '/projects.html')
+        && items[2]?.position === 3
+        && items[2]?.name === project.structuredData.breadcrumbName
+        && items[2]?.item === canonical,
+      `${project.name}: breadcrumb trail does not match the project registry`
+    );
+  }
+  check(
+    Boolean(landingFaq) && Array.isArray(landingFaq.mainEntity) && landingFaq.mainEntity.length > 0,
+    `${project.name}: landing JSON-LD has no populated FAQPage node`
   );
 
   const appNode = jsonLdNodes(appJsonLd).find((node) => hasSchemaType(node, 'WebApplication'));

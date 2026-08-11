@@ -352,26 +352,94 @@
       .project-hero h1 { font-size: 2.85rem; }
     }
   </style>
+  <!-- project-structured-data:start -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebPage",
-        "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#webpage",
-        "url": "https://otakudataviz.com/projects/nintendo-game-universe-map.html",
-        "name": "Nintendo Game Universe Map | Otaku Data Viz",
-        "description": "Explore 406 Nintendo-developed, published, and hardware-defining games from arcade origins through Switch 2 in an interactive Game Boy-style bubble map.",
-        "primaryImageOfPage": {
-          "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#primaryimage"
+        "@type": "Organization",
+        "@id": "https://otakudataviz.com/#organization",
+        "name": "Otaku Data Viz",
+        "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
         "@type": "ImageObject",
         "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#primaryimage",
         "url": "https://otakudataviz.com/assets/images/nintendo-game-universe-map-og.jpg",
-        "width": 1200,
-        "height": 630
+        "caption": "Nintendo Game Universe Map shown inside a retro Game Boy-inspired interface."
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#webpage",
+        "url": "https://otakudataviz.com/projects/nintendo-game-universe-map.html",
+        "name": "Nintendo Game Universe Map | Otaku Data Viz",
+        "description": "Explore 406 Nintendo-developed, published, and hardware-defining games from arcade origins through Switch 2 in an interactive Game Boy-style bubble map.",
+        "inLanguage": "en",
+        "dateModified": "2026-08-05",
+        "isPartOf": {
+          "@id": "https://otakudataviz.com/#website"
+        },
+        "mainEntity": {
+          "@id": "https://otakudataviz.com/nintendo-game-universe-map.html#application"
+        },
+        "breadcrumb": {
+          "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#breadcrumb"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#primaryimage"
+        },
+        "hasPart": {
+          "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#faq"
+        }
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://otakudataviz.com/nintendo-game-universe-map.html#application",
+        "name": "Nintendo Game Universe Map",
+        "url": "https://otakudataviz.com/nintendo-game-universe-map.html",
+        "mainEntityOfPage": "https://otakudataviz.com/projects/nintendo-game-universe-map.html",
+        "description": "An interactive Game Boy-style bubble map of 406 Nintendo-developed, published, and hardware-defining games.",
+        "applicationCategory": "Data Visualization",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "image": "https://otakudataviz.com/assets/images/nintendo-game-universe-map-og.jpg",
+        "author": {
+          "@id": "https://otakudataviz.com/#organization"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://otakudataviz.com/projects/nintendo-game-universe-map.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://otakudataviz.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://otakudataviz.com/projects.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Nintendo Game Universe Map",
+            "item": "https://otakudataviz.com/projects/nintendo-game-universe-map.html"
+          }
+        ]
       },
       {
         "@type": "FAQPage",
@@ -423,6 +491,7 @@
     ]
   }
   </script>
+  <!-- project-structured-data:end -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6742706951543902"
      crossorigin="anonymous"></script>
 </head>

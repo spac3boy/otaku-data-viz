@@ -32,6 +32,7 @@
         "imageAlt": "Network preview for the Dragon Ball character relationship chart by Otaku Data Viz."
       },
       "structuredData": {
+        "breadcrumbName": "Dragon Ball Character Relationship Chart",
         "appName": "Dragon Ball Character Relationship Chart",
         "appDescription": "An interactive Dragon Ball sociogram and family tree mapping rivalries, families, mentors, allies, enemies, origins, and story arcs.",
         "applicationCategory": "EducationalApplication"
@@ -69,6 +70,7 @@
         "imageAlt": "Timeline preview for the Anime and Manga History Timeline by Otaku Data Viz."
       },
       "structuredData": {
+        "breadcrumbName": "Anime & Manga History Timeline",
         "appName": "Anime and Manga History Timeline",
         "appDescription": "An interactive timeline of landmark manga and anime titles, creators, studios, adaptations, genres, and global breakout moments.",
         "applicationCategory": "EducationalApplication"
@@ -106,6 +108,7 @@
         "imageAlt": "Abstract Pokédex-style treemap preview for the Pokedex Type Treemap by Otaku Data Viz."
       },
       "structuredData": {
+        "breadcrumbName": "Pokédex Type Treemap",
         "appName": "Pokedex Type Treemap",
         "appDescription": "An interactive Pokedex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats.",
         "applicationCategory": "EducationalApplication"
@@ -143,6 +146,7 @@
         "imageAlt": "Nintendo Game Universe Map shown inside a retro Game Boy-inspired interface."
       },
       "structuredData": {
+        "breadcrumbName": "Nintendo Game Universe Map",
         "appName": "Nintendo Game Universe Map",
         "appDescription": "An interactive Game Boy-style bubble map of 406 Nintendo-developed, published, and hardware-defining games.",
         "applicationCategory": "Data Visualization"
@@ -180,6 +184,7 @@
         "imageAlt": "Gundam Watch Order and Timeline Map by Otaku Data Viz."
       },
       "structuredData": {
+        "breadcrumbName": "Gundam Watch Order & Timeline Map",
         "appName": "Gundam Universe Map",
         "appDescription": "An interactive fan-made Gundam watch order and timeline map comparing continuities, story chronology, release order, and newcomer viewing routes.",
         "applicationCategory": "EducationalApplication"

@@ -363,64 +363,154 @@
       }
     }
   </style>
+  <!-- project-structured-data:start -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#faq",
-    "url": "https://otakudataviz.com/projects/dragon-ball-sociogram.html",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "What is the Dragon Ball character relationship chart?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Dragon Ball character relationship chart is a fan-made sociogram and family tree that visualizes connections across Dragon Ball, Dragon Ball Z, and Dragon Ball Super, including families, rivalries, mentors, allies, enemies, origins, and special links."
+        "@type": "Organization",
+        "@id": "https://otakudataviz.com/#organization",
+        "name": "Otaku Data Viz",
+        "url": "https://otakudataviz.com/"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://otakudataviz.com/#website",
+        "url": "https://otakudataviz.com/",
+        "name": "Otaku Data Viz",
+        "publisher": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "How does this Dragon Ball relationship map work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The visualization uses nodes for characters and colored links for relationship types. Visitors can search, filter by series or saga, filter relationship categories, zoom, pan, drag nodes, and select characters to inspect their visible connections."
+        "@type": "ImageObject",
+        "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#primaryimage",
+        "url": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "caption": "Network preview for the Dragon Ball character relationship chart by Otaku Data Viz."
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#webpage",
+        "url": "https://otakudataviz.com/projects/dragon-ball-sociogram.html",
+        "name": "Dragon Ball Character Relationship Chart | Otaku Data Viz",
+        "description": "Explore an interactive Dragon Ball character relationship chart and family tree mapping rivalries, families, mentors, allies, enemies, origins, and story arcs.",
+        "inLanguage": "en",
+        "dateModified": "2026-08-05",
+        "isPartOf": {
+          "@id": "https://otakudataviz.com/#website"
+        },
+        "mainEntity": {
+          "@id": "https://otakudataviz.com/dragonball-character-sociogram/#application"
+        },
+        "breadcrumb": {
+          "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#breadcrumb"
+        },
+        "primaryImageOfPage": {
+          "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#primaryimage"
+        },
+        "hasPart": {
+          "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#faq"
         }
       },
       {
-        "@type": "Question",
-        "name": "Is this an official Dragon Ball project?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. This is an unofficial fan-made data visualization built for commentary, analysis, exploration, and fan discussion. Otaku Data Viz is not affiliated with the Dragon Ball rights holders."
+        "@type": "WebApplication",
+        "@id": "https://otakudataviz.com/dragonball-character-sociogram/#application",
+        "name": "Dragon Ball Character Relationship Chart",
+        "url": "https://otakudataviz.com/dragonball-character-sociogram/",
+        "mainEntityOfPage": "https://otakudataviz.com/projects/dragon-ball-sociogram.html",
+        "description": "An interactive Dragon Ball sociogram and family tree mapping rivalries, families, mentors, allies, enemies, origins, and story arcs.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "image": "https://otakudataviz.com/assets/images/site-og-v2.png",
+        "author": {
+          "@id": "https://otakudataviz.com/#organization"
         }
       },
       {
-        "@type": "Question",
-        "name": "What relationships are included in the map?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The map includes simplified relationship categories such as family, romance, mentor, rival, ally, enemy, origin, and special links. Some connections can reasonably fit more than one category, so the map should be interpreted as an exploratory model."
-        }
+        "@type": "BreadcrumbList",
+        "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://otakudataviz.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://otakudataviz.com/projects.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Dragon Ball Character Relationship Chart",
+            "item": "https://otakudataviz.com/projects/dragon-ball-sociogram.html"
+          }
+        ]
       },
       {
-        "@type": "Question",
-        "name": "Can I suggest corrections or additions?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Otaku Data Viz welcomes feedback, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What other anime or manga visualizations are coming next?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Current and planned Otaku Data Viz projects include Manga and Anime Evolution, the Pokedex Type Treemap, Nintendo Catalog Map concepts, and future anime, manga, and gaming data stories."
-        }
+        "@type": "FAQPage",
+        "@id": "https://otakudataviz.com/projects/dragon-ball-sociogram.html#faq",
+        "url": "https://otakudataviz.com/projects/dragon-ball-sociogram.html",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the Dragon Ball character relationship chart?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Dragon Ball character relationship chart is a fan-made sociogram and family tree that visualizes connections across Dragon Ball, Dragon Ball Z, and Dragon Ball Super, including families, rivalries, mentors, allies, enemies, origins, and special links."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does this Dragon Ball relationship map work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The visualization uses nodes for characters and colored links for relationship types. Visitors can search, filter by series or saga, filter relationship categories, zoom, pan, drag nodes, and select characters to inspect their visible connections."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this an official Dragon Ball project?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. This is an unofficial fan-made data visualization built for commentary, analysis, exploration, and fan discussion. Otaku Data Viz is not affiliated with the Dragon Ball rights holders."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What relationships are included in the map?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The map includes simplified relationship categories such as family, romance, mentor, rival, ally, enemy, origin, and special links. Some connections can reasonably fit more than one category, so the map should be interpreted as an exploratory model."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I suggest corrections or additions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Otaku Data Viz welcomes feedback, corrections, and ideas for future anime, manga, and gaming visualizations through the site contact form."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What other anime or manga visualizations are coming next?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Current and planned Otaku Data Viz projects include Manga and Anime Evolution, the Pokedex Type Treemap, Nintendo Catalog Map concepts, and future anime, manga, and gaming data stories."
+            }
+          }
+        ]
       }
     ]
   }
   </script>
+  <!-- project-structured-data:end -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6742706951543902"
      crossorigin="anonymous"></script>
 </head>

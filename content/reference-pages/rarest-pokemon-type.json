@@ -21,6 +21,18 @@
     "heading": "Ice is rarest overall; Flying is rarest as a primary type",
     "body": "Ice appears on 48 of the 1,025 species when both type slots count, fewer than any other type. If every species is grouped only by its primary type, Flying is rarest with nine species. These totals use each species' default variety and cover National Pokédex numbers 1 through 1025."
   },
+  "visualizationViews": [
+    {
+      "label": "Explore the Ice type view",
+      "description": "Open the treemap with Ice selected to examine the 31 species grouped under Ice as their primary type.",
+      "href": "/pokemon_territory_map.html?type=Ice"
+    },
+    {
+      "label": "Explore the Flying type view",
+      "description": "Open the smallest primary-type group and inspect its nine species and evolution families.",
+      "href": "/pokemon_territory_map.html?type=Flying"
+    }
+  ],
   "facts": [
     {
       "label": "Ice in either slot",

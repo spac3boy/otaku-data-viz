@@ -311,7 +311,7 @@
     }
     .controls {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(72px, .58fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       align-items: center;
     }
@@ -838,7 +838,7 @@
       .screen-top { position: static; grid-template-columns: 1fr; }
       .controls {
         display: grid;
-        grid-template-columns: minmax(210px, 1.4fr) minmax(150px, .9fr) minmax(150px, .9fr) auto;
+        grid-template-columns: minmax(180px, 1.3fr) minmax(125px, .85fr) minmax(125px, .85fr) auto auto;
         justify-content: stretch;
       }
       .search,
@@ -927,6 +927,7 @@
                 <option value="count">Size by count</option>
               </select>
               <button class="btn small dark" type="button" id="backButton">Back</button>
+              <button class="btn small yellow" type="button" id="copyViewButton" data-copy-link aria-label="Copy a link to the current Pokédex view" aria-live="polite">Copy View</button>
             </div>
           </div>
 
@@ -1040,6 +1041,9 @@
       ];
 
       const INDEX_PAGE_SIZE = 200;
+      const VIEW_STATE_PARAMS = ['type', 'family', 'pokemon', 'sort', 'size'];
+      const VALID_SORT_MODES = new Set(['featured', 'power', 'name']);
+      const VALID_SIZE_MODES = new Set(['power', 'count']);
 
       const state = {
         rawSpecies: [],
@@ -1058,6 +1062,7 @@
 
       const dom = {};
       let dpadAudioContext = null;
+      let copyViewStatusTimeout = null;
       function $(id) { return document.getElementById(id); }
       function setHTML(el, html) { if (el) el.innerHTML = html; }
       function setText(el, text) { if (el) el.textContent = text; }
@@ -1097,7 +1102,7 @@
       }
 
       function requiredDomIsReady() {
-        const requiredIds = ['treemap', 'characterList', 'selectedTypeCard', 'bars', 'activeChip', 'countChip', 'searchInput', 'sortSelect', 'sizeSelect', 'breadcrumb', 'tooltip', 'heroReadout', 'treemapGuide', 'indexRangeChip', 'indexPageMeta', 'indexPrevButton', 'indexNextButton'];
+        const requiredIds = ['treemap', 'characterList', 'selectedTypeCard', 'bars', 'activeChip', 'countChip', 'searchInput', 'sortSelect', 'sizeSelect', 'copyViewButton', 'breadcrumb', 'tooltip', 'heroReadout', 'treemapGuide', 'indexRangeChip', 'indexPageMeta', 'indexPrevButton', 'indexNextButton'];
         const optionalIds = ['typeBadges', 'backButton', 'allTypesButton'];
         const missing = requiredIds.filter(id => !$(id));
         if (missing.length) {
@@ -1433,13 +1438,126 @@ function validateStaticPayload(data) {
           }
         }
         state.typeData = buildTypeData(state.rawSpecies);
+        applyViewStateFromUrl();
         drawBadges();
         render();
+        syncViewUrl({ replace: true });
       }
 
       function getTypeByName(name) { return state.typeData.find(type => type.type === name); }
-      function getFamilyById(id) { return state.typeData.flatMap(type => type.families).find(family => family.id === id); }
+      function getFamilyById(id, typeName = state.selectedType) {
+        const type = typeName ? getTypeByName(typeName) : null;
+        return type?.families.find(family => family.id === id)
+          || state.typeData.flatMap(item => item.families).find(family => family.id === id);
+      }
       function getPokemonByName(name) { return state.allPokemon.find(pokemon => pokemon.name === name); }
+
+      function findCaseInsensitive(items, value, field) {
+        const normalized = String(value || '').trim().toLowerCase();
+        if (!normalized) return null;
+        return items.find(item => String(item[field] || '').toLowerCase() === normalized) || null;
+      }
+
+      function writeViewParams(url, viewState) {
+        VIEW_STATE_PARAMS.forEach(param => url.searchParams.delete(param));
+        if (viewState.selectedType) url.searchParams.set('type', viewState.selectedType);
+        if (viewState.selectedFamily) url.searchParams.set('family', viewState.selectedFamily);
+        if (viewState.selectedPokemon) url.searchParams.set('pokemon', viewState.selectedPokemon);
+        if (viewState.sortMode && viewState.sortMode !== 'featured') url.searchParams.set('sort', viewState.sortMode);
+        if (viewState.sizeMode && viewState.sizeMode !== 'power') url.searchParams.set('size', viewState.sizeMode);
+        url.hash = '';
+        return url;
+      }
+
+      function currentViewUrl({ clean = false } = {}) {
+        const url = new URL(window.location.href);
+        if (clean) url.search = '';
+        return writeViewParams(url, state);
+      }
+
+      function applyViewStateFromUrl(url = new URL(window.location.href)) {
+        const requestedSort = url.searchParams.get('sort');
+        const requestedSize = url.searchParams.get('size');
+        const requestedType = url.searchParams.get('type');
+        const requestedFamily = url.searchParams.get('family');
+        const requestedPokemon = url.searchParams.get('pokemon');
+        const type = findCaseInsensitive(state.typeData, requestedType, 'type');
+        const pokemon = findCaseInsensitive(state.allPokemon, requestedPokemon, 'name');
+
+        state.sortMode = VALID_SORT_MODES.has(requestedSort) ? requestedSort : 'featured';
+        state.sizeMode = VALID_SIZE_MODES.has(requestedSize) ? requestedSize : 'power';
+        state.selectedType = null;
+        state.selectedFamily = null;
+        state.selectedPokemon = null;
+        state.searchTerm = '';
+        state.indexPage = 1;
+
+        if (pokemon) {
+          state.selectedType = pokemon.primaryType;
+          state.selectedFamily = pokemon.evolutionFamilyId;
+          state.selectedPokemon = pokemon.name;
+        } else if (type) {
+          state.selectedType = type.type;
+          const family = findCaseInsensitive(type.families, requestedFamily, 'id');
+          if (family) state.selectedFamily = family.id;
+        }
+
+        if (dom.searchInput) dom.searchInput.value = '';
+        if (dom.sortSelect) dom.sortSelect.value = state.sortMode;
+        if (dom.sizeSelect) dom.sizeSelect.value = state.sizeMode;
+      }
+
+      function syncViewUrl({ replace = false } = {}) {
+        const nextUrl = currentViewUrl();
+        if (nextUrl.href === window.location.href) return;
+        const method = replace ? 'replaceState' : 'pushState';
+        window.history[method]({ pokedexView: true }, '', nextUrl);
+      }
+
+      function updateViewChrome() {
+        const type = state.selectedType ? getTypeByName(state.selectedType) : null;
+        const family = state.selectedFamily ? getFamilyById(state.selectedFamily, state.selectedType) : null;
+        const pokemon = state.selectedPokemon ? getPokemonByName(state.selectedPokemon) : null;
+        const label = pokemon ? pokemon.name : family ? family.name : type ? `${type.type} Type` : 'All Types';
+        document.title = label === 'All Types'
+          ? 'Pokémon Treemap | Otaku Data Viz'
+          : `${label} | Pokémon Treemap | Otaku Data Viz`;
+        if (dom.copyViewButton) dom.copyViewButton.dataset.copyUrl = currentViewUrl({ clean: true }).href;
+      }
+
+      function renderAndSyncView({ replace = false } = {}) {
+        render();
+        syncViewUrl({ replace });
+      }
+
+      async function copyCurrentViewLink() {
+        const shareUrl = currentViewUrl({ clean: true }).href;
+        if (dom.copyViewButton) dom.copyViewButton.dataset.copyUrl = shareUrl;
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(shareUrl);
+          } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = shareUrl;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const copied = document.execCommand('copy');
+            textarea.remove();
+            if (!copied) throw new Error('Copy command was unavailable');
+          }
+          if (dom.copyViewButton) dom.copyViewButton.textContent = 'Link Copied';
+        } catch (error) {
+          console.warn('Could not copy Pokédex view link:', error.message);
+          if (dom.copyViewButton) dom.copyViewButton.textContent = 'Copy Failed';
+        }
+        window.clearTimeout(copyViewStatusTimeout);
+        copyViewStatusTimeout = window.setTimeout(() => {
+          if (dom.copyViewButton) dom.copyViewButton.textContent = 'Copy View';
+        }, 1800);
+      }
 
       function getFamilyItems(type) {
         let items = type.families.map(family => ({ ...family, value: state.sizeMode === 'count' ? family.count : family.value, displayScore: state.sizeMode === 'count' ? family.count : family.value }));
@@ -1561,7 +1679,7 @@ function validateStaticPayload(data) {
         const headerHeight = 82;
         const header = makeHeaderTile(type.color, type.type, `${type.families.length} evolution families · ${type.pokemon.length} species`, type.icon);
         placeTile(header, { x: xInset, y: yInset, width: w, height: headerHeight });
-        header.addEventListener('click', () => { playTreemapSelectSound(); state.selectedFamily = null; state.selectedPokemon = null; render(); });
+        header.addEventListener('click', () => { playTreemapSelectSound(); selectType(type.type); });
         dom.treemap.appendChild(header);
 
         const familyItems = getFamilyItems(type);
@@ -1588,7 +1706,7 @@ function validateStaticPayload(data) {
         const headerHeight = 82;
         const header = makeHeaderTile(family.color, family.name, `${family.count} species · ${family.type} primary type`, family.icon);
         placeTile(header, { x: xInset, y: yInset, width: w, height: headerHeight });
-        header.addEventListener('click', () => { playTreemapSelectSound(); state.selectedPokemon = null; render(); });
+        header.addEventListener('click', () => { playTreemapSelectSound(); selectFamily(family.id, family.type); });
         dom.treemap.appendChild(header);
 
         const pokemonItems = state.searchTerm ? getPokemonItems(family).filter(matchesSearch) : getPokemonItems(family);
@@ -1695,17 +1813,17 @@ function validateStaticPayload(data) {
       }
 
       function resetIndexPage() { state.indexPage = 1; }
-      function selectType(type) { state.selectedType = type; state.selectedFamily = null; state.selectedPokemon = null; resetIndexPage(); render(); }
-      function selectFamily(familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = null; resetIndexPage(); render(); }
-      function selectPokemon(name, familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = state.selectedPokemon === name ? null : name; render(); }
+      function selectType(type) { state.selectedType = type; state.selectedFamily = null; state.selectedPokemon = null; resetIndexPage(); renderAndSyncView(); }
+      function selectFamily(familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = null; resetIndexPage(); renderAndSyncView(); }
+      function selectPokemon(name, familyId, type) { state.selectedType = type; state.selectedFamily = familyId; state.selectedPokemon = state.selectedPokemon === name ? null : name; renderAndSyncView(); }
       function stepBack() {
         if (state.selectedPokemon) state.selectedPokemon = null;
         else if (state.selectedFamily) state.selectedFamily = null;
         else if (state.selectedType) state.selectedType = null;
         resetIndexPage();
-        render();
+        renderAndSyncView();
       }
-      function resetView() { state.selectedType = null; state.selectedFamily = null; state.selectedPokemon = null; state.searchTerm = ''; resetIndexPage(); if (dom.searchInput) dom.searchInput.value = ''; render(); }
+      function resetView() { state.selectedType = null; state.selectedFamily = null; state.selectedPokemon = null; state.searchTerm = ''; resetIndexPage(); if (dom.searchInput) dom.searchInput.value = ''; renderAndSyncView(); }
 
       function filteredPokemon() {
         let list = state.allPokemon.filter(pokemon => {
@@ -1850,6 +1968,7 @@ function validateStaticPayload(data) {
         renderCharacters();
         renderBars();
         renderBreadcrumb();
+        updateViewChrome();
       }
 
       function bindEvents() {
@@ -1903,16 +2022,17 @@ function validateStaticPayload(data) {
 
           showTileTooltip((candidates[0] && candidates[0].tile) || current);
         }
-        dom.searchInput?.addEventListener('input', event => { state.searchTerm = event.target.value; state.selectedPokemon = null; resetIndexPage(); render(); });
-        dom.sortSelect?.addEventListener('change', event => { state.sortMode = event.target.value; resetIndexPage(); render(); });
-        dom.sizeSelect?.addEventListener('change', event => { state.sizeMode = event.target.value; state.typeData = buildTypeData(state.rawSpecies); resetIndexPage(); render(); });
+        dom.searchInput?.addEventListener('input', event => { state.searchTerm = event.target.value; state.selectedPokemon = null; resetIndexPage(); renderAndSyncView({ replace: true }); });
+        dom.sortSelect?.addEventListener('change', event => { state.sortMode = event.target.value; resetIndexPage(); renderAndSyncView(); });
+        dom.sizeSelect?.addEventListener('change', event => { state.sizeMode = event.target.value; state.typeData = buildTypeData(state.rawSpecies); resetIndexPage(); renderAndSyncView(); });
         dom.backButton?.addEventListener('click', stepBack);
+        dom.copyViewButton?.addEventListener('click', copyCurrentViewLink);
         dom.allTypesButton?.addEventListener('click', resetView);
         dom.indexPrevButton?.addEventListener('click', () => {
           if (state.indexPage <= 1) return;
           state.indexPage -= 1;
           state.selectedPokemon = null;
-          render();
+          renderAndSyncView({ replace: true });
           window.requestAnimationFrame(() => { if (dom.characterList) dom.characterList.scrollTop = 0; });
         });
         dom.indexNextButton?.addEventListener('click', () => {
@@ -1920,7 +2040,7 @@ function validateStaticPayload(data) {
           if (state.indexPage >= totalPages) return;
           state.indexPage += 1;
           state.selectedPokemon = null;
-          render();
+          renderAndSyncView({ replace: true });
           window.requestAnimationFrame(() => { if (dom.characterList) dom.characterList.scrollTop = 0; });
         });
         dom.characterList?.addEventListener('click', event => {
@@ -1949,6 +2069,11 @@ function validateStaticPayload(data) {
           playDpadSound();
           navigateTreemapWithDpad(button.dataset.scrollDirection);
         });
+        window.addEventListener('popstate', () => {
+          if (!state.typeData.length) return;
+          applyViewStateFromUrl();
+          render();
+        });
         window.addEventListener('resize', () => window.requestAnimationFrame(render));
       }
 
@@ -1964,6 +2089,16 @@ function validateStaticPayload(data) {
         console.assert(normalizeAttacks([{ name: 'thunder-shock', power: 40 }])[0].name === 'Thunder Shock', 'normalizeAttacks formats card-style move names');
         console.assert(cleanFlavorText('Line one' + String.fromCharCode(10) + 'Line two') === 'Line one Line two', 'cleanFlavorText removes newline characters safely');
         console.assert(escapeHtml('<Pikachu & Eevee>') === '&lt;Pikachu &amp; Eevee&gt;', 'escapeHtml safely escapes dynamic text');
+        const viewUrl = writeViewParams(new URL('https://otakudataviz.com/pokemon_territory_map.html?preview=1#old'), {
+          selectedType: 'Electric',
+          selectedFamily: 'pichu-family',
+          selectedPokemon: 'Pikachu',
+          sortMode: 'name',
+          sizeMode: 'count'
+        });
+        console.assert(viewUrl.searchParams.get('preview') === '1', 'view URL preserves non-state parameters');
+        console.assert(viewUrl.searchParams.get('pokemon') === 'Pikachu' && viewUrl.searchParams.get('sort') === 'name', 'view URL serializes meaningful state');
+        console.assert(viewUrl.hash === '', 'view URL removes stale fragments');
         try {
           validateStaticPayload({ generatedAt: 'test', source: 'test', species: FALLBACK_SPECIES });
           console.assert(false, 'validateStaticPayload should reject undersized fallback data');

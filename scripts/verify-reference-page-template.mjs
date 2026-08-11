@@ -52,6 +52,8 @@ export const verifyReferencePageTemplate = async ({ repositoryRoot = root } = {}
       `href="${project.landingPath}" data-event="click_related_project"`,
       'id="answer"',
       'id="key-facts"',
+      'id="explore-views"',
+      `href="${fixture.visualizationViews[0].href}" data-event="open_interactive_visualization" data-state-link`,
       'id="full-table"',
       'id="methodology"',
       'id="faq"',

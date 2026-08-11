@@ -59,6 +59,20 @@
         "body": { "type": "string", "minLength": 1 }
       }
     },
+    "visualizationViews": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "description", "href"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "href": { "type": "string", "pattern": "^/" }
+        }
+      }
+    },
     "facts": {
       "type": "array",
       "minItems": 3,

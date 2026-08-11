@@ -21,6 +21,13 @@
     "heading": "Water is the most common Pokémon type",
     "body": "Water appears on 154 of the 1,025 species when a type counts in either the primary or secondary slot. Water is also the largest primary-type group, with 134 species. These totals use each species' default variety and cover National Pokédex numbers 1 through 1025."
   },
+  "visualizationViews": [
+    {
+      "label": "Explore the Water type view",
+      "description": "Open the treemap with Water selected to compare its primary-type evolution families and species.",
+      "href": "/pokemon_territory_map.html?type=Water"
+    }
+  ],
   "facts": [
     {
       "label": "Water in either slot",

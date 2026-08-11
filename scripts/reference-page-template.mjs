@@ -55,6 +55,37 @@ export const validateReferencePage = (page, projectRegistry) => {
   addRequiredText(failures, page?.answer?.heading, 'answer.heading');
   addRequiredText(failures, page?.answer?.body, 'answer.body');
 
+  if (page?.visualizationViews !== undefined) {
+    if (!Array.isArray(page.visualizationViews) || page.visualizationViews.length === 0) {
+      failures.push('visualizationViews must contain at least one view when provided');
+    } else {
+      const allowedParams = new Set(['type', 'family', 'pokemon', 'sort', 'size']);
+      page.visualizationViews.forEach((view, index) => {
+        addRequiredText(failures, view?.label, `visualizationViews[${index}].label`);
+        addRequiredText(failures, view?.description, `visualizationViews[${index}].description`);
+        addRequiredText(failures, view?.href, `visualizationViews[${index}].href`);
+        try {
+          const url = new URL(view?.href, projectRegistry.site.origin);
+          if (!String(view?.href).startsWith('/')) {
+            failures.push(`visualizationViews[${index}].href must be root-relative`);
+          }
+          if (project && url.pathname !== project.appPath) {
+            failures.push(`visualizationViews[${index}].href must target the parent interactive app`);
+          }
+          [...url.searchParams.keys()].forEach((param) => {
+            if (!allowedParams.has(param)) failures.push(`visualizationViews[${index}].href has unsupported parameter: ${param}`);
+          });
+          if (![...url.searchParams.keys()].some((param) => allowedParams.has(param))) {
+            failures.push(`visualizationViews[${index}].href must include view state`);
+          }
+        } catch {
+          failures.push(`visualizationViews[${index}].href is invalid`);
+        }
+      });
+      addUniqueFailures(failures, page.visualizationViews.map((view) => view.href), 'Visualization view');
+    }
+  }
+
   if (!Array.isArray(page?.facts) || page.facts.length < 3) {
     failures.push('facts must contain at least three items');
   } else {
@@ -236,6 +267,17 @@ export const renderReferencePage = (page, projectRegistry, referencePages = []) 
             <summary>${escapeHtml(item.question)}</summary>
             <p>${escapeHtml(item.answer)}</p>
           </details>`).join('');
+  const visualizationViews = page.visualizationViews || [];
+  const visualizationViewSection = visualizationViews.length ? `
+      <section class="section inner rule-bottom" id="explore-views">
+        <div class="section-bar"><h2>Explore These Views</h2></div>
+        <div class="related-grid reference-grid">${visualizationViews.map((view) => `
+          <a class="related-card reference-card" href="${escapeHtml(view.href)}" data-event="open_interactive_visualization" data-state-link>
+            <h3>${escapeHtml(view.label)}</h3>
+            <p>${escapeHtml(view.description)}</p>
+          </a>`).join('')}
+        </div>
+      </section>` : '';
   const relatedPages = referencePages
     .filter((item) => item.projectId === page.projectId && item.id !== page.id)
     .sort((a, b) => a.cardTitle.localeCompare(b.cardTitle));
@@ -327,6 +369,7 @@ ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
       <nav class="reference-toc inner rule-bottom" aria-label="On this page">
         <a href="#answer">Answer</a>
         <a href="#key-facts">Key facts</a>
+        ${visualizationViews.length ? '<a href="#explore-views">Explore views</a>' : ''}
         <a href="#full-table">Full table</a>
         ${sectionLinks}
         <a href="#methodology">Methodology</a>
@@ -345,6 +388,7 @@ ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
         <div class="reference-facts">${facts}
         </div>
       </section>
+${visualizationViewSection}
       <section class="section inner rule-bottom" id="full-table">
         <div class="section-bar"><h2>Full Data Table</h2></div>
         <div class="reference-table-wrap">

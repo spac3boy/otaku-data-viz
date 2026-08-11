@@ -277,6 +277,13 @@ for (const project of projects) {
   }
 
   if (project.name === 'Pokedex Type Treemap') {
+    check(
+      appHtml.includes("const VIEW_STATE_PARAMS = ['type', 'family', 'pokemon', 'sort', 'size'];")
+        && appHtml.includes("window.history[method]({ pokedexView: true }, '', nextUrl);")
+        && appHtml.includes("window.addEventListener('popstate'")
+        && appHtml.includes('id="copyViewButton" data-copy-link'),
+      `${project.name}: durable URL state and copy-view controls are missing`
+    );
     try {
       const dataPath = path.join(root, 'assets/data/pokemon-treemap-data.json');
       const dataset = JSON.parse(await readFile(dataPath, 'utf8'));
@@ -461,6 +468,10 @@ for (const page of referencePages) {
       referenceHtml.includes(`href="./${relatedPage.slug}.html"`),
       `${page.id}: sibling reference link missing for ${relatedPage.id}`
     ));
+  (page.visualizationViews || []).forEach((view) => check(
+    referenceHtml.includes(`href="${view.href.replaceAll('&', '&amp;')}" data-event="open_interactive_visualization" data-state-link`),
+    `${page.id}: generated visualization state link is missing for ${view.href}`
+  ));
 }
 
 for (const page of ['index.html', 'projects.html']) {
@@ -495,6 +506,10 @@ check(
     && analyticsEvents.includes("? 'reference'")
     && analyticsEvents.includes('canonical_project_path: currentProject.landingPath'),
   'Shared analytics tracker does not associate generated reference pages with their parent project'
+);
+check(
+  analyticsEvents.includes('control.dataset.copyUrl || control.href || window.location.href'),
+  'Shared analytics tracker does not record the copied deep-link destination'
 );
 
 const sourceDashboard = await readFile(path.join(root, 'analytics-dashboard.html'), 'utf8');

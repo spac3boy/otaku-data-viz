@@ -199,7 +199,7 @@
         ...projectAnalyticsParams,
         platform: shareChannel || 'copy_link',
         location,
-        destination_url: control.href || window.location.href
+        destination_url: control.dataset.copyUrl || control.href || window.location.href
       });
       return;
     }

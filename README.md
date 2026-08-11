@@ -58,6 +58,8 @@ Reference-page analytics context is emitted by the renderer from the parent proj
 
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
+The Pokédex interactive app supports durable view parameters for `type`, `family`, `pokemon`, `sort`, and `size`. Meaningful interactions update browser history, copied view links omit preview and campaign parameters, and back/forward navigation restores validated state from the canonical Pokémon dataset. Search text and Index pagination are intentionally excluded from shared URLs. Reference content may declare validated `visualizationViews` that target these app states; the renderer turns them into measured exploration links.
+
 ## Canonical build workflow
 
 The repository root is the canonical source for the website. The `docs/` directory is generated output for GitHub Pages and should not be edited directly.

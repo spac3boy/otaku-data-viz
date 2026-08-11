@@ -44,6 +44,8 @@ Project identity and discovery metadata live in `config/project-registry.json`. 
 
 Landing-page JSON-LD is generated between `project-structured-data` markers. The reusable graph includes the site and publisher, canonical page, interactive application, primary image, three-level breadcrumb trail, and the page's existing FAQ content. Edit FAQ questions and answers in the landing page, edit shared metadata in the registry, then run the metadata generator rather than hand-maintaining the rest of the graph.
 
+Related-project cards are generated between `related-project-cards` markers in registry order. Each destination has reusable default card copy, while a source project may declare an intentional contextual override. Update relationships or card copy in the registry and regenerate instead of hand-editing individual card grids.
+
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
 ## Canonical build workflow

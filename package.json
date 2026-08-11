@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/publish-pokemon-data.mjs && node scripts/validate-pokemon-data.mjs && node scripts/build-site.mjs",
-    "check:build": "node scripts/validate-pokemon-data.mjs && node scripts/build-site.mjs --check",
+    "build": "node scripts/generate-sitemap.mjs && node scripts/publish-pokemon-data.mjs && node scripts/validate-pokemon-data.mjs && node scripts/build-site.mjs",
+    "check:build": "node scripts/generate-sitemap.mjs --check && node scripts/validate-pokemon-data.mjs && node scripts/build-site.mjs --check",
     "verify": "node scripts/verify-project-urls.mjs",
+    "metadata:generate": "node scripts/generate-sitemap.mjs",
+    "metadata:check": "node scripts/generate-sitemap.mjs --check",
     "data:pokemon:generate": "node scripts/generate-pokemon-treemap-data.mjs && node scripts/validate-pokemon-data.mjs",
     "data:pokemon:publish": "node scripts/publish-pokemon-data.mjs && node scripts/validate-pokemon-data.mjs",
     "data:pokemon:validate": "node scripts/validate-pokemon-data.mjs"

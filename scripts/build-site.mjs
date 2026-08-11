@@ -2,9 +2,16 @@ import { access, copyFile, mkdir, readFile, readdir, stat } from 'node:fs/promis
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 export const repositoryRoot = path.resolve(scriptDirectory, '..');
+const projectRegistry = await loadProjectRegistry({ root: repositoryRoot });
+
+const projectAppEntries = projectRegistry.projects.map((project) => {
+  const source = path.relative(repositoryRoot, siteFileFromPath(repositoryRoot, project.appPath));
+  return { source, target: source };
+});
 
 // The repository root is the canonical source. GitHub Pages publishes /docs.
 // Keep this list intentionally small so unrelated local files cannot be deployed.
@@ -18,11 +25,7 @@ export const siteEntries = [
   { source: 'about.html', target: 'about.html' },
   { source: 'contact.html', target: 'contact.html' },
   { source: 'lab.html', target: 'lab.html' },
-  { source: 'gundam-universe-map.html', target: 'gundam-universe-map.html' },
-  { source: 'manga-timeline.html', target: 'manga-timeline.html' },
-  { source: 'nintendo-game-universe-map.html', target: 'nintendo-game-universe-map.html' },
-  { source: 'pokemon_territory_map.html', target: 'pokemon_territory_map.html' },
-  { source: 'dragonball-character-sociogram/index.html', target: 'dragonball-character-sociogram/index.html' },
+  ...projectAppEntries,
   { source: 'projects', target: 'projects' },
   { source: 'assets', target: 'assets' },
   { source: 'data/weekly-performance.json', target: 'data/weekly-performance.json' },

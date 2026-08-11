@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.0.0",
+  "site": {
+    "name": "Otaku Data Viz",
+    "origin": "https://otakudataviz.com"
+  },
+  "staticSitemapEntries": [
+    { "path": "/", "lastModified": "2026-07-31", "priority": 1.0 },
+    { "path": "/projects.html", "lastModified": "2026-07-31", "priority": 0.9 },
+    { "path": "/about.html", "lastModified": "2026-05-26", "priority": 0.6 },
+    { "path": "/lab.html", "lastModified": "2026-07-29", "priority": 0.6 },
+    { "path": "/contact.html", "lastModified": "2026-05-26", "priority": 0.6 }
+  ],
+  "projects": [
+    {
+      "id": "dragon-ball-sociogram",
+      "name": "Dragon Ball Sociogram",
+      "landingPath": "/projects/dragon-ball-sociogram.html",
+      "appPath": "/dragonball-character-sociogram/",
+      "appAliases": [
+        "/dragonball-character-sociogram/",
+        "/dragonball-character-sociogram/index.html"
+      ],
+      "seo": {
+        "title": "Dragon Ball Character Relationship Chart | Otaku Data Viz",
+        "description": "Explore an interactive Dragon Ball character relationship chart and family tree mapping rivalries, families, mentors, allies, enemies, origins, and story arcs."
+      },
+      "social": {
+        "title": "Dragon Ball Character Relationship Chart | Otaku Data Viz",
+        "description": "Explore an interactive Dragon Ball relationship chart and family tree mapping rivalries, families, mentors, allies, enemies, and origins.",
+        "imagePath": "/assets/images/site-og-v2.png",
+        "imageAlt": "Network preview for the Dragon Ball character relationship chart by Otaku Data Viz."
+      },
+      "structuredData": {
+        "appName": "Dragon Ball Character Relationship Chart",
+        "appDescription": "An interactive Dragon Ball sociogram and family tree mapping rivalries, families, mentors, allies, enemies, origins, and story arcs.",
+        "applicationCategory": "EducationalApplication"
+      },
+      "dataAsset": {
+        "status": "embedded-curated",
+        "datasetId": null,
+        "version": null,
+        "manifestPath": null
+      },
+      "methodologyPath": "/projects/dragon-ball-sociogram.html#methodology",
+      "relatedProjectIds": [
+        "manga-anime-timeline",
+        "pokedex-type-treemap",
+        "nintendo-game-universe-map",
+        "gundam-universe-map"
+      ],
+      "lastReviewed": "2026-08-05",
+      "sitemap": { "lastModified": "2026-08-05", "priority": 0.9 }
+    },
+    {
+      "id": "manga-anime-timeline",
+      "name": "Manga and Anime Timeline",
+      "landingPath": "/projects/manga-anime-timeline.html",
+      "appPath": "/manga-timeline.html",
+      "appAliases": ["/manga-timeline.html"],
+      "seo": {
+        "title": "Anime & Manga History Timeline | Otaku Data Viz",
+        "description": "Explore an interactive anime and manga history timeline featuring landmark titles, creators, studios, adaptations, genres, eras, and global breakout moments."
+      },
+      "social": {
+        "title": "Anime & Manga History Timeline | Otaku Data Viz",
+        "description": "Explore an interactive history timeline of landmark anime and manga titles, creators, studios, adaptations, genres, and global breakout moments.",
+        "imagePath": "/assets/images/site-og-v2.png",
+        "imageAlt": "Timeline preview for the Anime and Manga History Timeline by Otaku Data Viz."
+      },
+      "structuredData": {
+        "appName": "Anime and Manga History Timeline",
+        "appDescription": "An interactive timeline of landmark manga and anime titles, creators, studios, adaptations, genres, and global breakout moments.",
+        "applicationCategory": "EducationalApplication"
+      },
+      "dataAsset": {
+        "status": "embedded-curated",
+        "datasetId": null,
+        "version": null,
+        "manifestPath": null
+      },
+      "methodologyPath": "/projects/manga-anime-timeline.html#methodology",
+      "relatedProjectIds": [
+        "dragon-ball-sociogram",
+        "pokedex-type-treemap",
+        "nintendo-game-universe-map",
+        "gundam-universe-map"
+      ],
+      "lastReviewed": "2026-08-05",
+      "sitemap": { "lastModified": "2026-08-05", "priority": 0.9 }
+    },
+    {
+      "id": "pokedex-type-treemap",
+      "name": "Pokedex Type Treemap",
+      "landingPath": "/projects/pokedex-type-treemap.html",
+      "appPath": "/pokemon_territory_map.html",
+      "appAliases": ["/pokemon_territory_map.html"],
+      "seo": {
+        "title": "Pokédex Type Treemap | Pokémon Type & Evolution Map | Otaku Data Viz",
+        "description": "Explore an interactive Pokédex-style treemap that groups Pokémon by primary type, evolution family, species count, and base stats through fan-made data visualization."
+      },
+      "social": {
+        "title": "Pokédex Type Treemap | Pokémon Type & Evolution Map",
+        "description": "Explore a fan-made Pokédex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats.",
+        "imagePath": "/assets/images/site-og-v2.png",
+        "imageAlt": "Abstract Pokédex-style treemap preview for the Pokedex Type Treemap by Otaku Data Viz."
+      },
+      "structuredData": {
+        "appName": "Pokedex Type Treemap",
+        "appDescription": "An interactive Pokedex-style treemap grouping Pokémon by primary type, evolution family, species count, and base stats.",
+        "applicationCategory": "EducationalApplication"
+      },
+      "dataAsset": {
+        "status": "versioned-canonical",
+        "datasetId": "pokemon-species-treemap",
+        "version": "1.0.0",
+        "manifestPath": "/datasets/pokemon/v1/metadata.json"
+      },
+      "methodologyPath": "/projects/pokedex-type-treemap.html#methodology",
+      "relatedProjectIds": [
+        "dragon-ball-sociogram",
+        "manga-anime-timeline",
+        "nintendo-game-universe-map",
+        "gundam-universe-map"
+      ],
+      "lastReviewed": "2026-08-10",
+      "sitemap": { "lastModified": "2026-08-10", "priority": 0.9 }
+    },
+    {
+      "id": "nintendo-game-universe-map",
+      "name": "Nintendo Game Universe Map",
+      "landingPath": "/projects/nintendo-game-universe-map.html",
+      "appPath": "/nintendo-game-universe-map.html",
+      "appAliases": ["/nintendo-game-universe-map.html"],
+      "seo": {
+        "title": "Nintendo Game Universe Map | Otaku Data Viz",
+        "description": "Explore 406 Nintendo-developed, published, and hardware-defining games from arcade origins through Switch 2 in an interactive Game Boy-style bubble map."
+      },
+      "social": {
+        "title": "Nintendo Game Universe Map | Otaku Data Viz",
+        "description": "Explore 406 Nintendo games across release years, hardware eras, franchises, genres, and reported sales in a Game Boy-style data visualization.",
+        "imagePath": "/assets/images/nintendo-game-universe-map-og.jpg",
+        "imageAlt": "Nintendo Game Universe Map shown inside a retro Game Boy-inspired interface."
+      },
+      "structuredData": {
+        "appName": "Nintendo Game Universe Map",
+        "appDescription": "An interactive Game Boy-style bubble map of 406 Nintendo-developed, published, and hardware-defining games.",
+        "applicationCategory": "Data Visualization"
+      },
+      "dataAsset": {
+        "status": "embedded-curated",
+        "datasetId": null,
+        "version": null,
+        "manifestPath": null
+      },
+      "methodologyPath": "/projects/nintendo-game-universe-map.html#methodology",
+      "relatedProjectIds": [
+        "dragon-ball-sociogram",
+        "manga-anime-timeline",
+        "pokedex-type-treemap",
+        "gundam-universe-map"
+      ],
+      "lastReviewed": "2026-08-05",
+      "sitemap": { "lastModified": "2026-08-05", "priority": 0.9 }
+    },
+    {
+      "id": "gundam-universe-map",
+      "name": "Gundam Universe Map",
+      "landingPath": "/projects/gundam-universe-map.html",
+      "appPath": "/gundam-universe-map.html",
+      "appAliases": ["/gundam-universe-map.html"],
+      "seo": {
+        "title": "Gundam Watch Order & Timeline Map | Otaku Data Viz",
+        "description": "Explore the Gundam watch order by continuity, compare story chronology with release order, and find beginner-friendly standalone series and viewing paths."
+      },
+      "social": {
+        "title": "Gundam Watch Order & Timeline Map | Otaku Data Viz",
+        "description": "Compare Gundam timelines, continuity connections, story and release order, standalone series, and beginner viewing paths.",
+        "imagePath": "/assets/images/gundam-universe-map-og.png",
+        "imageAlt": "Gundam Watch Order and Timeline Map by Otaku Data Viz."
+      },
+      "structuredData": {
+        "appName": "Gundam Universe Map",
+        "appDescription": "An interactive fan-made Gundam watch order and timeline map comparing continuities, story chronology, release order, and newcomer viewing routes.",
+        "applicationCategory": "EducationalApplication"
+      },
+      "dataAsset": {
+        "status": "embedded-curated",
+        "datasetId": null,
+        "version": null,
+        "manifestPath": null
+      },
+      "methodologyPath": "/projects/gundam-universe-map.html#methodology",
+      "relatedProjectIds": [
+        "dragon-ball-sociogram",
+        "manga-anime-timeline",
+        "nintendo-game-universe-map",
+        "pokedex-type-treemap"
+      ],
+      "lastReviewed": "2026-07-31",
+      "sitemap": { "lastModified": "2026-07-31", "priority": 0.9 }
+    }
+  ]
+}

@@ -40,6 +40,8 @@ Each visualization has two intentionally different public surfaces:
 
 The `/projects/` URL is the canonical SEO and sharing URL and is the only project URL included in the sitemap. The interactive URL remains available for direct use and iframe previews, but its canonical and Open Graph URL point to the matching landing page. Interactive-page JSON-LD describes the app at its real app URL and connects it to the landing page with `mainEntityOfPage`.
 
+Project identity and discovery metadata live in `config/project-registry.json`. This versioned registry is the source of truth for canonical and interactive paths, SEO and social metadata, structured application data, dataset associations, review dates, related-project relationships, and project sitemap entries. Run `npm run metadata:generate` after an intentional registry change; `npm run metadata:check`, `npm run check:build`, and `npm run verify` detect drift between the registry, sitemap, HTML metadata, JSON-LD, dataset manifests, related links, and the published `/docs` build.
+
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
 ## Canonical build workflow

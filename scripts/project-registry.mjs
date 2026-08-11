@@ -95,6 +95,9 @@ export const validateProjectRegistry = (registry) => {
     if (project.methodologyPath !== `${project.landingPath}#methodology`) {
       failures.push(`${label}: methodologyPath must target the landing-page methodology section`);
     }
+    for (const field of ['title', 'description']) {
+      if (!hasText(project.relatedCard?.[field])) failures.push(`${label}: relatedCard.${field} is required`);
+    }
     if (!Array.isArray(project.relatedProjectIds)) {
       failures.push(`${label}: relatedProjectIds must be an array`);
     } else {
@@ -103,6 +106,24 @@ export const validateProjectRegistry = (registry) => {
         if (relatedId === project.id) failures.push(`${label}: cannot relate to itself`);
         if (!knownIds.has(relatedId)) failures.push(`${label}: unknown related project ${relatedId}`);
       });
+    }
+    if (project.relatedCardOverrides !== undefined) {
+      if (!project.relatedCardOverrides
+        || Array.isArray(project.relatedCardOverrides)
+        || typeof project.relatedCardOverrides !== 'object') {
+        failures.push(`${label}: relatedCardOverrides must be an object`);
+      } else {
+        Object.entries(project.relatedCardOverrides).forEach(([relatedId, override]) => {
+          if (!project.relatedProjectIds?.includes(relatedId)) {
+            failures.push(`${label}: related card override is not in relatedProjectIds: ${relatedId}`);
+          }
+          for (const field of ['title', 'description']) {
+            if (!hasText(override?.[field])) {
+              failures.push(`${label}: relatedCardOverrides.${relatedId}.${field} is required`);
+            }
+          }
+        });
+      }
     }
 
     if (!isDate(project.lastReviewed)) failures.push(`${label}: lastReviewed must use YYYY-MM-DD`);

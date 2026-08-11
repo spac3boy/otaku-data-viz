@@ -44,6 +44,10 @@
         "manifestPath": null
       },
       "methodologyPath": "/projects/dragon-ball-sociogram.html#methodology",
+      "relatedCard": {
+        "title": "Dragon Ball Character Relationship Chart",
+        "description": "Map character relationships, rivalries, families, mentors, and alliances."
+      },
       "relatedProjectIds": [
         "manga-anime-timeline",
         "pokedex-type-treemap",
@@ -82,6 +86,10 @@
         "manifestPath": null
       },
       "methodologyPath": "/projects/manga-anime-timeline.html#methodology",
+      "relatedCard": {
+        "title": "Manga Timeline",
+        "description": "Trace manga serialization history, anime releases, adaptations, and breakout moments."
+      },
       "relatedProjectIds": [
         "dragon-ball-sociogram",
         "pokedex-type-treemap",
@@ -120,6 +128,10 @@
         "manifestPath": "/datasets/pokemon/v1/metadata.json"
       },
       "methodologyPath": "/projects/pokedex-type-treemap.html#methodology",
+      "relatedCard": {
+        "title": "Pokedex Type Treemap",
+        "description": "Explore Pokemon species patterns through a playful type and territory treemap."
+      },
       "relatedProjectIds": [
         "dragon-ball-sociogram",
         "manga-anime-timeline",
@@ -158,12 +170,22 @@
         "manifestPath": null
       },
       "methodologyPath": "/projects/nintendo-game-universe-map.html#methodology",
+      "relatedCard": {
+        "title": "Nintendo Game Universe Map",
+        "description": "Explore 406 Nintendo releases across years, hardware, franchises, genres, and sales."
+      },
       "relatedProjectIds": [
         "dragon-ball-sociogram",
         "manga-anime-timeline",
         "pokedex-type-treemap",
         "gundam-universe-map"
       ],
+      "relatedCardOverrides": {
+        "pokedex-type-treemap": {
+          "title": "Pokédex Type Treemap",
+          "description": "Explore Pokémon types, evolution families, species counts, and base stats."
+        }
+      },
       "lastReviewed": "2026-08-05",
       "sitemap": { "lastModified": "2026-08-05", "priority": 0.9 }
     },
@@ -196,12 +218,30 @@
         "manifestPath": null
       },
       "methodologyPath": "/projects/gundam-universe-map.html#methodology",
+      "relatedCard": {
+        "title": "Gundam Universe Map",
+        "description": "Compare Gundam continuities, watch orders, beginner routes, and release history."
+      },
       "relatedProjectIds": [
         "dragon-ball-sociogram",
         "manga-anime-timeline",
         "nintendo-game-universe-map",
         "pokedex-type-treemap"
       ],
+      "relatedCardOverrides": {
+        "manga-anime-timeline": {
+          "title": "Anime & Manga History Timeline",
+          "description": "Trace manga serialization history, anime releases, adaptations, and breakout moments."
+        },
+        "nintendo-game-universe-map": {
+          "title": "Nintendo Game Universe Map",
+          "description": "Explore Nintendo releases across years, hardware eras, franchises, genres, and sales."
+        },
+        "pokedex-type-treemap": {
+          "title": "Pokédex Type Treemap",
+          "description": "Explore Pokémon types, evolution families, species counts, and base stats."
+        }
+      },
       "lastReviewed": "2026-07-31",
       "sitemap": { "lastModified": "2026-07-31", "priority": 0.9 }
     }

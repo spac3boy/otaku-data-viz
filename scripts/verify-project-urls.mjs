@@ -5,6 +5,7 @@ import { createContext, runInContext } from 'node:vm';
 import { verifySiteBuild } from './build-site.mjs';
 import { canonicalUrl, loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
 import { verifyProjectStructuredData } from './generate-project-structured-data.mjs';
+import { verifyRelatedProjectCards } from './generate-related-project-cards.mjs';
 import { renderSitemap } from './generate-sitemap.mjs';
 import { validatePokemonDataset } from './validate-pokemon-data.mjs';
 
@@ -24,6 +25,8 @@ const check = (condition, message) => {
 
 const structuredDataBuild = await verifyProjectStructuredData({ root });
 structuredDataBuild.failures.forEach((failure) => failures.push(`Structured data: ${failure}`));
+const relatedCardBuild = await verifyRelatedProjectCards({ root });
+relatedCardBuild.failures.forEach((failure) => failures.push(`Related cards: ${failure}`));
 
 const pokemonDataset = await validatePokemonDataset({ root });
 pokemonDataset.failures.forEach((failure) => failures.push(`Pokémon dataset: ${failure}`));

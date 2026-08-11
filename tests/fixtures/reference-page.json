@@ -21,6 +21,13 @@
     "heading": "What does this reference page answer?",
     "body": "It demonstrates how a future reference page can answer one focused fandom-data question, show supporting facts, explain the result, disclose methodology, and lead readers into the parent visualization."
   },
+  "visualizationViews": [
+    {
+      "label": "Explore the Water type view",
+      "description": "Open a validated type-level state in the parent Pokédex visualization.",
+      "href": "/pokemon_territory_map.html?type=Water"
+    }
+  ],
   "facts": [
     {
       "label": "Dataset records",

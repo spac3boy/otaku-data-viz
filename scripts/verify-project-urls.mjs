@@ -3,38 +3,18 @@ import path from 'node:path';
 import process from 'node:process';
 import { createContext, runInContext } from 'node:vm';
 import { verifySiteBuild } from './build-site.mjs';
+import { canonicalUrl, loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
+import { renderSitemap } from './generate-sitemap.mjs';
 import { validatePokemonDataset } from './validate-pokemon-data.mjs';
 
 const root = process.cwd();
-const origin = 'https://otakudataviz.com';
-const projects = [
-  {
-    name: 'Dragon Ball Sociogram',
-    landing: '/projects/dragon-ball-sociogram.html',
-    app: '/dragonball-character-sociogram/',
-    appAliases: ['/dragonball-character-sociogram/', '/dragonball-character-sociogram/index.html']
-  },
-  {
-    name: 'Manga and Anime Timeline',
-    landing: '/projects/manga-anime-timeline.html',
-    app: '/manga-timeline.html'
-  },
-  {
-    name: 'Pokedex Type Treemap',
-    landing: '/projects/pokedex-type-treemap.html',
-    app: '/pokemon_territory_map.html'
-  },
-  {
-    name: 'Nintendo Game Universe Map',
-    landing: '/projects/nintendo-game-universe-map.html',
-    app: '/nintendo-game-universe-map.html'
-  },
-  {
-    name: 'Gundam Universe Map',
-    landing: '/projects/gundam-universe-map.html',
-    app: '/gundam-universe-map.html'
-  }
-];
+const projectRegistry = await loadProjectRegistry({ root });
+const origin = projectRegistry.site.origin;
+const projects = projectRegistry.projects.map((project) => ({
+  ...project,
+  landing: project.landingPath,
+  app: project.appPath
+}));
 
 const failures = [];
 const check = (condition, message) => {
@@ -43,35 +23,120 @@ const check = (condition, message) => {
 
 const pokemonDataset = await validatePokemonDataset({ root });
 pokemonDataset.failures.forEach((failure) => failures.push(`Pokémon dataset: ${failure}`));
-const siteFile = (urlPath, base = root) => {
-  const pathname = decodeURIComponent(urlPath).replace(/^\//, '');
-  if (!pathname) return path.join(base, 'index.html');
-  if (pathname.endsWith('/')) return path.join(base, pathname, 'index.html');
-  return path.join(base, pathname);
-};
+const siteFile = (urlPath, base = root) => siteFileFromPath(base, urlPath);
 const readSiteFile = (urlPath, base = root) => readFile(siteFile(urlPath, base), 'utf8');
 const appPaths = (project) => project.appAliases || [project.app];
 const matchesApp = (pathname, project) => appPaths(project).includes(pathname);
+const decodeHtml = (value) => value
+  .replaceAll('&amp;', '&')
+  .replaceAll('&quot;', '"')
+  .replaceAll('&#39;', "'")
+  .replaceAll('&apos;', "'");
+const titleValue = (html) => {
+  const match = html.match(/<title>([\s\S]*?)<\/title>/i);
+  return match ? decodeHtml(match[1].trim()) : null;
+};
+const metaValue = (html, attribute, value) => {
+  const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const attributePattern = new RegExp(`\\b${attribute}="${escapedValue}"`, 'i');
+  const tag = [...html.matchAll(/<meta\b[^>]*>/gi)]
+    .map((match) => match[0])
+    .find((candidate) => attributePattern.test(candidate));
+  const content = tag?.match(/\bcontent="([^"]*)"/i);
+  return content ? decodeHtml(content[1]) : null;
+};
+const jsonLdNodes = (documents) => documents.flatMap((document) => (
+  Array.isArray(document?.['@graph']) ? document['@graph'] : [document]
+));
+const hasSchemaType = (node, expectedType) => {
+  const types = Array.isArray(node?.['@type']) ? node['@type'] : [node?.['@type']];
+  return types.includes(expectedType);
+};
 const parseJsonLd = (html, label) => {
   const blocks = [...html.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
   check(blocks.length > 0, `${label}: no JSON-LD block found`);
+  const documents = [];
   for (const block of blocks) {
     try {
-      JSON.parse(block[1]);
+      documents.push(JSON.parse(block[1]));
     } catch (error) {
       failures.push(`${label}: invalid JSON-LD (${error.message})`);
     }
   }
+  return documents;
 };
 
 for (const project of projects) {
   const landingHtml = await readSiteFile(project.landing);
   const appHtml = await readSiteFile(project.app);
-  const canonical = `${origin}${project.landing}`;
-  const appUrl = `${origin}${project.app}`;
+  const canonical = canonicalUrl(projectRegistry, project.landing);
+  const appUrl = canonicalUrl(projectRegistry, project.app);
 
-  parseJsonLd(landingHtml, `${project.name} landing`);
-  parseJsonLd(appHtml, `${project.name} interactive`);
+  const landingJsonLd = parseJsonLd(landingHtml, `${project.name} landing`);
+  const appJsonLd = parseJsonLd(appHtml, `${project.name} interactive`);
+  const landingNodes = jsonLdNodes(landingJsonLd);
+
+  check(titleValue(landingHtml) === project.seo.title, `${project.name}: title does not match the project registry`);
+  check(
+    metaValue(landingHtml, 'name', 'description') === project.seo.description,
+    `${project.name}: meta description does not match the project registry`
+  );
+  const socialMetadata = new Map([
+    ['og:title', project.social.title],
+    ['og:description', project.social.description],
+    ['og:url', canonical],
+    ['og:image', canonicalUrl(projectRegistry, project.social.imagePath)],
+    ['og:image:alt', project.social.imageAlt]
+  ]);
+  socialMetadata.forEach((expectedValue, property) => {
+    check(
+      metaValue(landingHtml, 'property', property) === expectedValue,
+      `${project.name}: ${property} does not match the project registry`
+    );
+  });
+  check(
+    landingHtml.includes('id="methodology"'),
+    `${project.name}: methodologyPath does not resolve to a methodology section`
+  );
+
+  const appNode = jsonLdNodes(appJsonLd).find((node) => hasSchemaType(node, 'WebApplication'));
+  check(Boolean(appNode), `${project.name}: interactive JSON-LD has no WebApplication node`);
+  if (appNode) {
+    const expectedStructuredData = new Map([
+      ['name', project.structuredData.appName],
+      ['url', appUrl],
+      ['mainEntityOfPage', canonical],
+      ['description', project.structuredData.appDescription],
+      ['applicationCategory', project.structuredData.applicationCategory],
+      ['image', canonicalUrl(projectRegistry, project.social.imagePath)]
+    ]);
+    expectedStructuredData.forEach((expectedValue, field) => {
+      check(
+        appNode[field] === expectedValue,
+        `${project.name}: interactive JSON-LD ${field} does not match the project registry`
+      );
+    });
+  }
+
+  if (project.dataAsset.status === 'versioned-canonical') {
+    try {
+      const manifest = JSON.parse(await readFile(siteFile(project.dataAsset.manifestPath), 'utf8'));
+      check(
+        manifest.datasetId === project.dataAsset.datasetId,
+        `${project.name}: canonical dataset id does not match its registry association`
+      );
+      check(
+        manifest.version === project.dataAsset.version,
+        `${project.name}: canonical dataset version does not match its registry association`
+      );
+      check(
+        manifest.lastReviewed === project.lastReviewed,
+        `${project.name}: canonical dataset review date does not match the registry`
+      );
+    } catch (error) {
+      failures.push(`${project.name}: canonical dataset manifest is invalid (${error.message})`);
+    }
+  }
 
   for (const [surface, html] of [['landing', landingHtml], ['interactive', appHtml]]) {
     check(
@@ -85,16 +150,8 @@ for (const project of projects) {
   }
 
   check(
-    landingHtml.includes(`"url": "${canonical}"`),
+    landingNodes.some((node) => node?.url === canonical),
     `${project.name}: landing JSON-LD does not use the canonical landing URL`
-  );
-  check(
-    appHtml.includes(`"url": "${appUrl}"`),
-    `${project.name}: interactive JSON-LD does not identify its app URL`
-  );
-  check(
-    appHtml.includes(`"mainEntityOfPage": "${canonical}"`),
-    `${project.name}: interactive JSON-LD does not point to its landing page`
   );
   check(
     appHtml.includes("const isAnalyticsPreview = new URLSearchParams(window.location.search).get('preview') === '1';")
@@ -308,18 +365,19 @@ for (const project of projects) {
     relatedLinks.every((pathname) => pathname === '/index.html' || projects.some((item) => item.landing === pathname)),
     `${project.name}: a related-project card bypasses a canonical landing page`
   );
-  const expectedRelatedLinks = projects
-    .filter((item) => item.landing !== project.landing)
-    .map((item) => item.landing);
+  const expectedRelatedLinks = project.relatedProjectIds
+    .map((projectId) => projects.find((item) => item.id === projectId)?.landing)
+    .filter(Boolean);
   const uniqueRelatedLinks = new Set(relatedLinks);
   check(
     uniqueRelatedLinks.size === expectedRelatedLinks.length
       && expectedRelatedLinks.every((pathname) => uniqueRelatedLinks.has(pathname)),
-    `${project.name}: related-project cards must link to every other canonical project exactly once`
+    `${project.name}: related-project cards must match the project registry exactly once`
   );
 }
 
 const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
+check(sitemap === renderSitemap(projectRegistry), 'sitemap.xml is not generated from the project registry');
 for (const project of projects) {
   check(sitemap.includes(`<loc>${origin}${project.landing}</loc>`), `${project.name}: canonical landing missing from sitemap`);
   for (const appPath of appPaths(project)) {

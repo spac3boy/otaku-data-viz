@@ -46,6 +46,12 @@ Landing-page JSON-LD is generated between `project-structured-data` markers. The
 
 Related-project cards are generated between `related-project-cards` markers in registry order. Each destination has reusable default card copy, while a source project may declare an intentional contextual override. Update relationships or card copy in the registry and regenerate instead of hand-editing individual card grids.
 
+## Reference-page contract
+
+Demand-led reference pages use the renderer in `scripts/reference-page-template.mjs` and the machine-readable contract in `schemas/reference-page.schema.json`. The contract requires one focused direct answer, at least three supporting facts, explanatory sections, an exact parent dataset id and version, methodology, source attribution, disclosed limitations, FAQs, and a route back to the parent visualization. This is designed to prevent thin or mechanically varied pages from entering a reference cluster.
+
+`tests/fixtures/reference-page.json` exercises the scaffold without publishing a search-facing page. Run `npm run reference:check` to validate the schema, fixture, canonical dataset association, HTML escaping, deterministic rendering, required page sections, dataset JSON-LD, breadcrumbs, and FAQ structured data. Production reference pages should use the same renderer only after their claims have been recomputed and reviewed against the declared dataset version.
+
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
 ## Canonical build workflow

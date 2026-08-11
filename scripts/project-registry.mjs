@@ -90,6 +90,7 @@ export const validateProjectRegistry = (registry) => {
       if (!hasText(project.dataAsset.datasetId)) failures.push(`${label}: canonical data requires datasetId`);
       if (!hasText(project.dataAsset.version)) failures.push(`${label}: canonical data requires version`);
       if (!isSitePath(project.dataAsset.manifestPath)) failures.push(`${label}: canonical data requires manifestPath`);
+      if (!isSitePath(project.dataAsset.publicPath)) failures.push(`${label}: canonical data requires publicPath`);
     }
 
     if (project.methodologyPath !== `${project.landingPath}#methodology`) {

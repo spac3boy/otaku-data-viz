@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "rarest-pokemon-type",
+  "slug": "rarest-pokemon-type",
+  "projectId": "pokedex-type-treemap",
+  "dataset": {
+    "id": "pokemon-species-treemap",
+    "version": "1.0.0",
+    "manifestPath": "/datasets/pokemon/v1/metadata.json",
+    "publicPath": "/assets/data/pokemon-treemap-data.json"
+  },
+  "title": "What Is the Rarest Pokémon Type? | Otaku Data Viz",
+  "description": "Ice is the rarest Pokémon type by either-slot coverage, while Flying is rarest as a primary type. Compare all 18 types through Pokédex #1025.",
+  "cardTitle": "What Is the Rarest Pokémon Type?",
+  "cardDescription": "See why Ice or Flying can be the rarest type depending on how dual-type species are counted.",
+  "sitemapPriority": 0.8,
+  "eyebrow": "Pokémon Data Answer · Dataset v1.0.0",
+  "heading": "What Is the Rarest Pokémon Type?",
+  "introduction": "Ice is the least common type when a species counts in either its primary or secondary slot. Flying is the smallest group when each species is assigned only to its primary type. Both answers come from the same 1,025-species snapshot—the counting rule is what changes.",
+  "answer": {
+    "heading": "Ice is rarest overall; Flying is rarest as a primary type",
+    "body": "Ice appears on 48 of the 1,025 species when both type slots count, fewer than any other type. If every species is grouped only by its primary type, Flying is rarest with nine species. These totals use each species' default variety and cover National Pokédex numbers 1 through 1025."
+  },
+  "facts": [
+    {
+      "label": "Ice in either slot",
+      "value": "48",
+      "detail": "Only 4.7% of species have Ice as a primary or secondary type."
+    },
+    {
+      "label": "Flying as primary type",
+      "value": "9",
+      "detail": "Flying is usually a secondary type, so it becomes the smallest primary-type group."
+    },
+    {
+      "label": "Next-rarest any-slot type",
+      "value": "Fairy · 64",
+      "detail": "Ice appears on 16 fewer species than Fairy, the next-smallest either-slot group."
+    },
+    {
+      "label": "Ice as primary type",
+      "value": "31",
+      "detail": "Ice is the third-smallest primary-type group, behind Flying and Fairy."
+    }
+  ],
+  "table": {
+    "caption": "Species counts by type in dataset v1.0.0, sorted from fewest to most appearances in either type slot. Percentages use 1,025 species as the denominator.",
+    "columns": ["Type", "Either type slot", "Primary type", "Share of species"],
+    "rows": [
+      ["Ice", "48", "31", "4.7%"],
+      ["Fairy", "64", "29", "6.2%"],
+      ["Ghost", "65", "35", "6.3%"],
+      ["Steel", "65", "36", "6.3%"],
+      ["Dark", "69", "45", "6.7%"],
+      ["Electric", "69", "59", "6.7%"],
+      ["Dragon", "70", "37", "6.8%"],
+      ["Fighting", "73", "40", "7.1%"],
+      ["Rock", "74", "58", "7.2%"],
+      ["Ground", "75", "40", "7.3%"],
+      ["Fire", "81", "66", "7.9%"],
+      ["Poison", "83", "42", "8.1%"],
+      ["Bug", "92", "83", "9.0%"],
+      ["Psychic", "102", "60", "10.0%"],
+      ["Flying", "109", "9", "10.6%"],
+      ["Grass", "127", "103", "12.4%"],
+      ["Normal", "131", "118", "12.8%"],
+      ["Water", "154", "134", "15.0%"]
+    ]
+  },
+  "sections": [
+    {
+      "id": "two-counting-rules",
+      "heading": "Why there are two valid answers",
+      "paragraphs": [
+        "The either-slot count asks how many species have a type at all. A dual-type species contributes once to each of its two categories, which makes Ice the rarest type with 48 appearances.",
+        "The primary-type count assigns every species to exactly one group using the first type on its default variety. Under that rule, Flying is rarest with nine species. The two measures answer different questions, so a type-rarity claim should always state which one it uses."
+      ]
+    },
+    {
+      "id": "flying-contrast",
+      "heading": "Why Flying changes rank so dramatically",
+      "paragraphs": [
+        "Flying appears on 109 species in either slot, making it the fourth-most common type by overall coverage. It is the primary type for only nine species in this snapshot because it appears far more often as a secondary type.",
+        "That 100-species difference is the largest contrast between the two columns. A primary-only treemap is useful for assigning every species to one category, but it should not be read as the total number of species associated with each type."
+      ]
+    },
+    {
+      "id": "ice-rarity",
+      "heading": "How uncommon Ice is in this snapshot",
+      "paragraphs": [
+        "Ice appears on 48 species, or 4.7% of the 1,025-species dataset. Fairy is next with 64 appearances, leaving a gap of 16 species between the two least-common either-slot groups.",
+        "Ice is not the smallest primary group: 31 species use Ice as their primary type, compared with 29 for Fairy and nine for Flying. This is another reason the full counting method matters more than an unqualified rarity label."
+      ]
+    },
+    {
+      "id": "snapshot-scope",
+      "heading": "What this snapshot covers",
+      "paragraphs": [
+        "The dataset contains one record for each species from Bulbasaur through Pecharunt, National Pokédex numbers 1–1025, spanning Generations I–IX. It uses the default variety for each species.",
+        "The page is tied to dataset version 1.0.0 because later species or reviewed type changes can alter the ranking. Alternate forms, regional forms, Mega Evolutions, and other non-default varieties are outside this result."
+      ]
+    }
+  ],
+  "methodology": {
+    "lastReviewed": "2026-08-10",
+    "summary": "Counts are recomputed from the 1,025 unique species records in the canonical Pokémon Species Treemap Dataset. The either-slot calculation counts each species once for every distinct type in its types array. The primary calculation counts only primaryType. Percentages divide either-slot counts by 1,025 and round to one decimal place.",
+    "sources": [
+      {
+        "name": "PokéAPI v2 documentation",
+        "url": "https://pokeapi.co/docs/v2",
+        "role": "Documentation for the primary upstream species, Pokémon, type, generation, and evolution resources used by the canonical dataset generator."
+      },
+      {
+        "name": "PokéAPI source repository",
+        "url": "https://github.com/PokeAPI/pokeapi",
+        "role": "Upstream project source and provenance context for the API-backed snapshot."
+      }
+    ]
+  },
+  "limitations": [
+    "The snapshot ends at National Pokédex #1025 and does not automatically include later announced or numbered species.",
+    "Only each species' default variety is counted; alternate, regional, Mega, Gigantamax, and other forms are not separate records.",
+    "Type assignments follow the default variety represented by the upstream snapshot and may differ for alternate forms.",
+    "The result measures species abundance by type, not competitive usage, encounter frequency, popularity, or type strength."
+  ],
+  "faq": [
+    {
+      "question": "What is the rarest Pokémon type?",
+      "answer": "Ice is the rarest when a type counts in either the primary or secondary slot, appearing on 48 of 1,025 species. Flying is rarest when species are grouped only by primary type, with nine."
+    },
+    {
+      "question": "Why is Flying not rare when secondary types count?",
+      "answer": "Flying appears on 109 species overall but is the primary type for only nine. It is frequently paired as the second type, producing very different either-slot and primary-only rankings."
+    },
+    {
+      "question": "What is the second-rarest Pokémon type?",
+      "answer": "Fairy is the second-rarest by either-slot coverage with 64 species. Under primary-only grouping, Fairy is second-smallest with 29 species."
+    },
+    {
+      "question": "Are alternate Pokémon forms included?",
+      "answer": "No. The snapshot contains one record per National Pokédex species and uses its default variety. Alternate and regional forms are not separate records."
+    },
+    {
+      "question": "Will the rarest type ever change?",
+      "answer": "It can. This answer is tied to dataset version 1.0.0 and National Pokédex #1–1025. Later species additions or reviewed type assignments can change the counts."
+    }
+  ]
+}

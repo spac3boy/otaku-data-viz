@@ -125,7 +125,8 @@
         "status": "versioned-canonical",
         "datasetId": "pokemon-species-treemap",
         "version": "1.0.0",
-        "manifestPath": "/datasets/pokemon/v1/metadata.json"
+        "manifestPath": "/datasets/pokemon/v1/metadata.json",
+        "publicPath": "/assets/data/pokemon-treemap-data.json"
       },
       "methodologyPath": "/projects/pokedex-type-treemap.html#methodology",
       "relatedCard": {

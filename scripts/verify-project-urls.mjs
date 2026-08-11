@@ -177,6 +177,15 @@ for (const project of projects) {
         manifest.lastReviewed === project.lastReviewed,
         `${project.name}: canonical dataset review date does not match the registry`
       );
+      check(
+        `/${manifest.publishedFile}` === project.dataAsset.publicPath,
+        `${project.name}: public dataset path does not match the registry association`
+      );
+      try {
+        await access(siteFile(project.dataAsset.publicPath));
+      } catch {
+        failures.push(`${project.name}: registered public dataset path does not resolve locally`);
+      }
     } catch (error) {
       failures.push(`${project.name}: canonical dataset manifest is invalid (${error.message})`);
     }

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "pokemon-primary-type-distribution",
+  "slug": "pokemon-primary-type-distribution",
+  "projectId": "pokedex-type-treemap",
+  "dataset": {
+    "id": "pokemon-species-treemap",
+    "version": "1.0.0",
+    "manifestPath": "/datasets/pokemon/v1/metadata.json",
+    "publicPath": "/assets/data/pokemon-treemap-data.json"
+  },
+  "title": "Pokémon Primary Type Distribution | Otaku Data Viz",
+  "description": "A reference-page fixture demonstrating a direct answer, verifiable Pokémon type facts, methodology, limitations, sources, and links to the interactive dataset.",
+  "eyebrow": "Reference Template Fixture",
+  "heading": "Pokémon Primary Type Distribution",
+  "introduction": "This non-published fixture exercises the reusable reference-page contract against the canonical Pokémon dataset pilot.",
+  "answer": {
+    "heading": "What does this reference page answer?",
+    "body": "It demonstrates how a future reference page can answer one focused fandom-data question, show supporting facts, explain the result, disclose methodology, and lead readers into the parent visualization."
+  },
+  "facts": [
+    {
+      "label": "Dataset records",
+      "value": "1,025",
+      "detail": "One record for each species in the version 1.0.0 pilot snapshot."
+    },
+    {
+      "label": "Primary types",
+      "value": "18",
+      "detail": "Species are grouped by the primary type field used by the treemap."
+    },
+    {
+      "label": "Generations",
+      "value": "9",
+      "detail": "The fixture is connected to the documented generation coverage in the pilot dataset."
+    }
+  ],
+  "sections": [
+    {
+      "id": "interpretation",
+      "heading": "How to interpret the answer",
+      "paragraphs": [
+        "A reference page should distinguish a directly computed result from interpretation and should define the grouping rule that produced it.",
+        "It should send exploratory readers to the parent visualization without forcing visitors to use the interactive experience to obtain the basic answer."
+      ]
+    },
+    {
+      "id": "reuse",
+      "heading": "How this structure scales",
+      "paragraphs": [
+        "The same contract can support comparisons, rankings, category breakdowns, timelines, and other focused questions when the claims can be derived from a canonical dataset.",
+        "Each page remains a substantive reference with its own answer and context rather than a mechanically generated keyword variation."
+      ]
+    }
+  ],
+  "methodology": {
+    "lastReviewed": "2026-08-10",
+    "summary": "The fixture uses the same dataset identity, version, manifest, and review date declared by the parent Pokédex project in the canonical project registry.",
+    "sources": [
+      {
+        "name": "PokéAPI v2",
+        "url": "https://pokeapi.co/api/v2/",
+        "role": "Primary upstream source represented by the pilot dataset manifest."
+      }
+    ]
+  },
+  "limitations": [
+    "This file is a renderer fixture, not a published factual reference page or a search-targeted content page.",
+    "A production page must replace fixture copy with claims recomputed and validated from the declared dataset version."
+  ],
+  "faq": [
+    {
+      "question": "Is this fixture published on the Otaku Data Viz site?",
+      "answer": "No. It exists only to verify the reusable reference-page renderer and content contract."
+    },
+    {
+      "question": "What must a production reference page add?",
+      "answer": "It must provide a focused demand-led answer, validated facts from the declared dataset, useful interpretation, transparent methodology, limitations, and source attribution."
+    }
+  ]
+}

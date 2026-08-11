@@ -8,10 +8,17 @@ import { loadReferencePages } from './reference-page-registry.mjs';
 export const validatePokemonReferencePages = async ({ root = defaultRepositoryRoot } = {}) => {
   const failures = [];
   const pages = await loadReferencePages({ root });
-  const page = pages.find((item) => item.id === 'most-common-pokemon-type');
-  if (!page) return { failures: ['most-common-pokemon-type content is missing'] };
+  const pageById = new Map(pages.map((page) => [page.id, page]));
+  const mostCommonPage = pageById.get('most-common-pokemon-type');
+  const rarestPage = pageById.get('rarest-pokemon-type');
+  if (!mostCommonPage) failures.push('most-common-pokemon-type content is missing');
+  if (!rarestPage) failures.push('rarest-pokemon-type content is missing');
+  if (failures.length) return { failures, pageCount: pages.length };
 
-  const dataset = JSON.parse(await readFile(path.join(root, page.dataset.publicPath.replace(/^\//, '')), 'utf8'));
+  const dataset = JSON.parse(await readFile(
+    path.join(root, mostCommonPage.dataset.publicPath.replace(/^\//, '')),
+    'utf8'
+  ));
   const pokemon = dataset.pokemon || dataset.species || [];
   const primaryCounts = new Map();
   const anyTypeCounts = new Map();
@@ -24,7 +31,7 @@ export const validatePokemonReferencePages = async ({ root = defaultRepositoryRo
     if (types.size > 1) dualTypeCount += 1;
   });
 
-  const expectedRows = [...anyTypeCounts.entries()]
+  const rowsByEitherSlot = [...anyTypeCounts.entries()]
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .map(([type, anyCount]) => [
       type,
@@ -32,34 +39,60 @@ export const validatePokemonReferencePages = async ({ root = defaultRepositoryRo
       String(primaryCounts.get(type) || 0),
       `${(anyCount / pokemon.length * 100).toFixed(1)}%`
     ]);
-  if (JSON.stringify(page.table.rows) !== JSON.stringify(expectedRows)) {
-    failures.push('Type-abundance table does not match the canonical Pokémon dataset');
+  const rowsByRarity = [...rowsByEitherSlot]
+    .sort((a, b) => Number(a[1]) - Number(b[1]) || a[0].localeCompare(b[0]));
+  if (JSON.stringify(mostCommonPage.table.rows) !== JSON.stringify(rowsByEitherSlot)) {
+    failures.push('Most-common type table does not match the canonical Pokémon dataset');
+  }
+  if (JSON.stringify(rarestPage.table.rows) !== JSON.stringify(rowsByRarity)) {
+    failures.push('Rarest-type table does not match the canonical Pokémon dataset');
   }
 
-  const facts = new Map(page.facts.map((fact) => [fact.label, fact.value]));
-  const mostCommon = expectedRows[0];
-  const rarestAny = expectedRows.at(-1);
+  const mostCommonFacts = new Map(mostCommonPage.facts.map((fact) => [fact.label, fact.value]));
+  const rarestFacts = new Map(rarestPage.facts.map((fact) => [fact.label, fact.value]));
+  const mostCommon = rowsByEitherSlot[0];
+  const rarestAny = rowsByRarity[0];
+  const nextRarestAny = rowsByRarity[1];
   const rarestPrimary = [...primaryCounts.entries()].sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))[0];
-  const expectedFacts = new Map([
+  const expectedMostCommonFacts = new Map([
     ['Water in either slot', mostCommon[1]],
     ['Water as primary type', mostCommon[2]],
     ['Rarest in either slot', `${rarestAny[0]} · ${rarestAny[1]}`],
     ['Dual-type species', String(dualTypeCount)]
   ]);
-  expectedFacts.forEach((expected, label) => {
-    if (facts.get(label) !== expected) failures.push(`${label} fact does not match the canonical dataset`);
+  expectedMostCommonFacts.forEach((expected, label) => {
+    if (mostCommonFacts.get(label) !== expected) {
+      failures.push(`Most-common page: ${label} fact does not match the canonical dataset`);
+    }
+  });
+  const expectedRarestFacts = new Map([
+    ['Ice in either slot', rarestAny[1]],
+    ['Flying as primary type', String(rarestPrimary[1])],
+    ['Next-rarest any-slot type', `${nextRarestAny[0]} · ${nextRarestAny[1]}`],
+    ['Ice as primary type', String(primaryCounts.get('Ice'))]
+  ]);
+  expectedRarestFacts.forEach((expected, label) => {
+    if (rarestFacts.get(label) !== expected) {
+      failures.push(`Rarest page: ${label} fact does not match the canonical dataset`);
+    }
   });
   if (mostCommon[0] !== 'Water') failures.push('Water is no longer the most common either-slot type');
+  if (rarestAny[0] !== 'Ice' || Number(rarestAny[1]) !== 48) {
+    failures.push('Ice either-slot rarity explanation is out of date');
+  }
   if (rarestPrimary[0] !== 'Flying' || rarestPrimary[1] !== 9) {
     failures.push('Flying primary-type explanation is out of date');
   }
   if (pokemon.length !== 1025 || Number(dataset.speciesCount) !== pokemon.length) {
     failures.push('Reference-page snapshot scope does not match 1,025 canonical species records');
   }
-  if (!page.answer.body.includes('154') || !page.answer.body.includes('134')) {
-    failures.push('Direct answer does not contain the validated Water counts');
+  if (!mostCommonPage.answer.body.includes('154') || !mostCommonPage.answer.body.includes('134')) {
+    failures.push('Most-common direct answer does not contain the validated Water counts');
   }
-  return { failures, recordCount: pokemon.length, typeCount: expectedRows.length };
+  if (!rarestPage.answer.body.includes('48') || !rarestPage.answer.body.includes('nine')) {
+    failures.push('Rarest direct answer does not contain the validated Ice and Flying counts');
+  }
+  return { failures, pageCount: pages.length, recordCount: pokemon.length, typeCount: rowsByEitherSlot.length };
 };
 
 const isDirectRun = process.argv[1]
@@ -71,6 +104,6 @@ if (isDirectRun) {
     result.failures.forEach((failure) => console.error(`- ${failure}`));
     process.exitCode = 1;
   } else {
-    console.log(`Pokémon reference-page claims passed for ${result.recordCount} records and ${result.typeCount} types.`);
+    console.log(`Pokémon reference-page claims passed for ${result.pageCount} pages, ${result.recordCount} records, and ${result.typeCount} types.`);
   }
 }

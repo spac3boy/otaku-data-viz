@@ -454,6 +454,13 @@ for (const page of referencePages) {
     parentHtml.includes(`href="../references/${page.slug}.html"`),
     `${page.id}: parent project does not link to the reference page`
   );
+  const referenceHtml = await readFile(path.join(root, referencePath.replace(/^\//, '')), 'utf8');
+  referencePages
+    .filter((relatedPage) => relatedPage.projectId === page.projectId && relatedPage.id !== page.id)
+    .forEach((relatedPage) => check(
+      referenceHtml.includes(`href="./${relatedPage.slug}.html"`),
+      `${page.id}: sibling reference link missing for ${relatedPage.id}`
+    ));
 }
 
 for (const page of ['index.html', 'projects.html']) {

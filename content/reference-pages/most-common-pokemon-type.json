@@ -121,8 +121,8 @@
       "answer": "Water. It appears on 154 of 1,025 species when either type slot counts and is the primary type for 134 species in dataset v1.0.0."
     },
     {
-      "question": "What is the rarest Pokémon type?",
-      "answer": "Ice appears on the fewest species when primary and secondary slots both count, with 48. Flying is the smallest primary-type group, with nine species, so the answer depends on the counting rule."
+      "question": "Why can Pokémon type-rarity rankings differ?",
+      "answer": "A ranking can count a type in either slot or assign each species only to its primary type. Ice appears on the fewest species under the first rule, while Flying is the smallest primary-type group."
     },
     {
       "question": "Why do the type counts add up to more than 1,025?",

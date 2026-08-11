@@ -15,7 +15,7 @@ const expectedReferencePages = async (root) => {
   const pages = await loadReferencePages({ root, projectRegistry });
   return new Map(pages.map((page) => [
     `${page.slug}.html`,
-    renderReferencePage(page, projectRegistry)
+    renderReferencePage(page, projectRegistry, pages)
   ]));
 };
 

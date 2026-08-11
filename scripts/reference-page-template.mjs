@@ -200,7 +200,7 @@ const renderStructuredData = (page, registry, project) => {
   };
 };
 
-export const renderReferencePage = (page, projectRegistry) => {
+export const renderReferencePage = (page, projectRegistry, referencePages = []) => {
   const failures = validateReferencePage(page, projectRegistry);
   if (failures.length) {
     throw new Error(`Reference page validation failed:\n${failures.map((failure) => `- ${failure}`).join('\n')}`);
@@ -236,6 +236,19 @@ export const renderReferencePage = (page, projectRegistry) => {
             <summary>${escapeHtml(item.question)}</summary>
             <p>${escapeHtml(item.answer)}</p>
           </details>`).join('');
+  const relatedPages = referencePages
+    .filter((item) => item.projectId === page.projectId && item.id !== page.id)
+    .sort((a, b) => a.cardTitle.localeCompare(b.cardTitle));
+  const relatedAnswers = relatedPages.length ? `
+      <section class="section inner rule-bottom" id="related-answers">
+        <div class="section-bar"><h2>Related Data Answers</h2></div>
+        <div class="related-grid reference-grid">${relatedPages.map((item) => `
+          <a class="related-card reference-card" href="./${escapeHtml(item.slug)}.html" data-event="click_related_project">
+            <h3>${escapeHtml(item.cardTitle)}</h3>
+            <p>${escapeHtml(item.cardDescription)}</p>
+          </a>`).join('')}
+        </div>
+      </section>` : '';
   const structuredData = jsonForHtml(renderStructuredData(page, projectRegistry, project));
 
   return `<!DOCTYPE html>
@@ -260,7 +273,7 @@ export const renderReferencePage = (page, projectRegistry) => {
   <meta name="twitter:title" content="${escapeHtml(page.title)}" />
   <meta name="twitter:description" content="${escapeHtml(page.description)}" />
   <meta name="twitter:image" content="${escapeHtml(imageUrl)}" />
-  <link rel="stylesheet" href="/assets/css/site-pages.css" />
+  <link rel="stylesheet" href="/assets/css/site-pages.css?v=20260811" />
   <style>
     .reference-hero { padding-block: clamp(42px, 7vw, 82px); }
     .reference-hero h1 { max-width: 12ch; font-size: clamp(3.4rem, 7.5vw, 7rem); }
@@ -318,6 +331,7 @@ ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
         ${sectionLinks}
         <a href="#methodology">Methodology</a>
         <a href="#faq">FAQ</a>
+        ${relatedPages.length ? '<a href="#related-answers">Related answers</a>' : ''}
       </nav>
       <section class="section inner rule-bottom" id="answer">
         <div class="reference-answer">
@@ -363,6 +377,7 @@ ${sections}
         <div class="faq-list">${faq}
         </div>
       </section>
+${relatedAnswers}
       <section class="section inner">
         <div class="reference-answer">
           <p class="mini-label">Continue exploring</p>

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "most-common-pokemon-type",
+  "slug": "most-common-pokemon-type",
+  "projectId": "pokedex-type-treemap",
+  "dataset": {
+    "id": "pokemon-species-treemap",
+    "version": "1.0.0",
+    "manifestPath": "/datasets/pokemon/v1/metadata.json",
+    "publicPath": "/assets/data/pokemon-treemap-data.json"
+  },
+  "title": "What Is the Most Common Pokémon Type? | Otaku Data Viz",
+  "description": "Water is the most common Pokémon type through National Pokédex #1025. Compare all 18 types using any-slot and primary-type species counts.",
+  "cardTitle": "What Is the Most Common Pokémon Type?",
+  "cardDescription": "Compare all 18 types by any-slot and primary-type counts through National Pokédex #1025.",
+  "sitemapPriority": 0.8,
+  "eyebrow": "Pokémon Data Answer · Dataset v1.0.0",
+  "heading": "What Is the Most Common Pokémon Type?",
+  "introduction": "Water is the most common type in the Otaku Data Viz snapshot of 1,025 species from Generations I–IX. The answer is the same under two different counting rules, but the exact total depends on whether secondary types count.",
+  "answer": {
+    "heading": "Water is the most common Pokémon type",
+    "body": "Water appears on 154 of the 1,025 species when a type counts in either the primary or secondary slot. Water is also the largest primary-type group, with 134 species. These totals use each species' default variety and cover National Pokédex numbers 1 through 1025."
+  },
+  "facts": [
+    {
+      "label": "Water in either slot",
+      "value": "154",
+      "detail": "15.0% of species have Water as a primary or secondary type."
+    },
+    {
+      "label": "Water as primary type",
+      "value": "134",
+      "detail": "Water also leads when every species belongs to exactly one primary-type group."
+    },
+    {
+      "label": "Rarest in either slot",
+      "value": "Ice · 48",
+      "detail": "Ice appears on the fewest species when both type slots count."
+    },
+    {
+      "label": "Dual-type species",
+      "value": "526",
+      "detail": "Dual typing is why the any-slot column adds up to more than 1,025."
+    }
+  ],
+  "table": {
+    "caption": "Species counts by type in dataset v1.0.0, sorted by the number appearing in either type slot. Percentages use 1,025 species as the denominator.",
+    "columns": ["Type", "Either type slot", "Primary type", "Share of species"],
+    "rows": [
+      ["Water", "154", "134", "15.0%"],
+      ["Normal", "131", "118", "12.8%"],
+      ["Grass", "127", "103", "12.4%"],
+      ["Flying", "109", "9", "10.6%"],
+      ["Psychic", "102", "60", "10.0%"],
+      ["Bug", "92", "83", "9.0%"],
+      ["Poison", "83", "42", "8.1%"],
+      ["Fire", "81", "66", "7.9%"],
+      ["Ground", "75", "40", "7.3%"],
+      ["Rock", "74", "58", "7.2%"],
+      ["Fighting", "73", "40", "7.1%"],
+      ["Dragon", "70", "37", "6.8%"],
+      ["Dark", "69", "45", "6.7%"],
+      ["Electric", "69", "59", "6.7%"],
+      ["Ghost", "65", "35", "6.3%"],
+      ["Steel", "65", "36", "6.3%"],
+      ["Fairy", "64", "29", "6.2%"],
+      ["Ice", "48", "31", "4.7%"]
+    ]
+  },
+  "sections": [
+    {
+      "id": "counting-rules",
+      "heading": "Why the counting rule matters",
+      "paragraphs": [
+        "The either-slot count answers how many species have a type at all. A Water/Flying species contributes once to Water and once to Flying, so the 18 type totals add up to 1,551 rather than 1,025. No species is counted twice within the same type.",
+        "The primary-type count assigns every species to only the first type on its default variety. Those 18 groups add up to exactly 1,025 and match the grouping used by the Pokédex Type Treemap."
+      ]
+    },
+    {
+      "id": "primary-versus-secondary",
+      "heading": "Flying shows the biggest counting contrast",
+      "paragraphs": [
+        "Flying appears on 109 species when secondary types count, placing it fourth overall. Only nine species use Flying as their primary type in this snapshot, placing it last under the treemap's primary-type grouping.",
+        "That contrast is why a claim such as “the rarest Pokémon type” is incomplete without a stated counting method. Ice is rarest by either-slot coverage, while Flying is the smallest primary-type group."
+      ]
+    },
+    {
+      "id": "snapshot-scope",
+      "heading": "What this snapshot covers",
+      "paragraphs": [
+        "The dataset contains one record for each species from Bulbasaur through Pecharunt, National Pokédex numbers 1–1025, spanning Generations I–IX. It uses the default variety for each species.",
+        "The page is versioned because the Pokédex continues to change. Newly announced species, later National Pokédex numbers, alternate forms, regional forms, Mega Evolutions, and other non-default varieties are outside this result until the canonical dataset is deliberately updated and reviewed."
+      ]
+    }
+  ],
+  "methodology": {
+    "lastReviewed": "2026-08-10",
+    "summary": "Counts are recomputed from the 1,025 unique species records in the canonical Pokémon Species Treemap Dataset. The either-slot calculation counts each species once for every distinct type in its types array. The primary calculation counts only primaryType. Percentages divide either-slot counts by 1,025 and round to one decimal place.",
+    "sources": [
+      {
+        "name": "PokéAPI v2 documentation",
+        "url": "https://pokeapi.co/docs/v2",
+        "role": "Documentation for the primary upstream species, Pokémon, type, generation, and evolution resources used by the canonical dataset generator."
+      },
+      {
+        "name": "PokéAPI source repository",
+        "url": "https://github.com/PokeAPI/pokeapi",
+        "role": "Upstream project source and provenance context for the API-backed snapshot."
+      }
+    ]
+  },
+  "limitations": [
+    "The snapshot ends at National Pokédex #1025 and does not automatically include later announced or numbered species.",
+    "Only each species' default variety is counted; alternate, regional, Mega, Gigantamax, and other forms are not separate records.",
+    "Type assignments follow the default variety represented by the upstream snapshot and may differ for alternate forms.",
+    "The result measures species abundance by type, not competitive usage, encounter frequency, popularity, or type strength."
+  ],
+  "faq": [
+    {
+      "question": "Which Pokémon type has the most Pokémon?",
+      "answer": "Water. It appears on 154 of 1,025 species when either type slot counts and is the primary type for 134 species in dataset v1.0.0."
+    },
+    {
+      "question": "What is the rarest Pokémon type?",
+      "answer": "Ice appears on the fewest species when primary and secondary slots both count, with 48. Flying is the smallest primary-type group, with nine species, so the answer depends on the counting rule."
+    },
+    {
+      "question": "Why do the type counts add up to more than 1,025?",
+      "answer": "The either-slot total counts dual-type species in both of their type categories. The primary-type column assigns every species to one category and therefore adds up to exactly 1,025."
+    },
+    {
+      "question": "Are alternate Pokémon forms included?",
+      "answer": "No. The snapshot contains one record per National Pokédex species and uses its default variety. Alternate and regional forms are not separate records."
+    },
+    {
+      "question": "Will these totals change?",
+      "answer": "Yes. The page is tied to dataset version 1.0.0 and National Pokédex #1–1025. A later reviewed dataset version may add species or change type assignments."
+    }
+  ]
+}

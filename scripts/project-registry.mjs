@@ -61,6 +61,7 @@ export const validateProjectRegistry = (registry) => {
       failures.push(`${label}: id must be a lowercase kebab-case value`);
     }
     if (!hasText(project.name)) failures.push(`${label}: name is required`);
+    if (!hasText(project.analyticsCategory)) failures.push(`${label}: analyticsCategory is required`);
     if (!isSitePath(project.landingPath) || !project.landingPath.startsWith('/projects/')) {
       failures.push(`${label}: landingPath must be a canonical /projects/ path`);
     }

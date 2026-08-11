@@ -3,15 +3,21 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
+import { loadReferencePages } from './reference-page-registry.mjs';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 export const repositoryRoot = path.resolve(scriptDirectory, '..');
 const projectRegistry = await loadProjectRegistry({ root: repositoryRoot });
+const referencePages = await loadReferencePages({ root: repositoryRoot, projectRegistry });
 
 const projectAppEntries = projectRegistry.projects.map((project) => {
   const source = path.relative(repositoryRoot, siteFileFromPath(repositoryRoot, project.appPath));
   return { source, target: source };
 });
+const referencePageEntries = referencePages.map((page) => ({
+  source: `references/${page.slug}.html`,
+  target: `references/${page.slug}.html`
+}));
 
 // The repository root is the canonical source. GitHub Pages publishes /docs.
 // Keep this list intentionally small so unrelated local files cannot be deployed.
@@ -26,6 +32,7 @@ export const siteEntries = [
   { source: 'contact.html', target: 'contact.html' },
   { source: 'lab.html', target: 'lab.html' },
   ...projectAppEntries,
+  ...referencePageEntries,
   { source: 'projects', target: 'projects' },
   { source: 'assets', target: 'assets' },
   { source: 'data/weekly-performance.json', target: 'data/weekly-performance.json' },

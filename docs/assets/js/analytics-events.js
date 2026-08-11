@@ -63,8 +63,17 @@
     window.gtag('event', eventName, params);
   };
 
-  const currentProject = getProjectDefinition(window.location.pathname);
-  const currentPageType = getProjectPageType(window.location.pathname, currentProject);
+  const referenceProject = document.body?.dataset.referenceProjectId ? {
+    id: document.body.dataset.referenceProjectId,
+    name: document.body.dataset.referenceProjectName,
+    category: document.body.dataset.referenceProjectCategory,
+    landingPath: document.body.dataset.referenceProjectPath,
+    interactivePaths: []
+  } : null;
+  const currentProject = getProjectDefinition(window.location.pathname) || referenceProject;
+  const currentPageType = referenceProject
+    ? 'reference'
+    : getProjectPageType(window.location.pathname, currentProject);
   const isPreview = new URLSearchParams(window.location.search).get('preview') === '1';
   if (isPreview) return;
 

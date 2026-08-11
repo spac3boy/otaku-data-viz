@@ -6,8 +6,11 @@ import { verifySiteBuild } from './build-site.mjs';
 import { canonicalUrl, loadProjectRegistry, siteFileFromPath } from './project-registry.mjs';
 import { verifyProjectStructuredData } from './generate-project-structured-data.mjs';
 import { verifyRelatedProjectCards } from './generate-related-project-cards.mjs';
+import { verifyProjectReferenceLinks } from './generate-project-reference-links.mjs';
+import { verifyReferencePages } from './generate-reference-pages.mjs';
 import { renderSitemap } from './generate-sitemap.mjs';
 import { validatePokemonDataset } from './validate-pokemon-data.mjs';
+import { loadReferencePages } from './reference-page-registry.mjs';
 
 const root = process.cwd();
 const projectRegistry = await loadProjectRegistry({ root });
@@ -17,6 +20,7 @@ const projects = projectRegistry.projects.map((project) => ({
   landing: project.landingPath,
   app: project.appPath
 }));
+const referencePages = await loadReferencePages({ root, projectRegistry });
 
 const failures = [];
 const check = (condition, message) => {
@@ -27,6 +31,10 @@ const structuredDataBuild = await verifyProjectStructuredData({ root });
 structuredDataBuild.failures.forEach((failure) => failures.push(`Structured data: ${failure}`));
 const relatedCardBuild = await verifyRelatedProjectCards({ root });
 relatedCardBuild.failures.forEach((failure) => failures.push(`Related cards: ${failure}`));
+const projectReferenceLinkBuild = await verifyProjectReferenceLinks({ root });
+projectReferenceLinkBuild.failures.forEach((failure) => failures.push(`Reference links: ${failure}`));
+const referencePageBuild = await verifyReferencePages({ root });
+referencePageBuild.failures.forEach((failure) => failures.push(`Reference pages: ${failure}`));
 
 const pokemonDataset = await validatePokemonDataset({ root });
 pokemonDataset.failures.forEach((failure) => failures.push(`Pokémon dataset: ${failure}`));
@@ -430,12 +438,22 @@ for (const project of projects) {
 }
 
 const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
-check(sitemap === renderSitemap(projectRegistry), 'sitemap.xml is not generated from the project registry');
+check(sitemap === renderSitemap(projectRegistry, referencePages), 'sitemap.xml is not generated from the project and reference-page registries');
 for (const project of projects) {
   check(sitemap.includes(`<loc>${origin}${project.landing}</loc>`), `${project.name}: canonical landing missing from sitemap`);
   for (const appPath of appPaths(project)) {
     check(!sitemap.includes(`<loc>${origin}${appPath}</loc>`), `${project.name}: interactive app should not be in sitemap`);
   }
+}
+for (const page of referencePages) {
+  const referencePath = `/references/${page.slug}.html`;
+  check(sitemap.includes(`<loc>${origin}${referencePath}</loc>`), `${page.id}: reference page missing from sitemap`);
+  const parentProject = projects.find((project) => project.id === page.projectId);
+  const parentHtml = await readSiteFile(parentProject.landing);
+  check(
+    parentHtml.includes(`href="../references/${page.slug}.html"`),
+    `${page.id}: parent project does not link to the reference page`
+  );
 }
 
 for (const page of ['index.html', 'projects.html']) {
@@ -464,6 +482,12 @@ check(
     && analyticsEvents.includes("markReferenceEngagement('interactive_filter'")
     && analyticsEvents.includes("markReferenceEngagement('interactive_search'"),
   'Shared analytics tracker does not record meaningful interactive controls'
+);
+check(
+  analyticsEvents.includes('document.body?.dataset.referenceProjectId')
+    && analyticsEvents.includes("? 'reference'")
+    && analyticsEvents.includes('canonical_project_path: currentProject.landingPath'),
+  'Shared analytics tracker does not associate generated reference pages with their parent project'
 );
 
 const sourceDashboard = await readFile(path.join(root, 'analytics-dashboard.html'), 'utf8');
@@ -494,7 +518,8 @@ siteBuild.failures.forEach((failure) => failures.push(`Site build: ${failure}`))
 const pagesToCheck = [
   'index.html',
   'projects.html',
-  ...projects.flatMap((project) => [project.landing.replace(/^\//, ''), siteFile(project.app).slice(root.length + 1)])
+  ...projects.flatMap((project) => [project.landing.replace(/^\//, ''), siteFile(project.app).slice(root.length + 1)]),
+  ...referencePages.map((page) => `references/${page.slug}.html`)
 ];
 for (const relativePath of pagesToCheck) {
   const html = await readFile(path.join(root, relativePath), 'utf8');

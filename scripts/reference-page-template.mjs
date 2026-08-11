@@ -46,9 +46,12 @@ export const validateReferencePage = (page, projectRegistry) => {
     }
   }
 
-  for (const field of ['title', 'description', 'eyebrow', 'heading', 'introduction']) {
+  for (const field of ['title', 'description', 'cardTitle', 'cardDescription', 'eyebrow', 'heading', 'introduction']) {
     addRequiredText(failures, page?.[field], field);
   }
+  if (typeof page?.sitemapPriority !== 'number'
+    || page.sitemapPriority < 0
+    || page.sitemapPriority > 1) failures.push('sitemapPriority must be a number from 0 to 1');
   addRequiredText(failures, page?.answer?.heading, 'answer.heading');
   addRequiredText(failures, page?.answer?.body, 'answer.body');
 
@@ -78,6 +81,29 @@ export const validateReferencePage = (page, projectRegistry) => {
       }
     });
     addUniqueFailures(failures, page.sections.map((section) => section.id), 'Section id');
+  }
+
+  if (!page?.table || typeof page.table !== 'object') {
+    failures.push('table is required');
+  } else {
+    addRequiredText(failures, page.table.caption, 'table.caption');
+    if (!Array.isArray(page.table.columns) || page.table.columns.length < 2) {
+      failures.push('table.columns must contain at least two columns');
+    } else {
+      page.table.columns.forEach((column, index) => addRequiredText(failures, column, `table.columns[${index}]`));
+      addUniqueFailures(failures, page.table.columns, 'Table column');
+    }
+    if (!Array.isArray(page.table.rows) || page.table.rows.length === 0) {
+      failures.push('table.rows must not be empty');
+    } else {
+      page.table.rows.forEach((row, index) => {
+        if (!Array.isArray(row) || row.length !== page.table.columns?.length) {
+          failures.push(`table.rows[${index}] must match the column count`);
+        } else {
+          row.forEach((cell, cellIndex) => addRequiredText(failures, cell, `table.rows[${index}][${cellIndex}]`));
+        }
+      });
+    }
   }
 
   if (!isDate(page?.methodology?.lastReviewed)) {
@@ -192,6 +218,11 @@ export const renderReferencePage = (page, projectRegistry) => {
             <strong>${escapeHtml(fact.value)}</strong>
             <p>${escapeHtml(fact.detail)}</p>
           </article>`).join('');
+  const tableHead = page.table.columns.map((column) => `<th scope="col">${escapeHtml(column)}</th>`).join('');
+  const tableRows = page.table.rows.map((row) => `
+            <tr>${row.map((cell, index) => index === 0
+              ? `<th scope="row">${escapeHtml(cell)}</th>`
+              : `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('');
   const sections = page.sections.map((section) => `
       <section class="section inner rule-bottom reference-section" id="${escapeHtml(section.id)}">
         <div class="section-bar"><h2>${escapeHtml(section.heading)}</h2></div>
@@ -241,6 +272,12 @@ export const renderReferencePage = (page, projectRegistry) => {
     .reference-fact { border: 1.5px solid var(--ink); padding: 20px; background: rgba(251,245,232,.75); }
     .reference-fact strong { display: block; margin-block: 10px; font-family: var(--display); font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1; }
     .reference-fact p:last-child { line-height: 1.55; }
+    .reference-table-wrap { overflow-x: auto; border: 1.5px solid var(--ink); }
+    .reference-table { width: 100%; border-collapse: collapse; background: rgba(251,245,232,.78); }
+    .reference-table caption { padding: 14px; text-align: left; font-family: var(--mono); font-size: .78rem; font-weight: 900; }
+    .reference-table th, .reference-table td { border-top: 1px solid var(--ink); padding: 12px 14px; text-align: left; }
+    .reference-table thead th { background: var(--ink); color: var(--paper-soft); font-family: var(--mono); font-size: .76rem; text-transform: uppercase; }
+    .reference-table tbody th { font-weight: 900; }
     .reference-toc { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 18px; }
     .reference-toc a { border: 1.5px solid var(--ink); padding: 9px 12px; font-family: var(--mono); font-size: .72rem; font-weight: 900; text-decoration: none; text-transform: uppercase; }
     .method-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; }
@@ -256,7 +293,7 @@ export const renderReferencePage = (page, projectRegistry) => {
 ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
   </script>
 </head>
-<body data-reference-page-id="${escapeHtml(page.id)}" data-dataset-version="${escapeHtml(page.dataset.version)}">
+<body data-reference-page-id="${escapeHtml(page.id)}" data-dataset-version="${escapeHtml(page.dataset.version)}" data-reference-project-id="${escapeHtml(project.id.replaceAll('-', '_'))}" data-reference-project-name="${escapeHtml(project.name)}" data-reference-project-category="${escapeHtml(project.analyticsCategory)}" data-reference-project-path="${escapeHtml(project.landingPath)}">
   <div class="page">
     <header class="inner rule-bottom">
       <a class="brand" href="/index.html" aria-label="Otaku Data Viz home"><img class="brand-mark" src="/assets/images/ODV_Homepage_icon.svg" alt="" aria-hidden="true" /><span>Otaku Data Viz</span></a>
@@ -277,6 +314,7 @@ ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
       <nav class="reference-toc inner rule-bottom" aria-label="On this page">
         <a href="#answer">Answer</a>
         <a href="#key-facts">Key facts</a>
+        <a href="#full-table">Full table</a>
         ${sectionLinks}
         <a href="#methodology">Methodology</a>
         <a href="#faq">FAQ</a>
@@ -291,6 +329,17 @@ ${structuredData.split('\n').map((line) => `  ${line}`).join('\n')}
       <section class="section inner rule-bottom" id="key-facts">
         <div class="section-bar"><h2>Key Facts</h2></div>
         <div class="reference-facts">${facts}
+        </div>
+      </section>
+      <section class="section inner rule-bottom" id="full-table">
+        <div class="section-bar"><h2>Full Data Table</h2></div>
+        <div class="reference-table-wrap">
+          <table class="reference-table">
+            <caption>${escapeHtml(page.table.caption)}</caption>
+            <thead><tr>${tableHead}</tr></thead>
+            <tbody>${tableRows}
+            </tbody>
+          </table>
         </div>
       </section>
 ${sections}

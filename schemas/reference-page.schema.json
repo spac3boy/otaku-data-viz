@@ -12,11 +12,15 @@
     "dataset",
     "title",
     "description",
+    "cardTitle",
+    "cardDescription",
+    "sitemapPriority",
     "eyebrow",
     "heading",
     "introduction",
     "answer",
     "facts",
+    "table",
     "sections",
     "methodology",
     "limitations",
@@ -40,6 +44,9 @@
     },
     "title": { "type": "string", "minLength": 1 },
     "description": { "type": "string", "minLength": 1 },
+    "cardTitle": { "type": "string", "minLength": 1 },
+    "cardDescription": { "type": "string", "minLength": 1 },
+    "sitemapPriority": { "type": "number", "minimum": 0, "maximum": 1 },
     "eyebrow": { "type": "string", "minLength": 1 },
     "heading": { "type": "string", "minLength": 1 },
     "introduction": { "type": "string", "minLength": 1 },
@@ -63,6 +70,28 @@
           "label": { "type": "string", "minLength": 1 },
           "value": { "type": "string", "minLength": 1 },
           "detail": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caption", "columns", "rows"],
+      "properties": {
+        "caption": { "type": "string", "minLength": 1 },
+        "columns": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "items": { "type": "string" }
+          }
         }
       }
     },

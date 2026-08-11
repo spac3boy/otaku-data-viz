@@ -7,6 +7,7 @@ import {
   defaultRepositoryRoot,
   loadProjectRegistry
 } from './project-registry.mjs';
+import { loadReferencePages } from './reference-page-registry.mjs';
 
 const escapeXml = (value) => String(value)
   .replaceAll('&', '&amp;')
@@ -23,13 +24,18 @@ const renderEntry = (registry, entry) => [
   '  </url>'
 ].join('\n');
 
-export const renderSitemap = (registry) => {
+export const renderSitemap = (registry, referencePages = []) => {
   const entries = [
     ...registry.staticSitemapEntries.slice(0, 2),
     ...registry.projects.map((project) => ({
       path: project.landingPath,
       lastModified: project.sitemap.lastModified,
       priority: project.sitemap.priority
+    })),
+    ...referencePages.map((page) => ({
+      path: `/references/${page.slug}.html`,
+      lastModified: page.methodology.lastReviewed,
+      priority: page.sitemapPriority
     })),
     ...registry.staticSitemapEntries.slice(2)
   ];
@@ -45,8 +51,9 @@ export const renderSitemap = (registry) => {
 
 export const updateSitemap = async ({ root = defaultRepositoryRoot, checkOnly = false } = {}) => {
   const registry = await loadProjectRegistry({ root });
+  const referencePages = await loadReferencePages({ root, projectRegistry: registry });
   const sitemapPath = path.join(root, 'sitemap.xml');
-  const expected = renderSitemap(registry);
+  const expected = renderSitemap(registry, referencePages);
 
   if (checkOnly) {
     const current = await readFile(sitemapPath, 'utf8');
@@ -57,7 +64,7 @@ export const updateSitemap = async ({ root = defaultRepositoryRoot, checkOnly = 
     await writeFile(sitemapPath, expected);
   }
 
-  return { projectCount: registry.projects.length };
+  return { projectCount: registry.projects.length, referencePageCount: referencePages.length };
 };
 
 const isDirectRun = process.argv[1]
@@ -67,7 +74,7 @@ if (isDirectRun) {
   const checkOnly = process.argv.includes('--check');
   try {
     const result = await updateSitemap({ checkOnly });
-    console.log(`Project registry and sitemap ${checkOnly ? 'check' : 'generation'} passed for ${result.projectCount} projects.`);
+    console.log(`Project registry and sitemap ${checkOnly ? 'check' : 'generation'} passed for ${result.projectCount} projects and ${result.referencePageCount} reference page${result.referencePageCount === 1 ? '' : 's'}.`);
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

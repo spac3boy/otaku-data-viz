@@ -15,6 +15,7 @@
     {
       "id": "dragon-ball-sociogram",
       "name": "Dragon Ball Sociogram",
+      "analyticsCategory": "character relationship map",
       "landingPath": "/projects/dragon-ball-sociogram.html",
       "appPath": "/dragonball-character-sociogram/",
       "appAliases": [
@@ -60,6 +61,7 @@
     {
       "id": "manga-anime-timeline",
       "name": "Manga and Anime Timeline",
+      "analyticsCategory": "timeline",
       "landingPath": "/projects/manga-anime-timeline.html",
       "appPath": "/manga-timeline.html",
       "appAliases": ["/manga-timeline.html"],
@@ -102,6 +104,7 @@
     {
       "id": "pokedex-type-treemap",
       "name": "Pokedex Type Treemap",
+      "analyticsCategory": "treemap",
       "landingPath": "/projects/pokedex-type-treemap.html",
       "appPath": "/pokemon_territory_map.html",
       "appAliases": ["/pokemon_territory_map.html"],
@@ -145,6 +148,7 @@
     {
       "id": "nintendo-game-universe-map",
       "name": "Nintendo Game Universe Map",
+      "analyticsCategory": "bubble map",
       "landingPath": "/projects/nintendo-game-universe-map.html",
       "appPath": "/nintendo-game-universe-map.html",
       "appAliases": ["/nintendo-game-universe-map.html"],
@@ -193,6 +197,7 @@
     {
       "id": "gundam-universe-map",
       "name": "Gundam Universe Map",
+      "analyticsCategory": "timeline map",
       "landingPath": "/projects/gundam-universe-map.html",
       "appPath": "/gundam-universe-map.html",
       "appAliases": ["/gundam-universe-map.html"],

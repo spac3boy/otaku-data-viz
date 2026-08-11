@@ -11,6 +11,9 @@
   },
   "title": "Pokémon Primary Type Distribution | Otaku Data Viz",
   "description": "A reference-page fixture demonstrating a direct answer, verifiable Pokémon type facts, methodology, limitations, sources, and links to the interactive dataset.",
+  "cardTitle": "Pokémon Primary Type Distribution",
+  "cardDescription": "Exercise the non-published reference-page renderer with Pokémon type data.",
+  "sitemapPriority": 0.8,
   "eyebrow": "Reference Template Fixture",
   "heading": "Pokémon Primary Type Distribution",
   "introduction": "This non-published fixture exercises the reusable reference-page contract against the canonical Pokémon dataset pilot.",
@@ -35,6 +38,15 @@
       "detail": "The fixture is connected to the documented generation coverage in the pilot dataset."
     }
   ],
+  "table": {
+    "caption": "Fixture values used to verify accessible table rendering.",
+    "columns": ["Metric", "Value"],
+    "rows": [
+      ["Dataset records", "1,025"],
+      ["Primary types", "18"],
+      ["Generations", "9"]
+    ]
+  },
   "sections": [
     {
       "id": "interpretation",

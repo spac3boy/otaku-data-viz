@@ -52,6 +52,10 @@ Demand-led reference pages use the renderer in `scripts/reference-page-template.
 
 `tests/fixtures/reference-page.json` exercises the scaffold without publishing a search-facing page. Run `npm run reference:check` to validate the schema, fixture, canonical dataset association, HTML escaping, deterministic rendering, required page sections, dataset JSON-LD, breadcrumbs, and FAQ structured data. Production reference pages should use the same renderer only after their claims have been recomputed and reviewed against the declared dataset version.
 
+Production reference content lives in `content/reference-pages/`. `npm run reference:generate` renders each validated content record into `/references/`, adds registry-driven discovery cards to its parent project, and updates the sitemap. `npm run reference:validate` recomputes the current Pokémon reference claims from the canonical dataset. The normal build publishes only registered generated pages and mirrors them into `/docs`; generated reference pages should not be edited directly.
+
+Reference-page analytics context is emitted by the renderer from the parent project registry. The shared tracker records the page as a `reference` surface under its parent project, so meaningful reading time and related-reference clicks contribute to the reference-authority scorecard without hardcoding each generated URL.
+
 Do not redirect an interactive app URL to its landing page. Add a redirect only when an old URL is confirmed to be obsolete and is not used by a preview iframe, an interactive button, or a direct app experience. Analytics and dashboard reporting normalize landing, interactive, and external-embed traffic to the canonical landing path. Pages loaded with `preview=1` do not send pageviews or custom events, and the dashboard excludes historical preview URLs so embedded cards do not inflate portfolio traffic.
 
 ## Canonical build workflow

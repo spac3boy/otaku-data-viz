@@ -9,6 +9,7 @@ Live site target:
 - Repository: `https://github.com/spac3boy/otaku-data-viz`
 - Product strategy and reference-authority scorecard: [`STRATEGY.md`](STRATEGY.md)
 - Measurement framework and baseline: [`MEASUREMENT.md`](MEASUREMENT.md)
+- Canonical Pokémon dataset pilot: [`datasets/pokemon/README.md`](datasets/pokemon/README.md)
 
 > This is an unofficial fan project. It is not affiliated with any anime, manga, game, publisher, studio, platform, or rights holder. Franchise names and referenced properties belong to their respective owners.
 

@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/spac3boy/otaku-data-viz/main/datasets/pokemon/v1/schema.json",
+  "title": "Pokémon Species Treemap Dataset v1",
+  "description": "Schema for the canonical static snapshot used by the Otaku Data Viz Pokédex Type Treemap.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "source",
+    "generatedAt",
+    "expectedSpeciesCount",
+    "speciesCount",
+    "typeCounts",
+    "generationCounts",
+    "pokemon",
+    "species",
+    "treemap",
+    "typeTreemap"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "source": { "type": "string", "format": "uri" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "expectedSpeciesCount": { "type": "integer", "minimum": 1 },
+    "speciesCount": { "type": "integer", "minimum": 1 },
+    "typeCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "generationCounts": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 }
+    },
+    "pokemon": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/speciesRecord" }
+    },
+    "species": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/speciesRecord" }
+    },
+    "treemap": { "$ref": "#/$defs/treemapRoot" },
+    "typeTreemap": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/typeGroup" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nullableString": { "type": ["string", "null"] },
+    "stats": {
+      "type": "object",
+      "required": ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"],
+      "properties": {
+        "hp": { "type": "integer", "minimum": 0 },
+        "attack": { "type": "integer", "minimum": 0 },
+        "defense": { "type": "integer", "minimum": 0 },
+        "specialAttack": { "type": "integer", "minimum": 0 },
+        "specialDefense": { "type": "integer", "minimum": 0 },
+        "speed": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "attack": {
+      "type": "object",
+      "required": ["name", "type", "power", "text"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "power": { "type": "integer", "minimum": 0 },
+        "text": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "apiReferences": {
+      "type": "object",
+      "required": ["pokemon", "species", "evolutionChain"],
+      "properties": {
+        "pokemon": { "type": ["string", "null"], "format": "uri" },
+        "species": { "type": "string", "format": "uri" },
+        "evolutionChain": { "type": ["string", "null"], "format": "uri" }
+      },
+      "additionalProperties": false
+    },
+    "speciesRecord": {
+      "type": "object",
+      "required": [
+        "id",
+        "dexNumber",
+        "nationalDexNumber",
+        "slug",
+        "name",
+        "japaneseName",
+        "primaryType",
+        "secondaryType",
+        "types",
+        "generation",
+        "generationName",
+        "color",
+        "shape",
+        "habitat",
+        "growthRate",
+        "captureRate",
+        "baseHappiness",
+        "isBaby",
+        "isLegendary",
+        "isMythical",
+        "genus",
+        "description",
+        "flavorText",
+        "abilities",
+        "attacks",
+        "stats",
+        "baseStatsTotal",
+        "spriteUrl",
+        "officialArtworkUrl",
+        "evolutionFamilyId",
+        "evolutionFamilyName",
+        "evolutionStage",
+        "evolvesFrom",
+        "evolvesTo",
+        "api"
+      ],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "dexNumber": { "type": "integer", "minimum": 1 },
+        "nationalDexNumber": { "type": "integer", "minimum": 1 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "japaneseName": { "type": "string" },
+        "primaryType": { "type": "string", "minLength": 1 },
+        "secondaryType": { "$ref": "#/$defs/nullableString" },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "generation": { "type": ["integer", "null"], "minimum": 1 },
+        "generationName": { "$ref": "#/$defs/nullableString" },
+        "color": { "$ref": "#/$defs/nullableString" },
+        "shape": { "$ref": "#/$defs/nullableString" },
+        "habitat": { "$ref": "#/$defs/nullableString" },
+        "growthRate": { "$ref": "#/$defs/nullableString" },
+        "captureRate": { "type": ["integer", "null"], "minimum": 0 },
+        "baseHappiness": { "type": ["integer", "null"], "minimum": 0 },
+        "isBaby": { "type": "boolean" },
+        "isLegendary": { "type": "boolean" },
+        "isMythical": { "type": "boolean" },
+        "genus": { "type": "string" },
+        "description": { "type": "string" },
+        "flavorText": { "type": "string" },
+        "abilities": { "type": "array", "items": { "type": "string" } },
+        "attacks": { "type": "array", "items": { "$ref": "#/$defs/attack" } },
+        "stats": { "$ref": "#/$defs/stats" },
+        "baseStatsTotal": { "type": "integer", "minimum": 1 },
+        "spriteUrl": { "type": "string" },
+        "officialArtworkUrl": { "type": "string" },
+        "evolutionFamilyId": { "type": "string", "minLength": 1 },
+        "evolutionFamilyName": { "type": "string", "minLength": 1 },
+        "evolutionStage": { "type": "integer", "minimum": 1 },
+        "evolvesFrom": { "$ref": "#/$defs/nullableString" },
+        "evolvesTo": { "type": "array", "items": { "type": "string" } },
+        "api": { "$ref": "#/$defs/apiReferences" }
+      },
+      "additionalProperties": false
+    },
+    "treemapLeaf": {
+      "type": "object",
+      "required": ["id", "name", "value", "primaryType", "types", "generation", "evolutionFamilyId", "evolutionFamilyName", "evolutionStage"],
+      "properties": {
+        "id": { "type": "integer", "minimum": 1 },
+        "name": { "type": "string" },
+        "japaneseName": { "type": "string" },
+        "value": { "type": "number", "minimum": 1 },
+        "primaryType": { "type": "string" },
+        "secondaryType": { "$ref": "#/$defs/nullableString" },
+        "types": { "type": "array", "items": { "type": "string" } },
+        "generation": { "type": ["integer", "null"] },
+        "generationName": { "$ref": "#/$defs/nullableString" },
+        "spriteUrl": { "type": "string" },
+        "evolutionFamilyId": { "type": "string" },
+        "evolutionFamilyName": { "type": "string" },
+        "evolutionStage": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "typeGroup": {
+      "type": "object",
+      "required": ["name", "value", "children"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "integer", "minimum": 0 },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/treemapLeaf" } }
+      },
+      "additionalProperties": false
+    },
+    "treemapRoot": {
+      "type": "object",
+      "required": ["name", "children"],
+      "properties": {
+        "name": { "const": "Pokémon" },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/typeGroup" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "datasetId": "pokemon-species-treemap",
+  "title": "Pokémon Species Treemap Dataset",
+  "description": "A static species-level snapshot supporting the Otaku Data Viz Pokédex Type Treemap, including types, generations, base stats, evolution families, selected descriptive fields, and visualization-oriented presentation fields.",
+  "version": "1.0.0",
+  "schemaVersion": 2,
+  "status": "published",
+  "language": "en",
+  "canonicalFile": "datasets/pokemon/v1/pokemon-treemap-data.json",
+  "publishedFile": "assets/data/pokemon-treemap-data.json",
+  "schemaFile": "datasets/pokemon/v1/schema.json",
+  "generatedAt": "2026-05-25T02:30:22.810Z",
+  "lastReviewed": "2026-08-10",
+  "recordCount": 1025,
+  "coverage": {
+    "entity": "Pokémon species",
+    "nationalDexStart": 1,
+    "nationalDexEnd": 1025,
+    "generations": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "inclusionRule": "One record for each species returned by the PokéAPI pokemon-species endpoint through National Pokédex number 1025; the default Pokémon variety supplies battle stats, abilities, moves, types, and artwork references.",
+    "exclusions": [
+      "Alternate forms and non-default varieties are not separate species records.",
+      "Species introduced after National Pokédex number 1025 are outside this snapshot."
+    ]
+  },
+  "sources": [
+    {
+      "name": "PokéAPI v2",
+      "url": "https://pokeapi.co/api/v2/",
+      "role": "Primary upstream source for species, default varieties, types, stats, abilities, moves, generations, localized names, flavor text, and evolution chains.",
+      "retrieval": "The repository generator requests pokemon-species, pokemon, and evolution-chain resources and stores a static snapshot."
+    },
+    {
+      "name": "PokéAPI sprites repository",
+      "url": "https://github.com/PokeAPI/sprites",
+      "role": "Upstream host referenced by the artwork and sprite URL fields.",
+      "retrieval": "Image URLs are referenced; image binaries are not included in this dataset package."
+    }
+  ],
+  "methodology": [
+    "Retrieve the configured species range from PokéAPI's pokemon-species endpoint.",
+    "Use each species' default variety to retrieve types, six base stats, abilities, move names, and artwork references.",
+    "Retrieve and flatten each unique evolution chain to assign family identifiers, family labels, stages, parents, and children.",
+    "Normalize machine names into display labels and select the most recent available English flavor-text entry.",
+    "Sort records by National Pokédex number and derive type, generation, and treemap aggregates.",
+    "Validate coverage, uniqueness, stats, relationships, aggregate counts, provenance metadata, and byte equality with the public site copy."
+  ],
+  "transformations": [
+    {
+      "fields": ["name", "abilities[]", "attacks[].name", "primaryType", "secondaryType", "types[]"],
+      "description": "Hyphenated API identifiers are converted to title-style display labels."
+    },
+    {
+      "fields": ["baseStatsTotal"],
+      "description": "Calculated as the sum of HP, Attack, Defense, Special Attack, Special Defense, and Speed."
+    },
+    {
+      "fields": ["evolutionFamilyId", "evolutionFamilyName", "evolutionStage", "evolvesFrom", "evolvesTo"],
+      "description": "Derived by flattening the upstream evolution-chain graph; large branching families use a compact root-based family label."
+    },
+    {
+      "fields": ["description", "flavorText"],
+      "description": "Newlines and form-feed characters are removed from the selected English flavor-text entry."
+    },
+    {
+      "fields": ["typeCounts", "generationCounts", "treemap", "typeTreemap"],
+      "description": "Calculated from species records for visualization loading and backwards compatibility."
+    }
+  ],
+  "modeledFields": [
+    {
+      "fields": ["pokemon[].attacks[].power", "species[].attacks[].power"],
+      "description": "Presentation-only values calculated from total base stats and list position. They are not official move power values."
+    },
+    {
+      "fields": ["pokemon[].attacks[].text", "species[].attacks[].text"],
+      "description": "Generic card-display copy written by the generator. It is not official move description text."
+    },
+    {
+      "fields": ["pokemon[].attacks[].type", "species[].attacks[].type"],
+      "description": "Uses the Pokémon's primary type for card presentation and does not assert the move's official type."
+    }
+  ],
+  "limitations": [
+    "The snapshot ends at National Pokédex number 1025 and will not reflect later species until deliberately regenerated.",
+    "Only the default variety is used; alternate forms, regional forms, Mega Evolutions, Gigantamax forms, and other variants are not separate records.",
+    "Flavor text is a selected English entry rather than a complete version-by-version history.",
+    "The visualization groups species by primary type even though the compatibility treemap aggregate also contains secondary-type membership.",
+    "Move selection takes the first four upstream move references; it is not a ranking of signature, legal, current-generation, or competitively useful moves.",
+    "Modeled card-display power, type, and text fields must not be treated as official move data.",
+    "This fan-made dataset is not a substitute for official game resources or a competitive battle database."
+  ],
+  "verification": [
+    "The canonical file must contain 1,025 unique, ordered National Pokédex records for this version.",
+    "Every baseStatsTotal must equal the sum of the six component stats.",
+    "Type counts, generation counts, evolution-family fields, and treemap group counts are recomputed during validation.",
+    "The canonical and public JSON files must be byte-for-byte identical.",
+    "Landing-page factual claims are checked against the canonical snapshot by the repository verifier."
+  ],
+  "reuse": {
+    "licenseStatus": "not-asserted",
+    "note": "Otaku Data Viz does not grant rights to Pokémon names, data, artwork references, or other third-party material. Review PokéAPI's project information, upstream terms, and applicable intellectual-property rights before reuse, redistribution, licensing, or commercial use."
+  },
+  "citation": "Otaku Data Viz, Pokémon Species Treemap Dataset, version 1.0.0, generated 2026-05-25 from PokéAPI data and reviewed 2026-08-10."
+}

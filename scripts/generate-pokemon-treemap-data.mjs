@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * Generate docs/assets/data/pokemon-treemap-data.json from PokéAPI.
+ * Generate the canonical Pokémon v1 snapshot from PokéAPI, then publish the
+ * byte-identical site copy in assets/data. Run the normal site build afterward
+ * to propagate the public copy into docs/.
  *
  * Usage from repo root:
  *   node scripts/generate-pokemon-treemap-data.mjs
@@ -10,10 +12,12 @@
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { publishPokemonData } from './publish-pokemon-data.mjs';
 
 const API_ROOT = 'https://pokeapi.co/api/v2';
 const LIMIT = Number(process.env.POKEAPI_LIMIT || 1025);
-const OUT_PATH = path.resolve('docs/assets/data/pokemon-treemap-data.json');
+const OUT_PATH = path.resolve('datasets/pokemon/v1/pokemon-treemap-data.json');
+const METADATA_PATH = path.resolve('datasets/pokemon/v1/metadata.json');
 const CONCURRENCY = Number(process.env.POKEAPI_CONCURRENCY || 12);
 
 async function fetchJson(url, attempt = 1) {
@@ -322,6 +326,17 @@ if (zeroStats > 20) throw new Error(`Refusing to write dataset with ${zeroStats}
 await fs.mkdir(path.dirname(OUT_PATH), { recursive: true });
 await fs.writeFile(OUT_PATH, `${JSON.stringify(payload)}\n`, 'utf8');
 
-console.log(`Wrote ${OUT_PATH} with ${payload.speciesCount} species.`);
+const metadata = JSON.parse(await fs.readFile(METADATA_PATH, 'utf8'));
+metadata.version = process.env.POKEMON_DATASET_VERSION || metadata.version;
+metadata.generatedAt = payload.generatedAt;
+metadata.lastReviewed = process.env.POKEMON_DATASET_REVIEWED || metadata.lastReviewed;
+metadata.recordCount = payload.speciesCount;
+metadata.coverage.nationalDexEnd = rows.at(-1)?.nationalDexNumber || payload.speciesCount;
+await fs.writeFile(METADATA_PATH, `${JSON.stringify(metadata, null, 2)}\n`, 'utf8');
+
+await publishPokemonData();
+
+console.log(`Wrote canonical dataset ${OUT_PATH} with ${payload.speciesCount} species.`);
+console.log('Published byte-identical site data to assets/data/pokemon-treemap-data.json.');
 console.log(`Missing sprites: ${missingSprites}`);
 console.log(`Evolution chains fetched: ${evolutionChainCache.size}`);

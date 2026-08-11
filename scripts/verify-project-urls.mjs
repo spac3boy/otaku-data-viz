@@ -3,6 +3,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { createContext, runInContext } from 'node:vm';
 import { verifySiteBuild } from './build-site.mjs';
+import { validatePokemonDataset } from './validate-pokemon-data.mjs';
 
 const root = process.cwd();
 const origin = 'https://otakudataviz.com';
@@ -39,6 +40,9 @@ const failures = [];
 const check = (condition, message) => {
   if (!condition) failures.push(message);
 };
+
+const pokemonDataset = await validatePokemonDataset({ root });
+pokemonDataset.failures.forEach((failure) => failures.push(`Pokémon dataset: ${failure}`));
 const siteFile = (urlPath, base = root) => {
   const pathname = decodeURIComponent(urlPath).replace(/^\//, '');
   if (!pathname) return path.join(base, 'index.html');
@@ -402,5 +406,6 @@ if (failures.length) {
   process.exitCode = 1;
 } else {
   console.log(`Project URL verification passed for ${projects.length} landing/app pairs.`);
+  console.log(`Canonical Pokémon dataset ${pokemonDataset.summary.version} passed for ${pokemonDataset.summary.records} species records.`);
   console.log(`Canonical tags, Open Graph URLs, JSON-LD relationships, sitemap entries, buttons, previews, related links, project cards, local targets, and ${siteBuild.fileCount} generated docs files are consistent.`);
 }

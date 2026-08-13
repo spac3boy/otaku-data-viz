@@ -127,6 +127,7 @@
       "dataAsset": {
         "status": "versioned-canonical",
         "datasetId": "pokemon-species-treemap",
+        "description": "A static species-level snapshot supporting the Otaku Data Viz Pokédex Type Treemap, including types, generations, base stats, evolution families, selected descriptive fields, and visualization-oriented presentation fields.",
         "version": "1.0.0",
         "manifestPath": "/datasets/pokemon/v1/metadata.json",
         "publicPath": "/assets/data/pokemon-treemap-data.json"

@@ -58,6 +58,9 @@ export const verifyReferencePageTemplate = async ({ repositoryRoot = root } = {}
       'id="methodology"',
       'id="faq"',
       'class="nav-toggle"',
+      `"description": "${project.dataAsset.description}"`,
+      '"@type": "Organization"',
+      `"name": "${registry.site.name}"`,
       `"contentUrl": "${registry.site.origin}${fixture.dataset.publicPath}"`
     ];
     requiredFragments.forEach((fragment) => {
@@ -71,8 +74,16 @@ export const verifyReferencePageTemplate = async ({ repositoryRoot = root } = {}
       try {
         const document = JSON.parse(jsonLdMatch[1]);
         const types = new Set(document['@graph'].map((node) => node['@type']));
-        for (const type of ['WebPage', 'Dataset', 'BreadcrumbList', 'FAQPage']) {
+        for (const type of ['Organization', 'WebPage', 'Dataset', 'BreadcrumbList', 'FAQPage']) {
           if (!types.has(type)) failures.push(`Rendered fixture JSON-LD has no ${type} node`);
+        }
+        const datasetNode = document['@graph'].find((node) => node['@type'] === 'Dataset');
+        const creatorNode = document['@graph'].find((node) => node['@id'] === datasetNode?.creator?.['@id']);
+        if (datasetNode?.description !== project.dataAsset.description) {
+          failures.push('Rendered fixture Dataset description does not match the canonical data asset');
+        }
+        if (creatorNode?.['@type'] !== 'Organization' || creatorNode?.name !== registry.site.name) {
+          failures.push('Rendered fixture Dataset creator does not resolve to the site Organization');
         }
       } catch (error) {
         failures.push(`Rendered fixture JSON-LD is invalid (${error.message})`);

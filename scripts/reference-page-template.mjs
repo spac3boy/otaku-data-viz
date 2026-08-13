@@ -182,6 +182,12 @@ const renderStructuredData = (page, registry, project) => {
     '@context': 'https://schema.org',
     '@graph': [
       {
+        '@type': 'Organization',
+        '@id': `${origin}/#organization`,
+        name: registry.site.name,
+        url: `${origin}/`
+      },
+      {
         '@type': 'WebPage',
         '@id': `${canonical}#webpage`,
         url: canonical,
@@ -197,6 +203,7 @@ const renderStructuredData = (page, registry, project) => {
         '@type': 'Dataset',
         '@id': `${canonical}#dataset`,
         name: page.dataset.id,
+        description: project.dataAsset.description,
         version: page.dataset.version,
         url: projectUrl,
         isPartOf: { '@id': `${projectUrl}#webpage` },

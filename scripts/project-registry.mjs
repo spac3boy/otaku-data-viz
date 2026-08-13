@@ -89,6 +89,12 @@ export const validateProjectRegistry = (registry) => {
     }
     if (project.dataAsset?.status === 'versioned-canonical') {
       if (!hasText(project.dataAsset.datasetId)) failures.push(`${label}: canonical data requires datasetId`);
+      if (!hasText(project.dataAsset.description)) {
+        failures.push(`${label}: canonical data requires description`);
+      } else if (project.dataAsset.description.trim().length < 50
+        || project.dataAsset.description.trim().length > 5000) {
+        failures.push(`${label}: canonical data description must be between 50 and 5000 characters`);
+      }
       if (!hasText(project.dataAsset.version)) failures.push(`${label}: canonical data requires version`);
       if (!isSitePath(project.dataAsset.manifestPath)) failures.push(`${label}: canonical data requires manifestPath`);
       if (!isSitePath(project.dataAsset.publicPath)) failures.push(`${label}: canonical data requires publicPath`);
